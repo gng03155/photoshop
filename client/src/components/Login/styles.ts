@@ -2,7 +2,7 @@ import styled from "styled-components"
 
 
 export const Wrap = styled.div`
-    width: 1440px;
+    /* width: 1440px; */
     height : 500px;
     margin : 0 auto;
 `;
@@ -56,13 +56,9 @@ export const Button = styled.button`
     width: 400px;
     height : 60px;
     margin : 0 auto;
-    border: none;
-    user-select: none;
-    outline: none;
     color : #fff;
     background : #333;
     font-size : 20px;
-    cursor: pointer;
 `
 
 

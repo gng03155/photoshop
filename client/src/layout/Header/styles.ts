@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Content = styled.div`
     display : flex;
-    width: 1440px;
+    /* width: 1440px; */
     height: 100px;
     padding: 10px 0;
     margin: 0 auto;

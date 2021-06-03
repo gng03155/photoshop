@@ -1,8 +1,8 @@
 import styled from "styled-components"
 
 export const FooterMenu = styled.div`
-    width : 1440px;
-    margin : 0 auto;
+    /* width : 1440px;
+    margin : 0 auto; */
     ul{
         display: flex;
         margin-left: -15px;

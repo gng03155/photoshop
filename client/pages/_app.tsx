@@ -10,9 +10,11 @@ function App({ Component, pageProps }: AppProps) {
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyle></GlobalStyle>
-            <Header></Header>
-            <Component {...pageProps} />
-            <Footer></Footer>
+            <div style={{ width: "1440px", margin: "0 auto" }}>
+                <Header></Header>
+                <Component {...pageProps} />
+                <Footer></Footer>
+            </div>
         </ThemeProvider>
     )
 }

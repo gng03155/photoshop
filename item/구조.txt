@@ -1,0 +1,4 @@
+Header
+로고 , 로그인 , 회원가입 , 상품 , 공지사항 , 마이페이지 , 장바구니
+ㄴ상품 : Wallpaper , picture , pixelart
+
