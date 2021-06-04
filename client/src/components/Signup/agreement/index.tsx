@@ -1,14 +1,48 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
+
+import Router from "next/router";
 
 import { Contnent, AgreeArea, CheckBox, TextBox, ButtonBox, Label } from "./styles"
 
 export default function Agreement() {
+
+    const reff = useRef();
+
+    const inputRefs = new Array(4).fill(0).map((i) => { return useRef<HTMLInputElement>(null) });
+
+    const test = (e) => {
+        console.log(Router);
+    }
+
+    const onChangeCheck = (e) => {
+        const changeTg = e.target.name.replace("check_", "");
+
+        if (changeTg === "4") {
+            const chageMode = inputRefs[3].current.checked ? true : false;
+            inputRefs.forEach((item, idx) => {
+                item.current.checked = chageMode;
+            });
+        }
+    }
+
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (inputRefs[3].current.checked) {
+            Router.push("/signup/join");
+        } else if (inputRefs[0].current.checked && inputRefs[1].current.checked) {
+            Router.push("/signup/join");
+        } else {
+            alert("필수 동의 항목을 체크해주세요!");
+        }
+    }
+
     return (
-        <Contnent>
+        <Contnent onSubmit={(e: React.FormEvent<HTMLFormElement>) => onSubmit(e)} >
+            <button onClick={(e) => test(e)}>테스트</button>
             <AgreeArea>
                 <CheckBox>
                     <Label>
-                        <input type="checkbox" name="check" id="check" />
+                        <input type="checkbox" name="check_1" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[0]} />
                         이용약관 동의 (필수)
                     </Label>
                 </CheckBox>
@@ -51,7 +85,7 @@ export default function Agreement() {
             <AgreeArea>
                 <CheckBox>
                     <Label>
-                        <input type="checkbox" name="check" id="check" />
+                        <input type="checkbox" name="check_2" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[1]} />
                         개인정보 처리방침 동의 (필수)
                     </Label>
                 </CheckBox>
@@ -110,7 +144,7 @@ export default function Agreement() {
             <AgreeArea>
                 <CheckBox>
                     <Label>
-                        <input type="checkbox" name="check" id="check" />
+                        <input type="checkbox" name="check_3" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[2]} />
                         쇼핑정보 수신 동의 (선택)
                     </Label>
                 </CheckBox>
@@ -122,14 +156,13 @@ export default function Agreement() {
                 </TextBox>
             </AgreeArea>
             <CheckBox>
-                {/* <h3>전체 동의</h3> */}
                 <Label style={{ color: "blue" }}>
-                    <input type="checkbox" name="check" id="check" />
+                    <input type="checkbox" name="check_4" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[3]} />
                     이용약관 및 개인정보수집 및 이용,쇼핑정보 수신(선택)에 모두 동의합니다.
                 </Label>
             </CheckBox>
             <ButtonBox>
-                <button>다음</button>
+                <button type="submit">다음</button>
                 <button>취소</button>
             </ButtonBox>
         </Contnent>

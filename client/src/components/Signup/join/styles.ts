@@ -96,6 +96,41 @@ export const EmailBox = styled.tr`
         height : 35px;
     }
 `
+export const BirthBox = styled.tr`
+    th{
+        vertical-align: top;
+    }
+    ul{
 
+    }
+    li{
+        line-height: 45px;
+    }
+    li:first-child input{
+        width : 10px;
+        height : 10px;
+    }
+    li:last-child input{
+        width : 100px;
+        height : 35px;
+        text-align: right;
+    }
+    label{
+        margin : 0 5px;
+    }
+`
 
+export const Button = styled.button`
+    width : 100%;
+    height : 45px;
+    margin : 40px 0;
+    text-align: center;
+    background : black;
+    color : #fff;
+    border : 1px solid #ececec;
+    &:hover {
+        background : white;
+        color : #000;
+    }
 
+`

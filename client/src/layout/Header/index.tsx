@@ -1,6 +1,10 @@
 import React from 'react'
 
+import Link from "next/link"
+
 import { Content, LeftCategory, RightCategory, Logo } from "./styles"
+
+
 
 export default function Header() {
     return (
@@ -14,16 +18,16 @@ export default function Header() {
                     </ul>
                 </LeftCategory>
                 <Logo>
-                    <a href="#">
-                        <img src="/img/Logo.png" alt="logo" />
-                    </a>
+                    <Link href="/">
+                        <a><img src="/img/Logo.png" alt="logo" /></a>
+                    </Link>
                 </Logo>
                 <RightCategory>
                     <ul>
-                        <li><a href="#">카테고리4</a></li>
-                        <li><a href="#">카테고리5</a></li>
-                        <li><a href="#">카테고리6</a></li>
-                        <li><a href="#">카테고리7</a></li>
+                        <li><Link href="/login"><a>LOGIN</a></Link></li>
+                        <li><Link href="/signup/agree"><a>JOIN US</a></Link></li>
+                        <li><Link href="/signup/join"><a>JOIN US2</a></Link></li>
+                        <li><Link href="/signup/complete"><a>JOIN US3</a></Link></li>
                     </ul>
                 </RightCategory>
             </Content>
