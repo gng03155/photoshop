@@ -52,6 +52,13 @@ export const TextBox = styled.tr`
         width : 100%;
         height : 35px;
     }
+    span.error{
+        color : lightcoral;
+        display: none;
+    }
+    span.error.active{
+        display: inline;
+    }
 `
 
 export const AddressBox = styled.tr`

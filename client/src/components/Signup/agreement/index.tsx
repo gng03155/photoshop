@@ -11,7 +11,6 @@ export default function Agreement() {
     const inputRefs = new Array(4).fill(0).map((i) => { return useRef<HTMLInputElement>(null) });
 
     const test = (e) => {
-        console.log(Router);
     }
 
     const onChangeCheck = (e) => {
@@ -27,9 +26,7 @@ export default function Agreement() {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (inputRefs[3].current.checked) {
-            Router.push("/signup/join");
-        } else if (inputRefs[0].current.checked && inputRefs[1].current.checked) {
+        if (inputRefs[3].current.checked || (inputRefs[0].current.checked && inputRefs[1].current.checked)) {
             Router.push("/signup/join");
         } else {
             alert("필수 동의 항목을 체크해주세요!");
