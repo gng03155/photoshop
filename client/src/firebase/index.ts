@@ -3,7 +3,7 @@ import "firebase/auth"
 import "firebase/database"
 import "firebase/firestore"
 
-const fb: any = firebase;
+const fb = firebase;
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_APIKEY,
@@ -19,6 +19,7 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
+
 // firebase.auth().signInWithEmailAndPassword("test@test.com", "dnflwn12")
 //     .then((userCredential) => {
 //         // Signed in

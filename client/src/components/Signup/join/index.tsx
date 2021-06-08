@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react'
 import Router from "next/router";
+import DaumPostcode from "react-daum-postcode";
+import crypto from "crypto";
+import SHA256 from 'crypto-js/sha256';
 
 
 import { TitleArea, Form, Table, IdBox, TextBox, AddressBox, PhoneBox, EmailBox, BirthBox, Button } from "./styles"
 
-import DaumPostcode from "react-daum-postcode";
+import fb from '../../../firebase';
 
 export default function Join() {
 
@@ -14,6 +17,8 @@ export default function Join() {
 
     const [zoneCode, setZoneCode] = useState("");
     const [address, setAddress] = useState("");
+
+
 
     const handleComplete = (data) => {
         let fullAddress = data.address;
@@ -44,7 +49,7 @@ export default function Join() {
         },
         [],
     );
-    const onSublit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    const onSublit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const target = e.target as HTMLTextAreaElement;
 
@@ -54,12 +59,14 @@ export default function Join() {
             checkpswd: target["checkpswd"]["value"] || null,
             id: target["id"]["value"] || null,
             adrs: [target["zone"]["value"] || null, target["adrs"]["value"] || null, target["adrs2"]["value"] || null],
-            phone: [target["phone1"]["value"], target["phone2"]["value"] || null, target["phone3"]["value"] || null],
+            phone: [target["phone1"]["value"], target["phone2"]["value"] || null, target["phone3"]["value"] || null] || "",
             mobile: [target["mobile1"]["value"], target["mobile2"]["value"] || null, target["mobile3"]["value"] || null],
             email: target["email"]["value"] || null,
+            birth: null,
+            salt: "",
         }
 
-        //공백 및 비밀번호 체크
+        // 공백 및 비밀번호 체크
         const isEmpty = checkEmpty(values, target);
         if (isEmpty) {
             return;
@@ -68,12 +75,39 @@ export default function Join() {
             return;
         }
 
+        const { hashId, hashPw, salt } = await pswdHashing(values.id, values.pswd);
+
+        values.pswd = hashPw;
+        values.salt = salt;
+
+        await fb.database().ref(`users/${hashId}`).set(values)
+            .then(() => {
+                console.log("회원가입이 성공적으로 이루어졌습니다!");
+            })
+            .catch((err) => { console.error(err) });
+
 
         Router.push("/signup/complete");
 
 
 
     }, [])
+
+    const pswdHashing = async (id, pw) => {
+        const { hashId, hashPw, salt } = await new Promise((resolve, reject) => {
+            let hashId, hashPw, salt = "";
+            crypto.randomBytes(64, (err, buf) => {
+                //salt는 생성하는 해시값 이외에 추가적인 암호화 값
+                salt = buf.toString('base64');
+                hashId = SHA256(id).toString();
+                crypto.pbkdf2(pw, salt, 1, 64, 'sha512', (err, key) => {
+                    hashPw = key.toString('base64');
+                    resolve({ hashId, hashPw, salt });
+                });
+            });
+        })
+        return { hashId, hashPw, salt };
+    }
 
     const checkPassword = useCallback(
         (pswd, chpswd) => {

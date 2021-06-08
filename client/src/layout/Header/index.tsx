@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react'
 
+import crypto from "crypto";
+import sha256 from 'crypto-js/sha256';
+
 import Link from "next/link"
 
 import { Content, LeftCategory, RightCategory, Logo } from "./styles"
-import fbase from '../../firebase/fBase'
+import fetcher from '../../util/fetcher'
+
 
 
 
@@ -12,31 +16,8 @@ export default function Header() {
     useEffect(() => {
     }, [])
 
-    const test = (e: any) => {
-        console.log(fbase.User.email);
-        fbase.firestore().collection("test").add({
-            first: "Ada",
-            last: "Lovelace",
-            born: 1815
-        })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-        fbase.firestore().collection("test").doc("test").set({
-            first: "Ada",
-            last: "Lovelace",
-            born: 1815
-        })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-
+    const test = async (e: any) => {
+        await fetcher("cart");
     }
 
     return (

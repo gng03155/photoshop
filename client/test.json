@@ -1,0 +1,30 @@
+{
+    "cart": {
+        "user_id": {
+            "products": [
+                {
+                    "name": "밤하늘",
+                    "price": "3000",
+                    "option": {
+                        "color": "red",
+                        "size": "small",
+                        "num": "5"
+                    }
+                }
+            ]
+        },
+        "user_id2": {
+            "products": [
+                {
+                    "name": "가을하늘",
+                    "price": "5000",
+                    "option": {
+                        "color": "blue",
+                        "size": "large",
+                        "num": "10"
+                    }
+                }
+            ]
+        }
+    }
+}

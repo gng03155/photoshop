@@ -17,7 +17,7 @@ export const Titlearea = styled.div`
     }
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
     width: 400px;
     margin : 0 auto;
 `;

@@ -22,13 +22,7 @@ export default function signup() {
 
         setQuery(id);
 
-        addClass();
-
     }, [router])
-
-    const addClass = () => {
-
-    }
 
 
     return (
