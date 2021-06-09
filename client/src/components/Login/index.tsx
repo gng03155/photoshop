@@ -7,13 +7,12 @@ import { Wrap, Titlearea, Form, Label, Input, Find, Button } from "./styles"
 import fetcher from '../../util/fetcher';
 import crypto from 'crypto';
 import { SHA256 } from 'crypto-js';
-import loadFetcher from '../../util/loadFetcher';
+import localFetcher from '../../util/localFetcher';
 
 
 export default function Login() {
 
-    const { data, error } = useSWR("users", fetcher, { onError: (err) => { console.log(err) } });
-    const { data: userKey, mutate: userMute, } = useSWR("user", { revalidateOnMount: false, refreshInterval: 0 });
+    const { data, error } = useSWR("users", fetcher, { revalidateOnMount: true });
 
     const router = useRouter();
 
@@ -24,7 +23,7 @@ export default function Login() {
         const pswd = target["pswd"]["value"];
 
         const idHash = SHA256(id).toString();
-
+        console.log(data);
         const key = Object.keys(data).find(key => key === idHash);
         const userInfo = data[key];
         if (!userInfo) {
@@ -40,7 +39,6 @@ export default function Login() {
 
             if (pwHash === userInfo.pswd) {
                 console.log("비밀번호가 일치합니다!");
-                userMute(key, false);
                 sessionStorage.setItem("uid", key);
                 router.push("/");
 

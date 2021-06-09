@@ -3,18 +3,22 @@ import React, { useState, useEffect } from "react";
 import useSWR from "swr"
 
 import fetcher from '../src/util/fetcher';
-import loadFetcher from '../src/util/loadFetcher';
+import localFetcher from '../src/util/localFetcher';
 
 export default function Home() {
-  const { data: userKey, error: err } = useSWR("user", { revalidateOnMount: false, refreshInterval: 0 });
-  const { data, error } = useSWR(`${userKey ? `/users/${userKey}` : ''}`, fetcher);
+
+  const [userKey, setUserKey] = useState("");
+
+  const { data, error } = useSWR(`${userKey ? `/users/${userKey}` : ''}`, fetcher, { revalidateOnMount: true });
 
   useEffect(() => {
-    console.log(userKey);
-    console.log(data);
-    console.log(`session : ${sessionStorage.getItem("uid")}`);
+    setUserKey(window.sessionStorage.getItem("uid"));
+  }, []);
 
-  }, [userKey, data]);
+  useEffect(() => {
+    if (data)
+      console.log(`${data.name}님의 로그인이 성공적으로 이루어졌습니다.`);
+  }, [data]);
 
   return (
     <div className="container">
@@ -24,3 +28,4 @@ export default function Home() {
     </div>
   );
 }
+

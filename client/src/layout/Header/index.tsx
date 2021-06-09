@@ -1,23 +1,31 @@
-import React, { useEffect } from 'react'
-
-import crypto from "crypto";
-import sha256 from 'crypto-js/sha256';
-
+import React, { useEffect, useState } from 'react'
 import Link from "next/link"
+import { useRouter } from "next/router"
+import useSWR from 'swr'
 
 import { Content, LeftCategory, RightCategory, Logo } from "./styles"
-import fetcher from '../../util/fetcher'
+
+import localFetcher from '../../util/localFetcher'
 
 
 
 
 export default function Header() {
 
-    useEffect(() => {
-    }, [])
+    const [userKey, setUserKey] = useState("");
 
-    const test = async (e: any) => {
-        await fetcher("cart");
+    const router = useRouter();
+
+    useEffect(() => {
+        setUserKey(window.sessionStorage.getItem("uid"));
+    }, [])
+    useEffect(() => {
+        setUserKey(window.sessionStorage.getItem("uid"));
+    }, [router])
+
+    const onLogout = (e: any) => {
+        window.sessionStorage.removeItem("uid");
+        setUserKey(null);
     }
 
     return (
@@ -28,7 +36,6 @@ export default function Header() {
                         <li><a href="#">카테고리1</a></li>
                         <li><a href="#">카테고리2</a></li>
                         <li><a href="#">카테고리3</a></li>
-                        <button onClick={test}>test</button>
                     </ul>
                 </LeftCategory>
                 <Logo>
@@ -38,10 +45,20 @@ export default function Header() {
                 </Logo>
                 <RightCategory>
                     <ul>
-                        <li><Link href="/login"><a>LOGIN</a></Link></li>
-                        <li><Link href="/signup/agree"><a>JOIN US</a></Link></li>
+                        {
+                            userKey === null ?
+                                <li><Link href="/login"><a>LOGIN</a></Link></li>
+                                :
+                                <li><Link href="/"><a onClick={onLogout}>LOGOUT</a></Link></li>
+                        }
+                        {
+                            userKey === null ?
+                                <li><Link href="/signup/agree"><a>JOIN US</a></Link></li>
+                                :
+                                <li><Link href="/mypage"><a>MY PAGE</a></Link></li>
+                        }
                         <li><Link href="/signup/join"><a>JOIN US2</a></Link></li>
-                        <li><Link href="/signup/complete"><a>JOIN US3</a></Link></li>
+                        <li><Link href="/mypage"><a>JOIN US3</a></Link></li>
                     </ul>
                 </RightCategory>
             </Content>
