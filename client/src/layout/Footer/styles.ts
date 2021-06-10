@@ -1,8 +1,19 @@
 import styled from "styled-components"
 
+export const FooterWrap = styled.footer`
+    color : #111;
+`
+
+export const FooterBg = styled.div`
+    position: absolute;
+    width: 100vw;
+    height : 300px;
+    left: 0;
+    background: #333;
+    z-index: -1;
+`
+
 export const FooterMenu = styled.div`
-    /* width : 1440px;
-    margin : 0 auto; */
     ul{
         display: flex;
         margin-left: -15px;
@@ -11,6 +22,7 @@ export const FooterMenu = styled.div`
                 display: block;
                 padding: 10px 15px;
                 font-size: 16px;
+                color : #111;
             }
         }
     }

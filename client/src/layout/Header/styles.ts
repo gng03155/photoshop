@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
 export const Content = styled.div`
+    position: relative;
+    z-index: 100;
     display : flex;
-    /* width: 1440px; */
+    width: 100%;
     height: 100px;
     padding: 10px 0;
     margin: 0 auto;

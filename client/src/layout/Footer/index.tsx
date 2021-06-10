@@ -1,8 +1,9 @@
 import React from 'react'
-import { FooterMenu, Content, CompanyInfo, CScontent, BANKcontent, Gap } from "./styles"
+import { FooterWrap, FooterBg, FooterMenu, Content, CompanyInfo, CScontent, BANKcontent, Gap } from "./styles"
 export default function Footer() {
     return (
-        <div style={{ background: "rgba(0, 0, 255, 0.1)" }}>
+        <FooterWrap>
+            <FooterBg />
             <FooterMenu>
                 <ul>
                     <li><a href="#">회사소개</a></li>
@@ -54,6 +55,6 @@ export default function Footer() {
                     <p>예금주 홍길동</p>
                 </BANKcontent>
             </Content>
-        </div>
+        </FooterWrap>
     )
 }

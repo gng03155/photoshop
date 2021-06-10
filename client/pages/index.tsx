@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 import useSWR from "swr"
+import Banner from '../src/components/Home/Banner';
+import Section from '../src/components/Home/Section';
 
 import fetcher from '../src/util/fetcher';
 import localFetcher from '../src/util/localFetcher';
@@ -23,7 +25,8 @@ export default function Home() {
   return (
     <div className="container">
       <div>
-        <span>{userKey} 적용 완료</span>
+        <Banner></Banner>
+        <Section></Section>
       </div>
     </div>
   );

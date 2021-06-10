@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Link from "next/link"
 import { useRouter } from "next/router"
-import useSWR from 'swr'
 
 import { Content, LeftCategory, RightCategory, Logo } from "./styles"
 
-import localFetcher from '../../util/localFetcher'
 
 
 
@@ -13,15 +11,31 @@ import localFetcher from '../../util/localFetcher'
 export default function Header() {
 
     const [userKey, setUserKey] = useState("");
-
+    const ref = useRef(null);
+    const divRef = useRef(null);
     const router = useRouter();
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
-    }, [])
+        addEventListener("scroll", scrollHeader);
+        return () => { removeEventListener("scroll", scrollHeader) }
+    }, []);
+
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
-    }, [router])
+    }, [router]);
+
+    const scrollHeader = () => {
+        const scrollTop = document.documentElement.scrollTop;
+        if (scrollTop > 0) {
+            const tt = divRef.current.clientWidth;
+            ref.current.style.position = "fixed";
+            ref.current.style.width = tt + "px";
+        } else {
+            ref.current.style.position = "relative";
+            ref.current.style.width = "100%";
+        }
+    }
 
     const onLogout = (e: any) => {
         window.sessionStorage.removeItem("uid");
@@ -29,8 +43,8 @@ export default function Header() {
     }
 
     return (
-        <div style={{ backgroundColor: "rgba(0, 0, 255, 0.1)" }}>
-            <Content>
+        <div ref={divRef} style={{ width: "100%" }}>
+            <Content ref={ref}>
                 <LeftCategory>
                     <ul>
                         <li><a href="#">카테고리1</a></li>
