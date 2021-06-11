@@ -4,10 +4,6 @@ import { useRouter } from "next/router"
 
 import { Content, LeftCategory, RightCategory, Logo } from "./styles"
 
-
-
-
-
 export default function Header() {
 
     const [userKey, setUserKey] = useState("");
@@ -43,12 +39,12 @@ export default function Header() {
     }
 
     return (
-        <div ref={divRef} style={{ width: "100%" }}>
+        <div ref={divRef} style={{ width: "100%", height: "100px" }}>
             <Content ref={ref}>
                 <LeftCategory>
                     <ul>
                         <li><a href="#">카테고리1</a></li>
-                        <li><a href="#">카테고리2</a></li>
+                        <li><Link href="/product/asdf"><a>PRODUCT</a></Link></li>
                         <li><a href="#">카테고리3</a></li>
                     </ul>
                 </LeftCategory>

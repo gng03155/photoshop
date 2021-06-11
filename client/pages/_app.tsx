@@ -16,8 +16,8 @@ function App({ Component, pageProps }: AppProps) {
     return (
         <ThemeProvider theme={theme}>
             <GlobalStyle></GlobalStyle>
-            <div style={{ width: "1440px", margin: "0 auto" }}>
-                <SWRConfig value={{ revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, dedupingInterval: 2000 }}>
+            <div style={{ width: "1260px", margin: "0 auto" }}>
+                <SWRConfig value={{ revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false }}>
                     <Header></Header>
                     <Component {...pageProps} />
                     <Footer></Footer>

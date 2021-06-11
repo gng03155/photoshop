@@ -6,12 +6,7 @@ import { Contnent, AgreeArea, CheckBox, TextBox, ButtonBox, Label } from "./styl
 
 export default function Agreement() {
 
-    const reff = useRef();
-
     const inputRefs = new Array(4).fill(0).map((i) => { return useRef<HTMLInputElement>(null) });
-
-    const test = (e) => {
-    }
 
     const onChangeCheck = (e) => {
         const changeTg = e.target.name.replace("check_", "");
@@ -35,7 +30,6 @@ export default function Agreement() {
 
     return (
         <Contnent onSubmit={(e: React.FormEvent<HTMLFormElement>) => onSubmit(e)} >
-            <button onClick={(e) => test(e)}>테스트</button>
             <AgreeArea>
                 <CheckBox>
                     <Label>

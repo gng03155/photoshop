@@ -1,7 +1,6 @@
 import fb from '../firebase'
 
-const fetcher = async (path: string) => {
-
+export const fetcherData = async (path: string) => {
     return await fb.database().ref(path).get()
         .then((data) => {
             if (data.exists()) {
@@ -16,4 +15,41 @@ const fetcher = async (path: string) => {
 
 }
 
-export default fetcher
+export const fetcherStorage = async (path: string) => {
+
+    const storageRef = fb.storage().ref();
+
+    let arr = [];
+    await storageRef.child(path).listAll()
+        .then((res) => {
+            return res.items;
+        })
+        .then(async (items) => {
+            for (let i of items) {
+                await i.getDownloadURL().then((url) => {
+                    arr.push(url)
+                    console.log("for");
+                })
+            }
+
+            //문제의 코드
+            // items.forEach((item) => {
+            //     item.getDownloadURL().then((url) => {
+            //         arr.push(url);
+            //     })
+            // })
+
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+    if (typeof arr === "object") {
+        console.log(arr);
+        console.log(arr.length);
+    }
+
+
+    return arr;
+
+}

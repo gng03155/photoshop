@@ -13,7 +13,7 @@ export const Content = styled.div`
     text-align: center;
 
     & > div {
-        width: 33%;
+        width: 33.3333%;
     }
 
 `;

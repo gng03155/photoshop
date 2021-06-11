@@ -79,6 +79,7 @@ export default function Join() {
 
         values.pswd = hashPw;
         values.salt = salt;
+        delete values.checkpswd;
 
         await fb.database().ref(`users/${hashId}`).set(values)
             .then(() => {

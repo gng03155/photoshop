@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 
 import { Wrap, Titlearea, Form, Label, Input, Find, Button } from "./styles"
 
-import fetcher from '../../util/fetcher';
+import { fetcherData } from '../../util/fetcher';
 import crypto from 'crypto';
 import { SHA256 } from 'crypto-js';
 import localFetcher from '../../util/localFetcher';
@@ -12,7 +12,7 @@ import localFetcher from '../../util/localFetcher';
 
 export default function Login() {
 
-    const { data, error } = useSWR("users", fetcher, { revalidateOnMount: true });
+    const { data, error } = useSWR("users", fetcherData, { revalidateOnMount: true });
 
     const router = useRouter();
 

@@ -4,14 +4,14 @@ import useSWR from "swr"
 import Banner from '../src/components/Home/Banner';
 import Section from '../src/components/Home/Section';
 
-import fetcher from '../src/util/fetcher';
+import { fetcherData } from '../src/util/fetcher';
 import localFetcher from '../src/util/localFetcher';
 
 export default function Home() {
 
   const [userKey, setUserKey] = useState("");
 
-  const { data, error } = useSWR(`${userKey ? `/users/${userKey}` : ''}`, fetcher, { revalidateOnMount: true });
+  const { data, error } = useSWR(`${userKey ? `/users/${userKey}` : ''}`, fetcherData, { revalidateOnMount: true });
 
   useEffect(() => {
     setUserKey(window.sessionStorage.getItem("uid"));

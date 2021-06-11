@@ -11,9 +11,10 @@ export const GlobalStyle = createGlobalStyle`
   a { text-decoration : none; color : #333; }
   ul,li{list-style : none;}
   button {
-    border: none;
+    border: 1px solid #ececec;
     user-select: none;
     outline: none;
     cursor: pointer;
+    background: none;
   }
 `;
