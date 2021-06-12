@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 export const FooterWrap = styled.footer`
     color : #111;
+    width : 100%;
 `
 
 export const FooterBg = styled.div`
@@ -50,7 +51,7 @@ export const Content = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width : 1440px;
+    width : 100%;
     padding: 25px 0;
     margin : 0 auto;
 

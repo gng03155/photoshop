@@ -88,7 +88,7 @@ export default function Join() {
             .catch((err) => { console.error(err) });
 
 
-        Router.push("/signup/complete");
+        Router.push("/signup?name=complete", "/signup");
 
 
 

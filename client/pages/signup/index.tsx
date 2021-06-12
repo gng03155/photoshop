@@ -14,13 +14,13 @@ export default function signup() {
     const router = useRouter();
 
     useEffect(() => {
-        let id = "";
+        let name = "";
 
-        if (typeof router.query.id === "string") {
-            id = router.query.id;
+        if (typeof router.query.name === "string") {
+            name = router.query.name;
         }
-
-        setQuery(id);
+        console.log(router);
+        setQuery(name);
 
     }, [router])
 

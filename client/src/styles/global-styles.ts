@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
     overflow-x: hidden ;
   }
   * { margin : 0 ; padding : 0; box-sizing : border-box;}
-  a { text-decoration : none; color : #333; }
+  a { text-decoration : none; color : #333; cursor : pointer;}
   ul,li{list-style : none;}
   button {
     border: 1px solid #ececec;

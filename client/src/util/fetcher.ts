@@ -28,7 +28,6 @@ export const fetcherStorage = async (path: string) => {
             for (let i of items) {
                 await i.getDownloadURL().then((url) => {
                     arr.push(url)
-                    console.log("for");
                 })
             }
 
@@ -43,12 +42,6 @@ export const fetcherStorage = async (path: string) => {
         .catch((err) => {
             console.log(err);
         })
-
-    if (typeof arr === "object") {
-        console.log(arr);
-        console.log(arr.length);
-    }
-
 
     return arr;
 

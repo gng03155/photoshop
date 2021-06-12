@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react'
+import React, { useEffect, useRef, useCallback, useState } from 'react'
 import useSWR from 'swr';
 import { fetcherData, fetcherStorage } from '../../util/fetcher';
 import Board from '../Board'
@@ -7,62 +7,203 @@ import Board from '../Board'
 
 import { InfoWrap, Info, Img, ProductAdd, OptionAdd, Form, ProductButton, DetailWrap, NaviBar, DetailInfo, BuyInfo, Review, QnA } from "./styles"
 
-export default function ProductDetail() {
+interface Props {
+    id: string,
+}
+
+export default function ProductDetail({ id }: Props) {
 
 
-    const { data: detailImgs } = useSWR(`products/${1}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
-    const { data: thumbImg } = useSWR(`products/${1}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
-    const { data: productInfo } = useSWR(`products/${1}`, fetcherData, { revalidateOnMount: true });
+    const { data: detailImgs } = useSWR(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
+    const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
+    const { data: productInfo } = useSWR(`products/${id}`, fetcherData, { revalidateOnMount: true });
 
     const ref = new Array(4).fill(0).map((i) => { return useRef<HTMLDivElement>(null) });
 
-    let detailOffset = 0;
-    let infoOffset = 0;
-    let reviewOffset = 0;
-    let qnaOffset = 0;
+    const rr = useRef<HTMLDivElement>(null);
+
+    const [isProduct, setIsProduct] = useState(false);
+    const [buyProductInfo, setBuyProductInfo] = useState([]);
+    const [option, setOption] = useState([]);
+    const [selOption, setSelOption] = useState("");
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalNum, setTotalNum] = useState(0);
+
+    const [detailOffset, setDetailOffset] = useState(0);
+    const [infoOffset, seInfoOffset] = useState(0);
+    const [reviewOffset, setReviewOffset] = useState(0);
+    const [qnaOffset, setQnaOffset] = useState(0);
 
     useEffect(() => {
-        if (ref) {
-            detailOffset = ref[0].current.offsetTop;
-            infoOffset = ref[1].current.offsetTop;
-            reviewOffset = ref[2].current.offsetTop;
-            qnaOffset = ref[3].current.offsetTop;
-        }
-    }, [ref])
+        // console.log(ref[0].current?.clientHeight);
+        // if (ref[0].current !== null) {
+        //     setDetailOffset(ref[0].current.offsetTop);
+        //     seInfoOffset(ref[1].current.offsetTop);
+        //     setReviewOffset(ref[2].current.offsetTop);
+        //     setQnaOffset(ref[3].current.offsetTop);
+        // }
 
-    useEffect(() => {
-        console.log(detailImgs);
-        console.log(detailImgs.length);
-        console.log(thumbImg);
-        console.log(thumbImg.length);
-        console.log(productInfo);
-    }, [detailImgs, thumbImg, productInfo])
+    }, [])
 
     const onClickDetail = useCallback((e) => {
         e.preventDefault();
-        console.log(detailOffset);
-        window.scrollTo(0, detailOffset - 100);
+        window.scrollTo(0, ref[0].current.offsetTop - 100);
     }, []);
     const onClickInfo = useCallback((e) => {
         e.preventDefault();
-        console.log(detailOffset);
-        window.scrollTo(0, infoOffset - 100);
+        window.scrollTo(0, ref[1].current.offsetTop - 100);
     }, []);
     const onClickReview = useCallback((e) => {
         e.preventDefault();
-        console.log(detailOffset);
-        window.scrollTo(0, reviewOffset - 100);
+        window.scrollTo(0, ref[2].current.offsetTop - 100);
     }, []);
     const onClickQna = useCallback((e) => {
         e.preventDefault();
-        console.log(detailOffset);
-        window.scrollTo(0, qnaOffset - 100);
+        window.scrollTo(0, ref[3].current.offsetTop - 100);
     }, []);
 
 
+    const onChangeNum = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = Number(e.target.value.replace(/[^0-9]/g, ""));
+        if (value >= 5) {
+            alert("최대 5개까지 주문 가능합니다!");
+            value = 5;
+        } else if (value === 0) {
+            alert("최소 1개이상 주문해주세요!");
+            value = 1;
+        }
+        const idx = Number(e.target.name);
+        const copy = [...buyProductInfo];
+        const price = Number(copy[idx].price);
+        copy[idx].num = value;
+        copy[idx].buy_price = price * value;
+
+        calcPrice(copy);
+
+        setBuyProductInfo(copy);
+    }
+
+    const calcPrice = (copy) => {
+        let totalP = 0;
+        let totalN = 0;
 
 
+        for (let item of copy) {
+            totalP = totalP + Number(item.buy_price);
+            totalN = totalN + Number(item.num);
+        }
 
+        setTotalPrice(totalP);
+        setTotalNum(totalN);
+
+    }
+
+    const onClickDelete = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLAnchorElement;
+        const idx = Number(tg.id);
+        const copy = [...buyProductInfo];
+        const copyOpt = [...option];
+
+        const opIdx = copyOpt.indexOf(`${copy[idx].size}`);
+
+        copyOpt.splice(opIdx, 1);
+        copy.splice(idx, 1);
+
+        calcPrice(copy);
+        setBuyProductInfo(copy);
+        setOption(copyOpt);
+
+    }
+
+    const onClickMinus = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLAnchorElement;
+        const idx = Number(tg.id);
+        const copy = [...buyProductInfo];
+        let num = Number(copy[idx].num);
+        if (num <= 1) {
+            return
+        }
+        num--;
+        const price = Number(copy[idx].price);
+        copy[idx].buy_price = price * num;
+        copy[idx].num = String(num);
+        calcPrice(copy);
+        setBuyProductInfo(copy);
+
+    }
+
+    const onClickPlus = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLAnchorElement;
+        const idx = Number(tg.id);
+        const copy = [...buyProductInfo];
+        let num = Number(copy[idx].num);
+        if (num >= 5) {
+            return
+        }
+        num++;
+        const price = Number(copy[idx].price);
+        copy[idx].buy_price = price * num;
+        copy[idx].num = String(num);
+        calcPrice(copy);
+        setBuyProductInfo(copy);
+    }
+
+    const onClickSize = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLButtonElement;
+        const name = tg.name;
+        let info = {
+            name: productInfo.name,
+            size: "",
+            num: "1",
+            price: productInfo.price,
+            buy_price: productInfo.price,
+        };
+        if (name === "s") {
+            if (option.includes(selOption + "small")) {
+                alert("이미 등록된 옵션입니다!");
+                return;
+            }
+            setIsProduct(true);
+            setOption([...option, selOption + "small"]);
+            info.size = "small";
+            setBuyProductInfo([...buyProductInfo, info]);
+            setTotalPrice(totalPrice + Number(info.price));
+            setTotalNum(totalNum + 1);
+            setSelOption("");
+        } else if (name === "m") {
+            if (option.includes(selOption + "medium")) {
+                alert("이미 등록된 옵션입니다!");
+                return;
+            }
+            setIsProduct(true);
+            setOption([...option, selOption + "medium"]);
+            info.size = "medium";
+            setBuyProductInfo([...buyProductInfo, info]);
+            setTotalPrice(totalPrice + Number(info.price));
+            setTotalNum(totalNum + 1);
+            setSelOption("");
+        } else if (name === "l") {
+            if (option.includes(selOption + "large")) {
+                alert("이미 등록된 옵션입니다!");
+                return;
+            }
+            setIsProduct(true);
+            setOption([...option, selOption + "large"]);
+            info.size = "large";
+            setBuyProductInfo([...buyProductInfo, info]);
+            setTotalPrice(totalPrice + Number(info.price));
+            setTotalNum(totalNum + 1);
+            setSelOption("");
+        }
+    }
+
+    if (productInfo === undefined || detailImgs.length === 0 || thumbImg.length === 0) {
+        return (<div></div>)
+    }
 
     return (
         <div style={{ marginTop: "100px" }}>
@@ -95,23 +236,29 @@ export default function ProductDetail() {
                     </table>
                     <Form>
                         <OptionAdd>
-                            <label>상품이름</label>
+                            <label>사이즈</label>
                             <div>
-                                <button>small</button>
-                                <button>medium</button>
-                                <button>large</button>
-                                <p>이것봐요!</p>
+                                <button onClick={onClickSize} name="s">small</button>
+                                <button onClick={onClickSize} name="m">medium</button>
+                                <button onClick={onClickSize} name="l">large</button>
+                                <p>(필수선택)</p>
                             </div>
                         </OptionAdd>
-                        <ProductAdd>
-                            <label>상품이름</label>
-                            <input type="number" min={1}
-                                max={5} defaultValue="1"
-                            />
-                            <span>5000원</span>
-                        </ProductAdd>
+                        {isProduct && buyProductInfo.map((item, idx) => {
+                            return <ProductAdd key={idx}>
+                                <label>{item.name} - {item.size}</label>
+                                <ul>
+                                    <li><a id={`${idx}`} onClick={onClickMinus}></a></li>
+                                    <li><input name={String(idx)} type="text" value={item.num} onChange={onChangeNum} maxLength={2}
+                                    /></li>
+                                    <li><a id={`${idx}`} onClick={onClickPlus}></a></li>
+                                    <li><a id={`${idx}`} onClick={onClickDelete}></a></li>
+                                </ul>
+                                <span>{item.buy_price}원</span>
+                            </ProductAdd>
+                        })}
                         <ProductButton>
-                            <nav><strong>0원</strong><span>(0개)</span></nav>
+                            <nav><strong>{totalPrice}원</strong><span>({totalNum}개)</span></nav>
                             <div>
                                 <button>구매하기</button>
                                 <button>장바구니 담기</button>

@@ -38,13 +38,17 @@ export default function Header() {
         setUserKey(null);
     }
 
+    const test = () => {
+        router.push("/signup/1?name=join", "/signup/join");
+    }
+
     return (
         <div ref={divRef} style={{ width: "100%", height: "100px" }}>
             <Content ref={ref}>
                 <LeftCategory>
                     <ul>
                         <li><a href="#">카테고리1</a></li>
-                        <li><Link href="/product/asdf"><a>PRODUCT</a></Link></li>
+                        <li><Link href="/product/1"><a>PRODUCT</a></Link></li>
                         <li><a href="#">카테고리3</a></li>
                     </ul>
                 </LeftCategory>
@@ -63,11 +67,11 @@ export default function Header() {
                         }
                         {
                             userKey === null ?
-                                <li><Link href="/signup/agree"><a>JOIN US</a></Link></li>
+                                <li><Link as="/signup" href="/signup?name=agree"><a>JOIN US</a></Link></li>
                                 :
                                 <li><Link href="/mypage"><a>MY PAGE</a></Link></li>
                         }
-                        <li><Link href="/signup/join"><a>JOIN US2</a></Link></li>
+                        <li><Link as="/signup" href="/signup?name=join" ><a>JOIN US2</a></Link></li>
                         <li><Link href="/mypage"><a>JOIN US3</a></Link></li>
                     </ul>
                 </RightCategory>

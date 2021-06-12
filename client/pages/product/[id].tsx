@@ -10,15 +10,16 @@ export default function Product() {
 
     const router = useRouter();
 
-    const [id, setId] = useState(0);
+    const [id, setId] = useState("");
 
     useEffect(() => {
-        // setId(Number(router.query.id));
-    }, [])
+        if (typeof router.query.id === "string")
+            setId(router.query.id);
+    }, [router])
 
     return (
         <div>
-            <ProductDetail></ProductDetail>
+            <ProductDetail id={id}></ProductDetail>
         </div>
     )
 }

@@ -46,25 +46,60 @@ export const ProductAdd = styled.div`
     align-items: center;
     border-top: 2px solid #ccc;
     padding-top: 20px;
+    margin : 20px 0;
     label{
         display: inline-block;
-        width: 150px;
+        width: 35%;
+    }
+    ul{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+       li{
+        background: #eee;
+       } 
+       a{
+        display: block;
+       }
+       li:nth-child(1) a{
+            background: url("/img/btn_opt_minus.png") no-repeat;
+            width : 26px;
+            height: 26px;
+         }
+       li:nth-child(3) a{
+            background: url("/img/btn_opt_plus.png") no-repeat;
+            width : 26px;
+            height: 26px;
+        }
+        li:nth-child(4) {
+            margin-left: 15px;
+        }
+       li:nth-child(4) a{
+            background: url("/img/btn_price_delete.gif") no-repeat;
+            width: 11px;
+            height: 11px;
+       }   
+
     }
     input{
-        width : 40px;
-        height : 30px;
-        margin-right: 100px;
+        width : 25px;
+        height : 25px;
+        text-align : center;
     }
     span{
+        width: 35%;
         font-size: 20px;
+        text-align: right;
     }
 `
 
 export const OptionAdd = styled.div`
     margin-bottom : 20px;
     display: flex;
+    align-items: center;
     label{
         margin-right: 100px;
+        font-weight:bold;
     }
     div{
 
@@ -73,7 +108,7 @@ export const OptionAdd = styled.div`
         width: 60px;
         height: 36px;
         margin-right: 10px;
-        font-size: 14px;
+        font-size: 12px;
         text-transform: uppercase;
     }
     p{
@@ -155,8 +190,7 @@ export const DetailInfo = styled.div`
         img{
             display: block;
             width: 100%;
-            /* height : 600px; */
-            background-size: cover;
+            height : calc(50% + 0px);
             margin-bottom: 50px;
         }
     }
