@@ -3,6 +3,9 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 
 import { Content, LeftCategory, RightCategory, Logo } from "./styles"
+import fb from '../../firebase'
+
+
 
 export default function Header() {
 
@@ -38,8 +41,14 @@ export default function Header() {
         setUserKey(null);
     }
 
-    const test = () => {
-        router.push("/signup/1?name=join", "/signup/join");
+    const test = async () => {
+        // for (let i = 2; i <= 8; i++) {
+        //     let storage1 = fb.storage().ref(`products/${i}/imgs/detail/test`);
+        //     let storage2 = fb.storage().ref(`products/${i}/imgs/thumb/test`);
+        //     await storage1.put(null);
+        //     await storage2.put(null);
+        // }
+        // console.log("폴더생성완료!")
     }
 
     return (
@@ -47,7 +56,7 @@ export default function Header() {
             <Content ref={ref}>
                 <LeftCategory>
                     <ul>
-                        <li><a href="#">카테고리1</a></li>
+                        <li><a onClick={test}>test</a></li>
                         <li><Link href="/product/1"><a>PRODUCT</a></Link></li>
                         <li><a href="#">카테고리3</a></li>
                     </ul>
@@ -72,7 +81,7 @@ export default function Header() {
                                 <li><Link href="/mypage"><a>MY PAGE</a></Link></li>
                         }
                         <li><Link as="/signup" href="/signup?name=join" ><a>JOIN US2</a></Link></li>
-                        <li><Link href="/mypage"><a>JOIN US3</a></Link></li>
+                        <li><Link href="/category"><a>CATEGORY</a></Link></li>
                     </ul>
                 </RightCategory>
             </Content>

@@ -15,6 +15,8 @@ export default function Product() {
     useEffect(() => {
         if (typeof router.query.id === "string")
             setId(router.query.id);
+
+        console.log(router.query);
     }, [router])
 
     return (

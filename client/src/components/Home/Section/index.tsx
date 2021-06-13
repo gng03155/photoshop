@@ -3,10 +3,16 @@ import React, { useRef, useEffect } from 'react'
 import { SectionWrap, NewItem, InteraciveImg, BestItem } from "./styles"
 
 import ProductItem from '../../ProductItem'
+import useSWR from 'swr';
+import { fetcherData } from '../../../util/fetcher';
 
 export default function Section() {
 
+    const { data: bestList } = useSWR(`products/category/best`, fetcherData, { revalidateOnMount: true });
+    const { data: newList } = useSWR(`products/category/new`, fetcherData, { revalidateOnMount: true });
+
     const divRef = useRef<HTMLImageElement>(null);
+
 
     let prevPos = 0;
 
@@ -17,7 +23,13 @@ export default function Section() {
         }
     }, [])
 
+    useEffect(() => {
+    }, [bestList, newList])
+
     const handleScroll = () => {
+        if (divRef.current === null) {
+            return;
+        }
         const screenHeight = window.innerHeight;
         const scrollTop = document.documentElement.scrollTop;
         const scrollBt = scrollTop + screenHeight;
@@ -25,14 +37,12 @@ export default function Section() {
         const clientHeight = divRef.current.clientHeight;
 
         if (clientTop && scrollBt >= clientTop && scrollTop <= clientTop + clientHeight) {
-
             const move = (scrollBt - clientTop);
 
             const element = divRef.current.firstElementChild as HTMLElement;
             const elemHeight = element.clientHeight;
 
             element.style.top = -elemHeight + move + "px";
-
         }
 
         prevPos = scrollTop;
@@ -45,16 +55,16 @@ export default function Section() {
                     <h3>NEW ITEM</h3>
                     <ul>
                         <li>
-                            <ProductItem />
+                            {newList !== undefined && <ProductItem id={newList[0]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {newList !== undefined && <ProductItem id={newList[1]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {newList !== undefined && <ProductItem id={newList[2]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {newList !== undefined && <ProductItem id={newList[3]} />}
                         </li>
                     </ul>
                 </NewItem>
@@ -65,28 +75,28 @@ export default function Section() {
                     <h3>BEST ITEM</h3>
                     <ul>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[0]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[1]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[2]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[3]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[4]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[5]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[6]} />}
                         </li>
                         <li>
-                            <ProductItem />
+                            {bestList !== undefined && <ProductItem id={bestList[7]} />}
                         </li>
                     </ul>
                 </BestItem>

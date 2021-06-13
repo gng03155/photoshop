@@ -2,8 +2,6 @@ import styled from "styled-components"
 
 export const SectionWrap = styled.section`
      width: 100%;
-     /* height: calc(100vh - 100px); */
-     height: 2000px;
     
 `
 
@@ -20,7 +18,6 @@ export const NewItem = styled.div`
          width: 100%;
          li{
             width: 23%;
-            border: 1px solid #ececec;
          }
      }
     
@@ -40,7 +37,6 @@ export const BestItem = styled.div`
          width: 100%;
          li{
             width: 23%;
-            border: 1px solid #ececec;
             margin-bottom: 20px;
          }
      }

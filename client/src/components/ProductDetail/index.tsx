@@ -3,8 +3,6 @@ import useSWR from 'swr';
 import { fetcherData, fetcherStorage } from '../../util/fetcher';
 import Board from '../Board'
 
-
-
 import { InfoWrap, Info, Img, ProductAdd, OptionAdd, Form, ProductButton, DetailWrap, NaviBar, DetailInfo, BuyInfo, Review, QnA } from "./styles"
 
 interface Props {
@@ -13,10 +11,9 @@ interface Props {
 
 export default function ProductDetail({ id }: Props) {
 
-
     const { data: detailImgs } = useSWR(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
-    const { data: productInfo } = useSWR(`products/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: productInfo } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
 
     const ref = new Array(4).fill(0).map((i) => { return useRef<HTMLDivElement>(null) });
 

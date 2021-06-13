@@ -1,18 +1,52 @@
-import React from 'react'
-import { Wrap, ThumbNail, Color } from "./styles"
-export default function ProductItem() {
+import React, { useEffect } from 'react'
+import useSWR from 'swr';
+import Link from 'next/link';
+
+import { fetcherData, fetcherStorage } from '../../util/fetcher';
+import { Wrap, ThumbNail, Description, Color, Promotion } from "./styles"
+
+interface Props {
+    id: string,
+}
+export default function ProductItem({ id }: Props) {
+
+    const { data: productInfo } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true });
+
+    useEffect(() => {
+        console.log(id);
+    }, [])
+
+    useEffect(() => {
+        console.log(productInfo);
+    }, [productInfo])
+
+    if (productInfo === undefined || thumbImg === undefined) {
+        return <div></div>
+    }
+
     return (
         <Wrap>
             <ThumbNail>
-                <img src="img/ch2.jpg" alt="상품 썸네일" />
+                <Link href={`/product/${productInfo.id}`}>
+                    <a><img src={thumbImg[0]} alt="상품 썸네일" /></a>
+                </Link>
             </ThumbNail>
-            <span>상품이름</span>
-            <p>상품 부연 설명</p>
-            <strong>가격</strong>
-            <Color>
-                <span></span>
-                <span></span>
-            </Color>
+            <Description>
+                <span>{productInfo.name}</span>
+                <p>{productInfo.some_desc}</p>
+                <strong>{productInfo.price}원</strong>
+                <div>
+                    {productInfo.option.color !== undefined &&
+                        productInfo.option.color.map((color, idx) => {
+                            return <Color key={idx} color={color}></Color>
+                        })}
+                </div>
+                <Promotion>
+                    {productInfo.category.includes("new") && <img src="/img/new_icon.png" alt="new" />}
+                    {productInfo.category.includes("best") && <img src="/img/best_icon.png" alt="best" />}
+                </Promotion>
+            </Description>
         </Wrap>
     )
 }
