@@ -37,8 +37,8 @@ export default function ProductItem({ id }: Props) {
                 <p>{productInfo.some_desc}</p>
                 <strong>{productInfo.price}원</strong>
                 <div>
-                    {productInfo.option.color !== undefined &&
-                        productInfo.option.color.map((color, idx) => {
+                    {productInfo.color !== undefined &&
+                        productInfo.color.map((color, idx) => {
                             return <Color key={idx} color={color}></Color>
                         })}
                 </div>

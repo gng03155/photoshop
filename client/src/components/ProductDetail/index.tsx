@@ -1,9 +1,14 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useCallback, useState } from 'react'
 import useSWR from 'swr';
+import fb from '../../firebase';
+
 import { fetcherData, fetcherStorage } from '../../util/fetcher';
 import Board from '../Board'
 
-import { InfoWrap, Info, Img, ProductAdd, OptionAdd, Form, ProductButton, DetailWrap, NaviBar, DetailInfo, BuyInfo, Review, QnA } from "./styles"
+import { InfoWrap, Info, Img, ProductAdd, OptionAdd, Color, Form, ProductButton, DetailWrap, NaviBar, DetailInfo, BuyInfo, Review, QnA } from "./styles"
+
+
 
 interface Props {
     id: string,
@@ -14,33 +19,28 @@ export default function ProductDetail({ id }: Props) {
     const { data: detailImgs } = useSWR(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: productInfo } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
-
     const ref = new Array(4).fill(0).map((i) => { return useRef<HTMLDivElement>(null) });
 
-    const rr = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+
+    const colorRef = useRef<HTMLDivElement>();
+    const sizeRef = useRef<HTMLDivElement>();
+
+    const [userKey, setUserKey] = useState("");
 
     const [isProduct, setIsProduct] = useState(false);
+    const [isColor, setIsColor] = useState(false);
     const [buyProductInfo, setBuyProductInfo] = useState([]);
     const [option, setOption] = useState([]);
     const [selOption, setSelOption] = useState("");
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalNum, setTotalNum] = useState(0);
 
-    const [detailOffset, setDetailOffset] = useState(0);
-    const [infoOffset, seInfoOffset] = useState(0);
-    const [reviewOffset, setReviewOffset] = useState(0);
-    const [qnaOffset, setQnaOffset] = useState(0);
+
 
     useEffect(() => {
-        // console.log(ref[0].current?.clientHeight);
-        // if (ref[0].current !== null) {
-        //     setDetailOffset(ref[0].current.offsetTop);
-        //     seInfoOffset(ref[1].current.offsetTop);
-        //     setReviewOffset(ref[2].current.offsetTop);
-        //     setQnaOffset(ref[3].current.offsetTop);
-        // }
-
-    }, [])
+        setUserKey(window.sessionStorage.getItem("uid"));
+    }, [router]);
 
     const onClickDetail = useCallback((e) => {
         e.preventDefault();
@@ -58,6 +58,37 @@ export default function ProductDetail({ id }: Props) {
         e.preventDefault();
         window.scrollTo(0, ref[3].current.offsetTop - 100);
     }, []);
+
+
+    const onClickBuy = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        if (userKey === "") {
+            router.push("/login");
+        }
+
+        for (let info of buyProductInfo) {
+            const dataRef = fb.database().ref(`cart/${userKey}`).push();
+            const key = dataRef.toString().split(`${userKey}/`)[1]
+            dataRef.set({
+                name: info.name,
+                num: info.num,
+                price: info.price,
+                option: info.option,
+                delivery: info.delivery,
+                key: key,
+            })
+            info.key = key;
+        }
+        const copy = [...buyProductInfo];
+        router.push({
+            pathname: "/order",
+            query: {
+                data: JSON.stringify(copy),
+            },
+        }, `/order/${userKey}`);
+
+    }, [userKey, buyProductInfo])
 
 
     const onChangeNum = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,54 +179,66 @@ export default function ProductDetail({ id }: Props) {
         setBuyProductInfo(copy);
     }
 
-    const onClickSize = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const onClickColor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
-        const tg = e.target as HTMLButtonElement;
-        const name = tg.name;
+        const tg = e.target as HTMLAnchorElement;
+        const name = tg.id;
+        const nodes = tg.parentElement.parentElement.childNodes;
+        colorRef.current.firstChild.childNodes.forEach((node) => {
+            const elem = node.firstChild as HTMLAnchorElement;
+            elem.classList.remove("active");
+        })
+        sizeRef.current.firstChild.childNodes.forEach((node) => {
+            const elem = node.firstChild as HTMLAnchorElement;
+            elem.classList.remove("active");
+        })
+        tg.classList.add("active");
+
+        setSelOption(name + "/");
+
+        setIsColor(true);
+
+    }
+
+    const setBuyList = (name, info) => {
+        setIsProduct(true);
+        setOption([...option, selOption + name]);
+        info.option = selOption + name;
+        setBuyProductInfo([...buyProductInfo, info]);
+        setTotalPrice(totalPrice + Number(info.price));
+        setTotalNum(totalNum + 1);
+    }
+
+    const onClickSize = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        if (!isColor) {
+            alert("컬러를 먼저 선택해주세요!");
+            return;
+        }
+        const tg = e.target as HTMLAnchorElement;
+        const name = tg.id;
+        const nodes = tg.parentElement.parentElement.childNodes;
+        sizeRef.current.firstChild.childNodes.forEach((node) => {
+            const elem = node.firstChild as HTMLAnchorElement;
+            elem.classList.remove("active");
+        })
+
+        tg.classList.add("active");
+
+
         let info = {
             name: productInfo.name,
-            size: "",
+            option: "",
             num: "1",
             price: productInfo.price,
             buy_price: productInfo.price,
+            delivery: productInfo.delivery,
         };
-        if (name === "s") {
-            if (option.includes(selOption + "small")) {
-                alert("이미 등록된 옵션입니다!");
-                return;
-            }
-            setIsProduct(true);
-            setOption([...option, selOption + "small"]);
-            info.size = "small";
-            setBuyProductInfo([...buyProductInfo, info]);
-            setTotalPrice(totalPrice + Number(info.price));
-            setTotalNum(totalNum + 1);
-            setSelOption("");
-        } else if (name === "m") {
-            if (option.includes(selOption + "medium")) {
-                alert("이미 등록된 옵션입니다!");
-                return;
-            }
-            setIsProduct(true);
-            setOption([...option, selOption + "medium"]);
-            info.size = "medium";
-            setBuyProductInfo([...buyProductInfo, info]);
-            setTotalPrice(totalPrice + Number(info.price));
-            setTotalNum(totalNum + 1);
-            setSelOption("");
-        } else if (name === "l") {
-            if (option.includes(selOption + "large")) {
-                alert("이미 등록된 옵션입니다!");
-                return;
-            }
-            setIsProduct(true);
-            setOption([...option, selOption + "large"]);
-            info.size = "large";
-            setBuyProductInfo([...buyProductInfo, info]);
-            setTotalPrice(totalPrice + Number(info.price));
-            setTotalNum(totalNum + 1);
-            setSelOption("");
+        if (option.includes(selOption + name)) {
+            alert("이미 등록된 옵션입니다!");
+            return;
         }
+        setBuyList(name, info);
     }
 
     if (productInfo === undefined || detailImgs.length === 0 || thumbImg.length === 0) {
@@ -233,17 +276,30 @@ export default function ProductDetail({ id }: Props) {
                     </table>
                     <Form>
                         <OptionAdd>
+                            <label>컬러</label>
+                            <div ref={colorRef}>
+                                <ul>
+                                    {productInfo.color.map((value, idx) => {
+                                        return <li key={idx}><Color color={value} id={value} onClick={onClickColor}></Color></li>
+                                    })}
+                                </ul>
+                                <p>(필수선택)</p>
+                            </div>
+                        </OptionAdd>
+                        <OptionAdd>
                             <label>사이즈</label>
-                            <div>
-                                <button onClick={onClickSize} name="s">small</button>
-                                <button onClick={onClickSize} name="m">medium</button>
-                                <button onClick={onClickSize} name="l">large</button>
+                            <div ref={sizeRef}>
+                                <ul>
+                                    {productInfo.size.map((value, idx) => {
+                                        return <li key={idx}><a id={value} onClick={onClickSize}>{value}</a></li>
+                                    })}
+                                </ul>
                                 <p>(필수선택)</p>
                             </div>
                         </OptionAdd>
                         {isProduct && buyProductInfo.map((item, idx) => {
                             return <ProductAdd key={idx}>
-                                <label>{item.name} - {item.size}</label>
+                                <label>{item.name} - {item.option}</label>
                                 <ul>
                                     <li><a id={`${idx}`} onClick={onClickMinus}></a></li>
                                     <li><input name={String(idx)} type="text" value={item.num} onChange={onChangeNum} maxLength={2}
@@ -257,7 +313,7 @@ export default function ProductDetail({ id }: Props) {
                         <ProductButton>
                             <nav><strong>{totalPrice}원</strong><span>({totalNum}개)</span></nav>
                             <div>
-                                <button>구매하기</button>
+                                <button onClick={onClickBuy}>구매하기</button>
                                 <button>장바구니 담기</button>
                                 <button>관심상품 등록</button>
                             </div>

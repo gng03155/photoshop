@@ -49,6 +49,27 @@ export default function Header() {
         //     await storage2.put(null);
         // }
         // console.log("폴더생성완료!")
+
+        let stoRef = fb.database().ref(`cart/user_id3`);
+        let val = await stoRef.get().then((value) => {
+            return value.val();
+        })
+        const aa = stoRef.push("test").toString();
+        console.log(aa.split("user_id3/")[1]);
+        // .set({
+        //     name: "name",
+        //     test: "test",
+        //     hoho: "hoho",
+        // });
+
+        console.log(Object.keys(val).length);
+        // let dataRef = fb.database().ref(`cart/user_id2/02`);
+        // dataRef.set({
+        //     name: "name",
+        //     test: "test",
+        //     num: "num",
+        // })
+
     }
 
     return (

@@ -21,9 +21,8 @@ export const Info = styled.div`
         border-spacing: 0px;
     }
     tr{
-        height : 50px;
+        height : 40px;
         line-height: 2;
-        margin: 20px 0;
     }
     th{
         width: 150px;
@@ -37,8 +36,7 @@ export const Info = styled.div`
     }
 `
 export const Form = styled.form`
-    border-top: 1px solid #ccc;
-    padding-top : 20px;
+    padding-top : 10px;
 `
 export const ProductAdd = styled.div`
     display: flex;
@@ -94,26 +92,47 @@ export const ProductAdd = styled.div`
 `
 
 export const OptionAdd = styled.div`
+    padding-top: 10px;
     margin-bottom : 20px;
     display: flex;
-    align-items: center;
+    border-top : 1px solid #ececec;
     label{
-        margin-right: 100px;
+        width : 150px;
         font-weight:bold;
+        padding-top : 5px;
     }
     div{
 
     }
-    button{
-        width: 60px;
-        height: 36px;
-        margin-right: 10px;
-        font-size: 12px;
-        text-transform: uppercase;
+    ul{
+        display: flex;
+        li{
+            margin-right: 4px;
+        }
+        a{
+            display: inline-block;
+            padding: 10px 6px;
+            font-size: 12px;
+            text-transform: uppercase;
+            border : 1px solid #ececec;
+        }
+        a.active{
+            border : 2px solid black;
+        }
     }
     p{
         margin-top: 10px;
     }
+`
+
+export const Color = styled.a<{ color }>`
+    width : 24px;
+    height : 24px;
+    border : 1px solid ${props => props.color} ;
+    border-radius: 100%;
+    background-color: ${props => props.color};
+    margin-right: 3px;
+
 `
 
 export const ProductButton = styled.div`

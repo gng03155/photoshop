@@ -40,7 +40,7 @@ export default function Login() {
             if (pwHash === userInfo.pswd) {
                 console.log("비밀번호가 일치합니다!");
                 sessionStorage.setItem("uid", key);
-                router.push("/");
+                router.back();
 
 
             } else {
