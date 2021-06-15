@@ -101,7 +101,7 @@ export default function Header() {
                                 :
                                 <li><Link href="/mypage"><a>MY PAGE</a></Link></li>
                         }
-                        <li><Link as="/signup" href="/signup?name=join" ><a>JOIN US2</a></Link></li>
+                        <li><Link href="/cart" ><a>CART</a></Link></li>
                         <li><Link href="/category"><a>CATEGORY</a></Link></li>
                     </ul>
                 </RightCategory>

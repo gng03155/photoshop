@@ -17,4 +17,8 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
     background: none;
   }
+  input,select{
+    outline: none;
+    border : 0;
+  }
 `;

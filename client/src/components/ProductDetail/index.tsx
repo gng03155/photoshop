@@ -26,7 +26,7 @@ export default function ProductDetail({ id }: Props) {
     const colorRef = useRef<HTMLDivElement>();
     const sizeRef = useRef<HTMLDivElement>();
 
-    const [userKey, setUserKey] = useState("");
+    const [userKey, setUserKey] = useState(null);
 
     const [isProduct, setIsProduct] = useState(false);
     const [isColor, setIsColor] = useState(false);
@@ -62,14 +62,19 @@ export default function ProductDetail({ id }: Props) {
 
     const onClickBuy = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-
-        if (userKey === "") {
+        if (buyProductInfo.length === 0) {
+            alert("상품을 선택해주세요!");
+            return;
+        }
+        if (userKey === null) {
             router.push("/login");
+            return;
         }
 
         for (let info of buyProductInfo) {
             const dataRef = fb.database().ref(`cart/${userKey}`).push();
             const key = dataRef.toString().split(`${userKey}/`)[1]
+            const idx = buyProductInfo.indexOf(info);
             dataRef.set({
                 name: info.name,
                 num: info.num,
@@ -77,6 +82,7 @@ export default function ProductDetail({ id }: Props) {
                 option: info.option,
                 delivery: info.delivery,
                 key: key,
+                thumbnail_src: thumbImg[0],
             })
             info.key = key;
         }
@@ -233,6 +239,7 @@ export default function ProductDetail({ id }: Props) {
             price: productInfo.price,
             buy_price: productInfo.price,
             delivery: productInfo.delivery,
+            thumb_src: thumbImg[0],
         };
         if (option.includes(selOption + name)) {
             alert("이미 등록된 옵션입니다!");
