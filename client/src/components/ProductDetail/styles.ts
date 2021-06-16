@@ -148,26 +148,68 @@ export const ProductButton = styled.div`
             vertical-align: bottom;
         }
     }
-    div{
+    & > div{
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        button {
-            height : 50px;
-            margin-bottom : 10px;
-            border-radius: 5px;
-        }
-        button:nth-child(1){
+        ul{
             width: 100%;
-            background: #333;
-            color : #fff;
+            display: flex;
         }
-        button:nth-child(2) , button:nth-child(3){
-            width: 49%;
-            background: #fff;
-            color : #333;
+        li{
+            height : 60px;
             border : 1px solid #ececec;
+            cursor: pointer;
         }
+        li:nth-child(1){
+            width: 70%;
+        }
+        li:nth-child(2) , li:nth-child(3){
+            width: 15%;
+        }
+        button {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+    }
+`
+export const LikeBtn = styled.div`
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &.active {
+        background-color: #f00;
+        color : #fff;
+    }
+    a{
+        display: block;
+        width: 30px;
+        height : 30px;
+        background : url("/img/icon.png") no-repeat;
+        background-position: -181px -12px;
+    }
+    span{
+        font-size : 12px;
+    }
+`
+
+export const CartBtn = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    a{
+        display: block;
+        width: 30px;
+        height : 30px;
+        background : url("/img/icon.png") no-repeat;
+        background-position: -240px -11px;
     }
 `
 

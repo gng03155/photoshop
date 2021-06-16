@@ -70,17 +70,26 @@ export const PageNation = styled.div`
         margin-top: 50px;
     }
     li{
-        margin-right: 10px;
         cursor: pointer;
+        width : 32px;
+        height : 32px;
+        line-height: 32px;
+        text-align: center;
+    }
+    li.page_number{
+        border: 1px solid #d7d5d5;
     }
     a{
         font-weight: 400;
+        display: inline-block;
+        width : 100%;
+        height: 100%;
     }
     a.active{
         font-weight: bold;
     }
     img{
-        width: 32px;
-        height : 32px
+        width: 100%;
+        height : 100%
     }
 `

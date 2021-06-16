@@ -14,7 +14,11 @@ export default function Category() {
     const [proIdList, setProIdList] = useState<string[]>([]);
 
     const router = useRouter();
+    useEffect(() => {
 
+        console.log("들어옴");
+
+    }, [])
     useEffect(() => {
 
         if (router.query.id) {
@@ -24,19 +28,15 @@ export default function Category() {
     }, [router])
 
     useEffect(() => {
+
         if (productList !== undefined) {
             const list = Object.keys(productList);
             setProIdList(list);
         }
-
-        console.log(proIdList)
-
     }, [productList])
 
     useEffect(() => {
-
-        console.log(proIdList)
-
+        console.log(proIdList);
     }, [proIdList])
 
     if (proIdList.length === 0) {
@@ -45,7 +45,7 @@ export default function Category() {
 
     return (
         <div>
-            <ProductList proIdList={proIdList}></ProductList>
+            {proIdList.length !== 0 && <ProductList proIdList={proIdList}></ProductList>}
         </div>
     )
 }

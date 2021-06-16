@@ -79,7 +79,7 @@ export default function Header() {
                     <ul>
                         <li><a onClick={test}>test</a></li>
                         <li><Link href="/product/1"><a>PRODUCT</a></Link></li>
-                        <li><a href="#">카테고리3</a></li>
+                        <li><Link href="/board"><a>BOARD</a></Link></li>
                     </ul>
                 </LeftCategory>
                 <Logo>

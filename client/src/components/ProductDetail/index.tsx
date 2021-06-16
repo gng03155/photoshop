@@ -4,9 +4,9 @@ import useSWR from 'swr';
 import fb from '../../firebase';
 
 import { fetcherData, fetcherStorage } from '../../util/fetcher';
-import Board from '../Board'
+import Board from '../BoardList'
 
-import { InfoWrap, Info, Img, ProductAdd, OptionAdd, Color, Form, ProductButton, DetailWrap, NaviBar, DetailInfo, BuyInfo, Review, QnA } from "./styles"
+import { InfoWrap, Info, Img, ProductAdd, OptionAdd, Color, Form, ProductButton, DetailWrap, NaviBar, DetailInfo, BuyInfo, Review, QnA, LikeBtn, CartBtn } from "./styles"
 
 
 
@@ -76,6 +76,7 @@ export default function ProductDetail({ id }: Props) {
             const key = dataRef.toString().split(`${userKey}/`)[1]
             const idx = buyProductInfo.indexOf(info);
             dataRef.set({
+                id: info.id,
                 name: info.name,
                 num: info.num,
                 price: info.price,
@@ -233,6 +234,7 @@ export default function ProductDetail({ id }: Props) {
 
 
         let info = {
+            id: productInfo.id,
             name: productInfo.name,
             option: "",
             num: "1",
@@ -320,9 +322,20 @@ export default function ProductDetail({ id }: Props) {
                         <ProductButton>
                             <nav><strong>{totalPrice}원</strong><span>({totalNum}개)</span></nav>
                             <div>
-                                <button onClick={onClickBuy}>구매하기</button>
-                                <button>장바구니 담기</button>
-                                <button>관심상품 등록</button>
+                                <ul>
+                                    <li><button onClick={onClickBuy}>구매하기</button></li>
+                                    <li>
+                                        <LikeBtn className="active">
+                                            <a></a>
+                                            <span>1000</span>
+                                        </LikeBtn>
+                                    </li>
+                                    <li>
+                                        <CartBtn>
+                                            <a></a>
+                                        </CartBtn>
+                                    </li>
+                                </ul>
                             </div>
                         </ProductButton>
                     </Form>

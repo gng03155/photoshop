@@ -7,7 +7,7 @@ export const fetcherData = async (path: string) => {
                 return data.val();
             } else {
                 console.log("No data available");
-                return null;
+                return;
             }
         })
         .catch((err) => {

@@ -27,13 +27,13 @@ export const Label = styled.label`
     width: 400px;
     height : 40px;
     margin-bottom : 5px;
-    /* border : 1px solid #ccc; */
 `;
 
 export const Input = styled.input`
     width: 100%;
     height: 100%;
     padding: 2px 5px;
+    border : 1px solid #ececec;
 `;
 
 export const Find = styled.div`

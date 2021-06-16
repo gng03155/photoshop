@@ -41,14 +41,10 @@ export default function ProductList({ proIdList }: Props) {
         }
         copy.splice(0, 1);
         setPageList(copy);
-
-        // setIsSet(true);
-
     }, [])
 
     useEffect(() => {
-        // console.log(productList);
-        // console.log(categoryList);
+
     }, [productList, categoryList])
 
     const onClickPage = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -96,6 +92,10 @@ export default function ProductList({ proIdList }: Props) {
         window.scrollTo(0, 0);
     }, [curPage, pageList])
 
+    if (proIdList.length === 0) {
+        return <div></div>
+    }
+
     return (
         <Wrap>
             <ListMenu>
@@ -120,9 +120,8 @@ export default function ProductList({ proIdList }: Props) {
                         <li><a onClick={onClickFirst}><img src="img/btn_page_first.gif" alt="#" /></a></li>
                         <li><a onClick={onClickPrev}><img src="img/btn_page_prev.gif" alt="#" /></a></li>
                         {pageList.map((item, idx) => {
-                            console.log(idx);
                             return (
-                                <li key={idx}>
+                                <li key={idx} className="page_number">
                                     <a id={`${idx}`}
                                         onClick={onClickPage}
                                         className={curPage === idx ? "active" : ""}

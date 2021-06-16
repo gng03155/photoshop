@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { promises } from 'stream';
 import useSWR from 'swr'
+import OptionModal from '../../src/components/Modal/OptionModal';
 import fb from '../../src/firebase';
 import { fetcherData } from '../../src/util/fetcher'
 import { BasketItem, BasketWrap, Wrap, ProductInfo, Quantity, OrderPrice, OrderButton, Modal } from './styles'
@@ -9,22 +11,47 @@ export default function Cart() {
 
     const [userKey, setUserKey] = useState("");
 
-    const { data: cartList, revalidate: cartUpdate } = useSWR(`cart/${userKey}`, fetcherData, { revalidateOnMount: true, compare: (a, b) => { return false } });
+    const { data: cartList, revalidate: cartUpdate } = useSWR(`cart/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => { return false } });
 
+    const [optionList, setOptionList] = useState({});
+    const [isModal, setIsModal] = useState(false);
+    const [isOption, setIsOption] = useState(false);
+    const [modalProps, setModalProps] = useState({ x: 0, y: 0, productId: "", cartKey: "" });
+
+    const [selColor, setSelColor] = useState("");
 
     const ref = new Array(50).fill(0).map(() => { return useRef<HTMLInputElement>(null) })
+
+
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
     }, [])
 
     useEffect(() => {
-        if (cartList === undefined) {
-
+        if (cartList !== null && cartList !== undefined) {
+            let keys = [];
+            for (let key in cartList) {
+                keys.push(cartList[key].id);
+            }
+            //중복된 id값 필터링
+            const set = new Set(keys);
+            const ids = Array.from(set);
+            setStock(ids);
         }
-        console.log(cartList)
     }, [cartList])
 
+    const setStock = async (ids) => {
+        const temp = {};
+
+        for (let id of ids) {
+            const option = await fb.database().ref(`products/stock/${id}`).get().then((data) => { return data.val(); });
+            temp[id] = option;
+        }
+
+        setOptionList(temp);
+
+    }
 
     const onClickMinus = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
@@ -125,15 +152,69 @@ export default function Cart() {
         cartUpdate();
     }
 
-    const tt = (e: any) => {
+    const onSubmitOption = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(ref);
+        setIsModal(false);
+        setIsOption(false);
+
+        const option1 = e.target[0].value as HTMLSelectElement;
+        const option2 = e.target[1].value as HTMLSelectElement;
+        if (option1.value === "" || option2.value === "") {
+            alert("옵션을 선택해주세요");
+        }
+
+
+        const copy = { ...cartList };
+        const key = modalProps.cartKey;
+        copy[key].option = `${option1}/${option2}`;
+        fb.database().ref(`cart/${userKey}/${key}`).update(copy[key]);
+        alert("옵션이 수정되었습니다.")
+        cartUpdate();
+
     }
 
+    const openOptionModal = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
 
-    // if (cartList === undefined) {
-    //     return <div></div>
-    // }
+        const tg = e.target as HTMLAnchorElement;
+
+        const x = window.pageXOffset + tg.getBoundingClientRect().left;
+        const y = window.pageYOffset + tg.getBoundingClientRect().top + tg.clientHeight;
+        const id = tg.id;
+        const key = tg.dataset.key;
+
+        setIsModal(true);
+        setModalProps({ x, y, productId: id, cartKey: key });
+
+    }
+
+    const onCloseModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setIsOption(false);
+        setIsModal(false);
+    }
+
+    const onChangeColor = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const tg = e.target as HTMLSelectElement;
+
+        const value = tg.value;
+
+        if (value === "") {
+            setIsOption(false);
+            setSelColor("");
+            return;
+        }
+
+        setIsOption(true);
+        setSelColor(value);
+    }
+
+    const tt = (e: any) => {
+        e.preventDefault();
+    }
+
+    if (cartList === null) {
+        return <div></div>
+    }
 
     return (
         <Wrap>
@@ -180,21 +261,7 @@ export default function Cart() {
                                                 <li><p>{cartList[id].name}</p></li>
                                                 <li><p className="option">[옵션 : {cartList[id].option}]</p></li>
                                                 <li>
-                                                    <a>옵션 변경</a>
-                                                    <Modal>
-                                                        <h3>옵션 변경</h3>
-                                                        <p>상품이름</p>
-                                                        <div className="bar"></div>
-                                                        <ul>
-                                                            <li><span>상품옵션</span></li>
-                                                            <li><label>컬러</label><select name="" id=""></select></li>
-                                                            <li><label>사이즈</label><select name="" id=""></select></li>
-                                                        </ul>
-                                                        <div>
-                                                            <button>변경</button>
-                                                            <button>취소</button>
-                                                        </div>
-                                                    </Modal>
+                                                    <a id={cartList[id].id} data-key={cartList[id].key} onClick={openOptionModal}>옵션 변경</a>
                                                 </li>
                                             </ul>
                                         </ProductInfo>
@@ -215,7 +282,7 @@ export default function Cart() {
                                 </tr>
                             )
                         })}
-                        {cartList === null &&
+                        {cartList === undefined &&
                             <tr><td colSpan={9}>현재 장바구니에 등록된 상품이 없습니다!!</td></tr>
                         }
                     </tbody>
@@ -263,6 +330,39 @@ export default function Cart() {
                 <button>전체 상품 주문</button>
                 <button>선택 상품 주문</button>
             </OrderButton>
-        </Wrap>
+            {isModal &&
+                <Modal x={modalProps.x} y={modalProps.y}>
+                    <form onSubmit={onSubmitOption}>
+                        <h3>옵션 변경</h3>
+                        <p>상품이름</p>
+                        <div className="bar"></div>
+                        <ul>
+                            <li><span>상품옵션</span></li>
+                            <li>
+                                <label>컬러</label>
+                                <select defaultValue="" onChange={onChangeColor}>
+                                    <option value="">-필수 옵션을 선택해주세요.</option>
+                                    {Object.keys(optionList[modalProps.productId]).map((color, idx) => {
+                                        return <option key={idx} value={color}>{color}</option>
+                                    })}
+                                </select>
+                            </li>
+                            <li>
+                                <label>사이즈</label>
+                                <select defaultValue="">
+                                    <option value="">-필수 옵션을 선택해주세요.</option>
+                                    {isOption && Object.keys(optionList[modalProps.productId][selColor]).map((size, idx) => {
+                                        return <option key={idx} value={size}>{size}</option>
+                                    })}
+                                </select>
+                            </li>
+                        </ul>
+                        <div>
+                            <button type="submit">변경</button>
+                            <button onClick={onCloseModal}>취소</button>
+                        </div>
+                    </form>
+                </Modal>}
+        </Wrap >
     )
 }

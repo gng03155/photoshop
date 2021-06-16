@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Table, PageNation } from "./styles"
 
-export default function Board() {
+export default function BoardList() {
     return (
         <div>
             <Table>

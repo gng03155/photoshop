@@ -155,12 +155,12 @@ export const OrderButton = styled.div`
     }
 `
 
-export const Modal = styled.div`
-    display: none;
+export const Modal = styled.div<{ x, y }>`
+    /* display: none; */
     position: absolute;
+    top : ${props => props.y}px;
+    left : ${props => props.x}px;
     width : 450px;
-    top: 100%;
-    left: 0;
     padding: 10px;
     background-color: #fff;
     border : 1px solid #ccc;

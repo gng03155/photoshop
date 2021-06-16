@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import Link from 'next/link';
 
 import { fetcherData, fetcherStorage } from '../../util/fetcher';
-import { Wrap, ThumbNail, Description, Color, Promotion } from "./styles"
+import { Wrap, ThumbNail, Description, Color, Promotion, Like } from "./styles"
 
 interface Props {
     id: string,
@@ -18,7 +18,6 @@ export default function ProductItem({ id }: Props) {
     }, [])
 
     useEffect(() => {
-        console.log(productInfo);
     }, [productInfo])
 
     if (productInfo === undefined || thumbImg === undefined) {
@@ -46,6 +45,10 @@ export default function ProductItem({ id }: Props) {
                     {productInfo.category.includes("new") && <img src="/img/new_icon.png" alt="new" />}
                     {productInfo.category.includes("best") && <img src="/img/best_icon.png" alt="best" />}
                 </Promotion>
+                <Like>
+                    <a></a>
+                    <span>1000</span>
+                </Like>
             </Description>
         </Wrap>
     )

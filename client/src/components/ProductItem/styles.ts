@@ -33,6 +33,25 @@ export const Description = styled.div`
     }
 `
 
+export const Like = styled.div`
+    display: flex;
+    align-items: center;
+    a{
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background : url("/img/icon_like.png") no-repeat;
+        /* background-position: -150px -10px; */
+        margin-right: 10px;
+    }
+    span{
+        color : red;
+        margin : 0;
+        font-size : 14px;
+        font-weight: bold;
+    }
+`
+
 export const Color = styled.div<{ color: string }>`
     display: inline-block;
     width: 22px;
