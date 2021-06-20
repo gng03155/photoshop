@@ -50,19 +50,19 @@ export default function Header() {
         // }
         // console.log("폴더생성완료!")
 
-        let stoRef = fb.database().ref(`cart/user_id3`);
-        let val = await stoRef.get().then((value) => {
-            return value.val();
-        })
-        const aa = stoRef.push("test").toString();
-        console.log(aa.split("user_id3/")[1]);
+        // let stoRef = fb.database().ref(`cart/user_id3`);
+        // let val = await stoRef.get().then((value) => {
+        //     return value.val();
+        // })
+        // const aa = stoRef.push("test").toString();
+        // console.log(aa.split("user_id3/")[1]);
         // .set({
         //     name: "name",
         //     test: "test",
         //     hoho: "hoho",
         // });
 
-        console.log(Object.keys(val).length);
+        // console.log(Object.keys(val).length);
         // let dataRef = fb.database().ref(`cart/user_id2/02`);
         // dataRef.set({
         //     name: "name",
@@ -77,9 +77,9 @@ export default function Header() {
             <Content ref={ref}>
                 <LeftCategory>
                     <ul>
-                        <li><a onClick={test}>test</a></li>
+                        <li><Link href="/article/free?id=free&key=-McV-rHrRab1MvqYdjGL">test</Link></li>
                         <li><Link href="/product/1"><a>PRODUCT</a></Link></li>
-                        <li><Link href="/board"><a>BOARD</a></Link></li>
+                        <li><Link href="/board/free"><a>BOARD</a></Link></li>
                     </ul>
                 </LeftCategory>
                 <Logo>

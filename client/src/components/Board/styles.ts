@@ -44,13 +44,12 @@ export const SubContent = styled.div`
     }
     li{
         width : 100%;
-        height : 45px;
         border-bottom : 1px solid #ececec;
     }
     li > div{
         display: flex;
+        height : 50px;
         align-items: center;
-        height: 100%;
     }
     li:last-child{
         border-bottom : 0;
@@ -67,9 +66,24 @@ export const SubContent = styled.div`
 `
 export const File = styled.div`
 
+    input[type = "file"]{
+        display: none;
+    }
     input{
-        width : 30%;
-        height : 24px;
+        width : 200px;
+        padding : 5px 5px;
+        font-size: 16px;
+        margin-left: 10px;
+    }
+    label.fileLabel{
+        display: inline-block;
+        padding : 5px 5px;
+        color: #fff;
+        background-color: #337ab7;
+        border-color: #2e6da4;
+        border-radius: 3px;
+        font-size: 16px;
+        text-align: center;
     }
 `
 

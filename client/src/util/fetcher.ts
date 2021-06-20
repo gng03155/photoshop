@@ -1,6 +1,9 @@
 import fb from '../firebase'
 
 export const fetcherData = async (path: string) => {
+    if (path == "null") {
+        return undefined;
+    }
     return await fb.database().ref(path).get()
         .then((data) => {
             if (data.exists()) {

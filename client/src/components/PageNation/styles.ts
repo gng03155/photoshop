@@ -1,29 +1,6 @@
 import styled from "styled-components"
 
-export const Table = styled.table`
-    width: 100%;
-    border-spacing: 0px;
-    border-collapse: collapse;
-    thead {
-        height : 40px;
-        border-top : 1px solid #ececec;
-        border-bottom : 1px solid #ececec;
-    }
-    tbody{
-        tr{
-            height : 60px;
-            border-bottom : 1px solid #ececec;
-        }
-    }
-    tr{
-        
-    }
-    td{
-        text-align: center;
-    }
-`
-
-export const PageNation = styled.div`
+export const Page = styled.div`
     margin-bottom : 50px;
     ul{
         width: 100%;
@@ -56,4 +33,3 @@ export const PageNation = styled.div`
         height : 100%
     }
 `
-

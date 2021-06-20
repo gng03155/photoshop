@@ -3,7 +3,7 @@ import { CKEditor } from 'ckeditor4-react';
 import useSWR from 'swr';
 import { fetcherData } from '../../src/util/fetcher';
 
-import { Wrap, BoardWrap, Title, SubContent, File, PassWord, Button } from "./styles"
+import { Wrap, BoardWrap, Title, SubContent, File, PassWord, Button } from "./[id]/write/styles"
 import fb from '../../src/firebase';
 import moment from 'moment';
 // import dynamic from 'next/dynamic'
@@ -12,8 +12,10 @@ import moment from 'moment';
 // })
 // import {} from "../../src/ckeditor/ckeditor"
 
-
-export default function Board() {
+interface Props {
+  boardKey?: string
+}
+export default function Board({ boardKey }: Props) {
 
   const [userKey, setUserKey] = useState("");
 
@@ -79,6 +81,7 @@ export default function Board() {
       userInfo: {
         name: userInfo.name,
         id: userInfo.id,
+        key: userKey,
       },
       type,
       pswd,
@@ -86,10 +89,10 @@ export default function Board() {
 
     console.log(board);
 
-    fb.database().ref(`board/board_list/${key}`).set(board).then((snapshot) => {
+    await fb.database().ref(`board/board_list/${key}`).set(board).then((snapshot) => {
       console.log("성공");
     })
-    fb.database().ref(`board/category/free`).set(copy).then((snapshot) => {
+    await fb.database().ref(`board/category/free`).set(copy).then((snapshot) => {
       console.log("성공");
     })
       .catch(err => { console.log(err) });
@@ -104,12 +107,17 @@ export default function Board() {
     }, [])
 
     if (fileList.length !== 0) {
+      let fileCopy = [];
       for (let file of fileList) {
-        const filePath = `/images/${file.name}`;
-        fb.storage().ref(filePath).put(file).then((event) => {
-          event.ref.getDownloadURL().then((url) => { console.log(url) });
+        console.log(fileCopy.length);
+        const filePath = `file/${key}/${fileCopy.length}`;
+        await fb.storage().ref(filePath).put(file).then(async (event) => {
+          await event.ref.getDownloadURL().then((url) => { fileCopy.push(url) });
         });
       }
+      fb.database().ref(`board/file/${key}`).set(fileCopy).then((snapshot) => {
+        console.log("성공");
+      })
     }
 
   }
@@ -146,7 +154,7 @@ export default function Board() {
           </Title>
           <CKEditor
             editorUrl='//cdn.ckeditor.com/4.16.1/full/ckeditor.js'
-            onSetData={(e) => { e.data.dataValue = aa }}
+            // onSetData={(e) => { e.data.dataValue = aa }}
             onChange={(evt) => { setData(evt.editor.getData()) }}
             config={{
               toolbar: [

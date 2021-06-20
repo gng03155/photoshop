@@ -28,6 +28,7 @@
     "ckeditor4-react": "^2.0.0-rc.1",
     "crypto-js": "^4.0.0",
     "firebase": "^8.6.5",
+    "lightgallery": "^2.1.5",
     "moment": "^2.29.1",
     "next": "10.2.3",
     "next-images": "^1.8.1",

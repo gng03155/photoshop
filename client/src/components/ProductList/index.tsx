@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr';
 import { fetcherData } from '../../util/fetcher';
+import PageNation from '../PageNation';
 import ProductItem from '../ProductItem';
 
-import { Wrap, ListMenu, ListWrap, List, PageNation } from "./styles"
+import { Wrap, ListMenu, ListWrap, List } from "./styles"
 
 
 interface Props {
@@ -17,8 +18,9 @@ export default function ProductList({ proIdList }: Props) {
 
     const { data: categoryList } = useSWR(`/products/category`, fetcherData, { revalidateOnMount: true });
 
-    const [pageList, setPageList] = useState<string[][]>([[null]]);
+    const [data, setData] = useState<string[][]>([[null]]);
 
+    const [pageNumber, setPageNumber] = useState(0);
     const [curPage, setCurPage] = useState(0);
 
     useEffect(() => {
@@ -40,57 +42,17 @@ export default function ProductList({ proIdList }: Props) {
             copy.push(list);
         }
         copy.splice(0, 1);
-        setPageList(copy);
+        setPageNumber(copy.length);
+        setData(copy);
     }, [])
 
     useEffect(() => {
 
     }, [productList, categoryList])
 
-    const onClickPage = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        const tg = e.target as HTMLAnchorElement;
-        const idx = Number(tg.id);
-        setCurPage(idx);
-        window.scrollTo(0, 0);
-    }, [])
-
-    const onClickFirst = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        if (curPage === 0) {
-            return;
-        }
-        setCurPage(0);
-        window.scrollTo(0, 0);
-    }, [curPage, pageList])
-
-    const onClickPrev = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        if (curPage === 0) {
-            return;
-        }
-        setCurPage(curPage - 1);
-        window.scrollTo(0, 0);
-    }, [curPage, pageList])
-
-    const onClickNext = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        console.log(curPage);
-        if (curPage === pageList.length - 1) {
-            return;
-        }
-        setCurPage(curPage + 1);
-        window.scrollTo(0, 0);
-    }, [curPage, pageList])
-
-    const onClickLast = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        if (curPage === pageList.length - 1) {
-            return;
-        }
-        setCurPage(pageList.length - 1);
-        window.scrollTo(0, 0);
-    }, [curPage, pageList])
+    const onSetPage = (num) => {
+        setCurPage(num);
+    }
 
     if (proIdList.length === 0) {
         return <div></div>
@@ -110,30 +72,12 @@ export default function ProductList({ proIdList }: Props) {
             <ListWrap>
                 <List>
                     <ul>
-                        {pageList[curPage].map((item, idx) => {
+                        {data[curPage].map((item, idx) => {
                             return <li key={idx}><ProductItem id={item}></ProductItem></li>
                         })}
                     </ul>
                 </List>
-                <PageNation>
-                    <ul>
-                        <li><a onClick={onClickFirst}><img src="img/btn_page_first.gif" alt="#" /></a></li>
-                        <li><a onClick={onClickPrev}><img src="img/btn_page_prev.gif" alt="#" /></a></li>
-                        {pageList.map((item, idx) => {
-                            return (
-                                <li key={idx} className="page_number">
-                                    <a id={`${idx}`}
-                                        onClick={onClickPage}
-                                        className={curPage === idx ? "active" : ""}
-                                    >
-                                        {idx + 1}
-                                    </a>
-                                </li>)
-                        })}
-                        <li><a onClick={onClickNext}><img src="img/btn_page_next.gif" alt="#" /></a></li>
-                        <li><a onClick={onClickLast}><img src="img/btn_page_last.gif" alt="#" /></a></li>
-                    </ul>
-                </PageNation>
+                <PageNation onSetPage={onSetPage} pageNumber={pageNumber} />
             </ListWrap>
         </Wrap>
     )

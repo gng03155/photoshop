@@ -19,6 +19,6 @@ export const GlobalStyle = createGlobalStyle`
   }
   input,select{
     outline: none;
-    border : 0;
+    border : 1px solid #ececec;
   }
 `;
