@@ -1,21 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { CKEditor } from 'ckeditor4-react';
 
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import moment from 'moment';
 
 import { Wrap, BoardWrap, Title, SubContent, File, PassWord, Button } from "./styles"
 import fb from '../../firebase';
 import { fetcherData } from '../../util/fetcher';
+import ProductItem2 from '../ProductItem2';
 // import dynamic from 'next/dynamic'
 // const Editor = dynamic(() => import('../../src/components/test'), {
 //   ssr: false
 // })
 
 interface Props {
-    boardKey?: string
+    boardKey?: string,
+    category?: string,
+    productId?: string,
 }
-export default function Board({ boardKey }: Props) {
+export default function Board({ boardKey, category, productId }: Props) {
+
+    const router = useRouter();
 
     const [userKey, setUserKey] = useState("");
 
@@ -69,7 +75,6 @@ export default function Board({ boardKey }: Props) {
             pswd: (tg["pswd"] as HTMLInputElement).value,
             type,
         }
-        console.log(info.content);
         if (boardKey) {
             info["fileList"] = tg["file"];
             info["key"] = boardInfo.id;
@@ -80,6 +85,8 @@ export default function Board({ boardKey }: Props) {
             info["fileList"] = getFiles(tg);
             await writeBoard(info);
         }
+
+        // router.back();
 
     }
 
@@ -163,7 +170,7 @@ export default function Board({ boardKey }: Props) {
             return Object.keys(snapshot.val()).length;
         })
         //카테고리 리스트 받기
-        const copy = await fb.database().ref(`board/category/free`).once("value").then((snapshot) => {
+        const copy = await fb.database().ref(`board/category/${category}`).once("value").then((snapshot) => {
             if (snapshot.val() === null) {
                 return [];
             }
@@ -180,12 +187,12 @@ export default function Board({ boardKey }: Props) {
         const board = {
             id: info.key,
             num: idx,
-            category: "free",
+            category,
             title: info.title,
             content: info.content,
             date: info.date,
             hits: 0,
-            userInfo: {
+            user_info: {
                 name: userInfo.name,
                 id: userInfo.id,
                 key: userKey,
@@ -193,13 +200,26 @@ export default function Board({ boardKey }: Props) {
             type: info.type,
             pswd: info.pswd,
         }
-
+        if (category === "qna" || category === "review") {
+            board["product_id"] = productId;
+            await fb.database().ref(`products/${category}/${productId}`).once("value").then((snapshot) => {
+                if (snapshot.exists()) {
+                    const copy = snapshot.val();
+                    console.log(copy);
+                    copy.push(info.key);
+                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${productId} 데이터 저장 완료`) });
+                } else {
+                    const copy = [info.key];
+                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${productId} 데이터 저장 완료`) });
+                }
+            })
+        }
         console.log(board);
 
         await fb.database().ref(`board/board_list/${info.key}`).set(board).then((snapshot) => {
             console.log("성공");
         })
-        await fb.database().ref(`board/category/free`).set(copy).then((snapshot) => {
+        await fb.database().ref(`board/category/${category}`).set(copy).then((snapshot) => {
             console.log("성공");
         })
             .catch(err => { console.log(err) });
@@ -251,6 +271,7 @@ export default function Board({ boardKey }: Props) {
             <form onSubmit={(e) => test(e)}>
                 <BoardWrap>
                     <h2>게시글 작성</h2>
+                    {(category === "review" || category === "qna") && <ProductItem2 />}
                     <Title>
                         <label>제목</label>
                         <input name="Title" type="text" defaultValue={boardInfo !== undefined ? boardInfo.title : ""} required />
@@ -258,7 +279,6 @@ export default function Board({ boardKey }: Props) {
                     <CKEditor
                         editorUrl='//cdn.ckeditor.com/4.16.1/full/ckeditor.js'
                         onSetData={(e) => {
-                            console.log(boardInfo);
                             if (boardKey) {
                                 e.data.dataValue = boardInfo.content;
                             } else {
@@ -329,7 +349,7 @@ export default function Board({ boardKey }: Props) {
                     </SubContent>
                     <Button>
                         <button type="submit">등록</button>
-                        <button type="button">취소</button>
+                        <button type="button" onClick={() => { router.back(); }}>취소</button>
                     </Button>
                 </BoardWrap>
             </form>

@@ -35,7 +35,6 @@ export default function FileList({ boardKey }: Props) {
     const { data: fileInfo } = useSWR(`board/file/${boardKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
     useEffect(() => {
-        console.log(fileInfo);
     }, [fileInfo])
 
     if (fileInfo === null) {
@@ -44,7 +43,9 @@ export default function FileList({ boardKey }: Props) {
 
     return (
         <FileWrap>
-            <h3>첨부파일</h3>
+            {(fileInfo !== undefined && fileInfo !== null) ? <h3>첨부파일</h3> :
+                <h3>첨부파일 없음</h3>
+            }
             {(fileInfo !== undefined && fileInfo !== null) &&
                 <LightGallery plugins={[lgZoom, lgThumbnail]}>
                     {fileInfo.map((value, idx) => {

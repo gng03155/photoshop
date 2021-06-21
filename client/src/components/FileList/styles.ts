@@ -1,12 +1,11 @@
 import styled from "styled-components"
 
 export const FileWrap = styled.div`
-    padding : 5px 0;
-    border-top:1px solid #ececec;
-    border-bottom:1px solid #ececec;
-    margin-bottom: 50px;
+    width : 100%;
+    margin-top : 10px;
+    padding-bottom: 10px;
+    border-bottom:1px solid #dfdfdf;
     h3{
-        margin-bottom: 10px;
     }
     a{
         display: inline-block;

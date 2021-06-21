@@ -4,18 +4,16 @@ export const fetcherData = async (path: string) => {
     if (path == "null") {
         return undefined;
     }
-    return await fb.database().ref(path).get()
-        .then((data) => {
-            if (data.exists()) {
-                return data.val();
+    return await fb.database().ref(path).once("value").then(
+        (snapshot) => {
+            if (snapshot.exists()) {
+                return snapshot.val();
             } else {
                 console.log("No data available");
-                return;
+                return undefined;
             }
-        })
-        .catch((err) => {
-            return err
-        })
+        }
+    );
 
 }
 

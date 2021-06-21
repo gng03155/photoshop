@@ -5,12 +5,15 @@ import useSWR from 'swr';
 import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation'
 
-import { Table } from "./styles"
+import { NoBoard, Table, WriteButton } from "./styles"
+interface Props {
+    boardKeyList: string[] | undefined,
+    userKey: string,
+    category: string,
+}
+export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
-export default function BoardList({ boardKeyList }: any) {
 
-
-    const [userKey, setUserKey] = useState("");
     const [data, setData] = useState([[]]);
     const [pageNumber, setPageNumber] = useState(0);
     const [curPage, setCurPage] = useState(0);
@@ -22,11 +25,10 @@ export default function BoardList({ boardKeyList }: any) {
 
 
     useEffect(() => {
-        setUserKey(window.sessionStorage.getItem("uid"));
     }, [])
 
     useEffect(() => {
-        if (allList !== undefined) {
+        if (allList !== undefined && boardKeyList !== undefined) {
             setBoardList();
         }
     }, [allList])
@@ -79,21 +81,18 @@ export default function BoardList({ boardKeyList }: any) {
         const type = tg.dataset.type;
         const user = tg.dataset.user;
         const key = tg.dataset.key;
+        const category = tg.dataset.category;
         if (type === "private") {
             if (userKey === user) {
                 router.push({
-                    pathname: `/article/${key}`, query: {
-                        key,
-                    }
+                    pathname: `/article/${category}/${key}`
                 });
             } else {
                 alert("비밀글로 작성자만 볼 수 있습니다.");
             }
         } else if (type === "public") {
             router.push({
-                pathname: `/article/${key}`, query: {
-                    key,
-                }
+                pathname: `/article/${category}/${key}`
             });
         }
 
@@ -101,8 +100,11 @@ export default function BoardList({ boardKeyList }: any) {
 
     }, [userKey])
 
-    if (pageNumber === 0) {
-        return <div></div>
+    const onClickWrite = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        router.push({
+            pathname: `/board/${category}/write`
+        });
     }
 
 
@@ -126,19 +128,27 @@ export default function BoardList({ boardKeyList }: any) {
                     </tr>
                 </thead>
                 <tbody>
-                    {data[curPage].map((value, idx) => {
+                    {pageNumber !== 0 ? data[curPage].map((value, idx) => {
                         return (
                             <tr key={idx}>
                                 <td>{(8 * curPage) + idx + 1}</td>
-                                <td><a data-key={value.id} data-type={value.type} data-user={value.userInfo.key} onClick={onClickBoard}>{value.title}</a></td>
-                                <td>{value.userInfo.name}</td>
+                                <td><a data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>{value.title}</a></td>
+                                <td>{value.user_info.name}</td>
                                 <td>{value.date}</td>
                                 <td>{value.hits}</td>
                             </tr>
                         )
-                    })}
+                    }) :
+                        <tr>
+                            <td colSpan={5}><NoBoard><h3>등록된 게시글이 없습니다.</h3></NoBoard></td>
+                        </tr>
+                    }
+
                 </tbody>
             </Table>
+            <WriteButton>
+                <button onClick={onClickWrite}>글쓰기</button>
+            </WriteButton>
             <PageNation onSetPage={onSetPage} pageNumber={pageNumber}></PageNation>
         </div>
     )

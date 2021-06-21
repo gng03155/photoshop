@@ -1,8 +1,23 @@
 import styled from "styled-components"
 
 export const FooterWrap = styled.footer`
-    color : #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width : 100%;
+    height : 300px;
+    color : #111;
+
+    &:before{
+        position: absolute;
+        left: 0;
+        content: "";
+        width : 100vw;
+        height : 300px;
+        background-color: #444;
+        z-index: -1;
+    }
+
 `
 
 export const FooterBg = styled.div`
@@ -10,6 +25,7 @@ export const FooterBg = styled.div`
     width: 100vw;
     height : 300px;
     left: 0;
+    top: 0;
     background: #333;
     z-index: -1;
 `

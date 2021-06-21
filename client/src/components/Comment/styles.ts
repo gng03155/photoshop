@@ -2,8 +2,13 @@ import styled from "styled-components"
 
 export const CommentWrap = styled.div`
     width : 100%;
-    h3{margin-bottom: 20px;}
-    margin : 0 0 100px 0;
+    h3{
+        padding: 20px 0 20px 20px ;
+        background-color: #f1f1f1;
+        border : 1px solid #ccc;
+        border-bottom : 0;
+    }
+    margin : 0px 0 100px 0;
 
 `
 
@@ -30,7 +35,7 @@ export const CommentWrite = styled.div`
         width : 90%;
         height :50px;    
         appearance : none;
-        border: 1px solid #ececec;
+        border: 1px solid #dfdfdf;
     }
     button{
         width : 8%;
@@ -40,14 +45,12 @@ export const CommentWrite = styled.div`
 `
 
 export const CommentList = styled.div`
-    border-top : 1px solid #ececec;
-    /* border-left : 1px solid #ececec;
-    border-right : 1px solid #ececec; */
+    border-top : 1px solid #dfdfdf;
 `
 
 export const CommentInfo = styled.div`
     background-color: #fafafa;
-    border-bottom : 2px solid #ececec;
+    border-bottom : 2px solid #dfdfdf;
     &:last-child{
         border : 0;
     }
@@ -59,7 +62,7 @@ export const CommentTop = styled.div`
     height: 40px;
     align-items: center;
     padding: 10px 20px;
-    border-bottom : 1px solid #ececec;
+    border-bottom : 1px solid #dfdfdf;
     strong{
         width: 100px;
         color : #337ab7;
@@ -73,7 +76,7 @@ export const CommentTop = styled.div`
         padding: 5px 10px;
         margin-left: auto;
         background-color: #fff;
-        border : 1px solid #ececec;
+        border : 1px solid #dfdfdf;
         text-align: center;
     }
 
@@ -83,3 +86,10 @@ export const CommentForm = styled.div`
 `
 
 
+export const IsLogin = styled.div`
+    border-top : 1px solid #3b4890;
+    border-bottom : 1px solid #3b4890;
+    h3{
+        background-color: #dfdfdf;
+    }
+`

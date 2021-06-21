@@ -3,7 +3,6 @@ import { FooterWrap, FooterBg, FooterMenu, Content, CompanyInfo, CScontent, BANK
 export default function Footer() {
     return (
         <FooterWrap>
-            <FooterBg />
             <FooterMenu>
                 <ul>
                     <li><a href="#">회사소개</a></li>

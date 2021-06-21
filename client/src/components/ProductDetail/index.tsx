@@ -19,6 +19,8 @@ export default function ProductDetail({ id }: Props) {
     const { data: detailImgs } = useSWR(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: productInfo } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: reviewList } = useSWR(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: qnaList } = useSWR(`products/qna/${id}`, fetcherData, { revalidateOnMount: true });
     const ref = new Array(4).fill(0).map((i) => { return useRef<HTMLDivElement>(null) });
 
     const router = useRouter();
@@ -41,6 +43,12 @@ export default function ProductDetail({ id }: Props) {
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
     }, [router]);
+
+    useEffect(() => {
+        console.log(reviewList);
+    }, [reviewList, qnaList]);
+
+
 
     const onClickDetail = useCallback((e) => {
         e.preventDefault();
@@ -71,11 +79,25 @@ export default function ProductDetail({ id }: Props) {
             return;
         }
 
+        await setFbCart();
+
+        const copy = [...buyProductInfo];
+
+        router.push({
+            pathname: "/order",
+            query: {
+                data: JSON.stringify(copy),
+            },
+        }, `/order/${userKey}`);
+
+    }, [userKey, buyProductInfo])
+
+    const setFbCart = async () => {
         for (let info of buyProductInfo) {
             const dataRef = fb.database().ref(`cart/${userKey}`).push();
             const key = dataRef.toString().split(`${userKey}/`)[1]
             const idx = buyProductInfo.indexOf(info);
-            dataRef.set({
+            await dataRef.set({
                 id: info.id,
                 name: info.name,
                 num: info.num,
@@ -87,16 +109,7 @@ export default function ProductDetail({ id }: Props) {
             })
             info.key = key;
         }
-        const copy = [...buyProductInfo];
-        router.push({
-            pathname: "/order",
-            query: {
-                data: JSON.stringify(copy),
-            },
-        }, `/order/${userKey}`);
-
-    }, [userKey, buyProductInfo])
-
+    }
 
     const onChangeNum = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = Number(e.target.value.replace(/[^0-9]/g, ""));
@@ -250,6 +263,82 @@ export default function ProductDetail({ id }: Props) {
         setBuyList(name, info);
     }
 
+    const onClickCart = async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+
+        e.preventDefault();
+        if (buyProductInfo.length === 0) {
+            alert("상품을 선택해주세요!");
+            return;
+        }
+        if (userKey === null) {
+            alert("로그인창으로 이동합니다.")
+            router.push("/login");
+            return;
+        }
+
+        const isCart = confirm("선택하신 상품을 장바구니에 추가하시겠습니까?");
+
+        if (!isCart) {
+            return;
+        }
+
+        await setFbCart();
+
+        alert("장바구니에 추가되었습니다.");
+
+    }
+
+    const onClickLike = async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+
+        if (userKey === null) {
+            alert("로그인창으로 이동합니다.")
+            router.push("/login");
+            return;
+        }
+
+        const tg = e.target as HTMLAnchorElement;
+        const parent = tg.parentElement as HTMLDivElement;
+        const pRef = await fb.database().ref(`products/product/${id}`);
+        const lRef = await fb.database().ref(`like/${userKey}`);
+
+        //유저 위시리스트 처리
+        let list = await lRef.once("value").then((data) => {
+            return data.val()
+        });
+
+        if (list !== null) {
+            if (Object.keys(list).includes(id)) {
+                delete list[id];
+            } else {
+                list = { [id]: true };
+            }
+        } else {
+            list = { [id]: true };
+        }
+        lRef.set(list).then(() => { console.log("좋아요 데이터 처리 성공") })
+
+        //상품 좋아요 개수 처리
+        const temp = await pRef.once("value").then((data) => { return data.val().like });
+        let like = Number(temp);
+        if (!parent.className.includes("active")) {
+            like += 1;
+            await pRef.update({
+                like,
+            })
+        }
+        else {
+            like -= 1;
+            if (like < 0) {
+                like = 0;
+            }
+            await pRef.update({
+                like,
+            })
+        }
+
+        parent.classList.toggle("active");
+    }
+
     if (productInfo === undefined || detailImgs.length === 0 || thumbImg.length === 0) {
         return (<div></div>)
     }
@@ -325,14 +414,14 @@ export default function ProductDetail({ id }: Props) {
                                 <ul>
                                     <li><button onClick={onClickBuy}>구매하기</button></li>
                                     <li>
-                                        <LikeBtn className="active">
-                                            <a></a>
+                                        <LikeBtn>
+                                            <a onClick={onClickLike}></a>
                                             <span>1000</span>
                                         </LikeBtn>
                                     </li>
                                     <li>
                                         <CartBtn>
-                                            <a></a>
+                                            <a onClick={onClickCart}></a>
                                         </CartBtn>
                                     </li>
                                 </ul>
@@ -405,7 +494,7 @@ export default function ProductDetail({ id }: Props) {
                         </ul>
                     </NaviBar>
                     <h2>Review</h2>
-                    <Board></Board>
+                    <Board boardKeyList={reviewList} userKey={userKey} category={"review"}></Board>
                 </Review>
                 <QnA ref={ref[3]}>
                     <NaviBar>
@@ -417,7 +506,7 @@ export default function ProductDetail({ id }: Props) {
                         </ul>
                     </NaviBar>
                     <h2>Q&A</h2>
-                    <Board></Board>
+                    <Board boardKeyList={qnaList} userKey={userKey} category={"qna"}></Board>
                 </QnA>
             </DetailWrap>
         </div>

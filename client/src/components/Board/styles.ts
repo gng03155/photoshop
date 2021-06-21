@@ -2,16 +2,16 @@ import styled from "styled-components"
 
 export const Wrap = styled.div`
     width : 100%;
-    height : 1000px;
 `
 
 export const BoardWrap = styled.div`
     width : 100%;
-    height : 400px;
     margin: 0 auto;
+    margin-bottom: 50px;
     h2{
         font-size : 20px;
         text-align: center;
+        margin-bottom: 50px;
     }
 `
 
@@ -21,7 +21,7 @@ export const Title = styled.div`
     width : 100%;
     padding : 5px 10px;
     height : 40px;
-    margin : 40px 0 20px;
+    margin : 0px 0 20px;
     border-top : 1px solid #ececec;
     border-bottom : 1px solid #ececec;
     label{

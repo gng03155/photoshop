@@ -58,6 +58,11 @@ export default function PageNation({ onSetPage, pageNumber }: Props) {
         setCurPage(pageNumber - 1);
 
     }, [curPage, pageNumber])
+
+    if (pageNumber === 0) {
+        return <div></div>
+    }
+
     return (
         <div>
             <Page>

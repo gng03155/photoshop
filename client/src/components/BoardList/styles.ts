@@ -57,3 +57,23 @@ export const PageNation = styled.div`
     }
 `
 
+export const NoBoard = styled.div`
+    h3{
+        width : 100%;
+        text-align: center;
+        color : coral;
+    }
+`
+
+export const WriteButton = styled.div`
+    
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    button{
+        width : 110px;
+        padding: 11px 27px 10px;
+        font-size: 15px;
+        color : #777;
+    }
+`

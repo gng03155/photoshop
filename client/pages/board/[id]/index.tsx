@@ -3,23 +3,21 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { fetcherData } from '../../../src/util/fetcher';
 import BoardList from '../../../src/components/BoardList';
+import { Title } from './styles';
 export default function Index() {
 
     const [userKey, setUserKey] = useState("");
 
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState(null);
 
     const router = useRouter();
 
-    const name = router.query.id;
-
-    const { data: boardList } = useSWR(`board/category/${name}`, fetcherData, { revalidateOnMount: true });
+    const { data: boardList } = useSWR(query ? `board/category/${query}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
 
 
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
-        console.log("[id]들어옴");
     }, [])
 
     useEffect(() => {
@@ -31,17 +29,19 @@ export default function Index() {
         }
     }, [router])
 
-    if (boardList === undefined) {
+    if (boardList === null) {
         return <div></div>;
     }
 
     return (
         <div>
-            {query === "notice" && <h2>공지사항</h2>}
-            {query === "free" && <h2>자유게시판</h2>}
-            {query === "review" && <h2>상품후기</h2>}
-            {query === "qna" && <h2>Q&A</h2>}
-            <BoardList boardKeyList={boardList}></BoardList>
+            <Title>
+                {query === "notice" && <h2>공지사항</h2>}
+                {query === "free" && <h2>자유게시판</h2>}
+                {query === "review" && <h2>상품후기</h2>}
+                {query === "qna" && <h2>Q&A</h2>}
+            </Title>
+            {<BoardList boardKeyList={boardList} userKey={userKey} category={query}></BoardList>}
         </div>
     )
 }
