@@ -18,12 +18,12 @@ interface Props {
     boardKey?: string,
     category?: string,
     productId?: string,
+    userKey: string,
 }
-export default function Board({ boardKey, category, productId }: Props) {
+export default function Board({ boardKey, category, productId, userKey }: Props) {
 
     const router = useRouter();
 
-    const [userKey, setUserKey] = useState("");
 
     const { data: userInfo, error } = useSWR(`${userKey ? `/users/${userKey}` : 'null'}`, fetcherData, { revalidateOnMount: true });
 
@@ -39,7 +39,6 @@ export default function Board({ boardKey, category, productId }: Props) {
     const passRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        setUserKey(window.sessionStorage.getItem("uid"));
     }, [])
 
     useEffect(() => {

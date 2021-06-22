@@ -6,6 +6,7 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
   }
   body {
+    position: relative;
     overflow-x: hidden ;
   }
   * { margin : 0 ; padding : 0; box-sizing : border-box;}

@@ -34,7 +34,7 @@ export const Wrap = styled.div`
             height: 22px;
             background : url("/img/icon.png") no-repeat;
             background-position: -325px -200px;
-            margin-right: 5px;
+            margin-right: 3px;
         }
         span{
             font-size: 12px;
@@ -45,6 +45,9 @@ export const Wrap = styled.div`
             padding : 5px 0;
             color : #777;
             font-weight: 500;
+        }
+        button:hover{
+            border : 1px solid #555;
         }
     }
 `

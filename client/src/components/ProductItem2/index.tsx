@@ -1,23 +1,43 @@
+import { useRouter } from 'next/router';
 import React from 'react'
+import useSWR from 'swr'
+import { fetcherData, fetcherStorage } from '../../util/fetcher'
 import { Wrap } from './styles'
 
-export default function ProductItem2() {
+interface Props {
+    productId?: string
+}
+export default function ProductItem2({ productId }: Props) {
 
+    const { data: productInfo } = useSWR(productId ? `products/product/${productId}` : "null", fetcherData, { revalidateOnMount: true });
+    const { data: thumbImg } = useSWR(`products/${productId}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true });
 
+    const router = useRouter();
+
+    if (productInfo === undefined || thumbImg === undefined) {
+        return <div></div>
+    }
+
+    const onClickProduct = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLButtonElement;
+        router.push(`/product/${tg.dataset.id}`);
+        return;
+    }
 
     return (
         <Wrap>
             <div>
-                <img src="/img/ch2.jpg" alt="상품이미지" />
+                <img src={thumbImg[0]} alt="상품이미지" />
             </div>
             <nav>
-                <p>상품이름</p>
-                <strong>10000원</strong>
+                <p>{productInfo.name}</p>
+                <strong>{productInfo.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</strong>
                 <article>
                     <a className="like"></a>
-                    <span>1000</span>
+                    <span>{productInfo.like}</span>
                 </article>
-                <button>상품 상세보기</button>
+                <button data-id={productInfo.id} onClick={onClickProduct}>상품 상세보기</button>
             </nav>
         </Wrap>
     )

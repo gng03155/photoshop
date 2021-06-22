@@ -12,15 +12,17 @@ import { InfoWrap, Info, Img, ProductAdd, OptionAdd, Color, Form, ProductButton,
 
 interface Props {
     id: string,
+    userKey: string,
 }
 
-export default function ProductDetail({ id }: Props) {
+export default function ProductDetail({ id, userKey }: Props) {
 
     const { data: detailImgs } = useSWR(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
-    const { data: productInfo } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: productInfo, revalidate: proUpdate } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: reviewList } = useSWR(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: qnaList } = useSWR(`products/qna/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: likeList } = useSWR(`like/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
     const ref = new Array(4).fill(0).map((i) => { return useRef<HTMLDivElement>(null) });
 
     const router = useRouter();
@@ -28,10 +30,11 @@ export default function ProductDetail({ id }: Props) {
     const colorRef = useRef<HTMLDivElement>();
     const sizeRef = useRef<HTMLDivElement>();
 
-    const [userKey, setUserKey] = useState(null);
 
     const [isProduct, setIsProduct] = useState(false);
     const [isColor, setIsColor] = useState(false);
+    const [isLike, setIsLike] = useState(false);
+    const [isFb, setIsFb] = useState(false);
     const [buyProductInfo, setBuyProductInfo] = useState([]);
     const [option, setOption] = useState([]);
     const [selOption, setSelOption] = useState("");
@@ -40,13 +43,21 @@ export default function ProductDetail({ id }: Props) {
 
 
 
-    useEffect(() => {
-        setUserKey(window.sessionStorage.getItem("uid"));
-    }, [router]);
 
     useEffect(() => {
-        console.log(reviewList);
     }, [reviewList, qnaList]);
+
+    useEffect(() => {
+
+        if (likeList !== undefined && likeList !== null) {
+            console.log(likeList);
+            if (likeList.includes(id)) {
+                setIsLike(true);
+                return;
+            }
+        }
+        setIsLike(false);
+    }, [likeList])
 
 
 
@@ -263,9 +274,13 @@ export default function ProductDetail({ id }: Props) {
         setBuyList(name, info);
     }
 
-    const onClickCart = async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickCart = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
         e.preventDefault();
+        if (isFb) {
+            return;
+        }
+        console.log("cart!");
         if (buyProductInfo.length === 0) {
             alert("상품을 선택해주세요!");
             return;
@@ -288,58 +303,68 @@ export default function ProductDetail({ id }: Props) {
 
     }
 
-    const onClickLike = async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-
+    const onClickLike = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        console.log("like!");
+        if (isFb) {
+            return;
+        }
         if (userKey === null) {
             alert("로그인창으로 이동합니다.")
             router.push("/login");
             return;
         }
 
-        const tg = e.target as HTMLAnchorElement;
-        const parent = tg.parentElement as HTMLDivElement;
+        const tg = e.currentTarget as HTMLDivElement;
         const pRef = await fb.database().ref(`products/product/${id}`);
         const lRef = await fb.database().ref(`like/${userKey}`);
-
+        setIsFb(true);
         //유저 위시리스트 처리
-        let list = await lRef.once("value").then((data) => {
-            return data.val()
+        await lRef.once("value").then(async (data) => {
+            let copy: string[] = [];
+            if (data.exists()) {
+                const value = data.val();
+                if (value.includes(id)) {
+                    const idx = value.indexOf(id);
+                    value.splice(idx, 1);
+                    copy = value;
+                } else {
+                    value.push(id);
+                    copy = value;
+                }
+            } else {
+                copy = [id];
+            }
+            await data.ref.set(copy).then(() => { console.log("좋아요 데이터 성공적!") });
         });
 
-        if (list !== null) {
-            if (Object.keys(list).includes(id)) {
-                delete list[id];
-            } else {
-                list = { [id]: true };
-            }
-        } else {
-            list = { [id]: true };
-        }
-        lRef.set(list).then(() => { console.log("좋아요 데이터 처리 성공") })
-
         //상품 좋아요 개수 처리
-        const temp = await pRef.once("value").then((data) => { return data.val().like });
-        let like = Number(temp);
-        if (!parent.className.includes("active")) {
-            like += 1;
-            await pRef.update({
-                like,
-            })
-        }
-        else {
-            like -= 1;
-            if (like < 0) {
-                like = 0;
+        await pRef.once("value").then(async (data) => {
+            let temp = data.val().like;
+            let like = Number(temp);
+            if (!tg.className.includes("active")) {
+                like += 1;
+                await pRef.update({
+                    like,
+                })
             }
-            await pRef.update({
-                like,
-            })
-        }
+            else {
+                like -= 1;
+                if (like < 0) {
+                    like = 0;
+                }
+                await pRef.update({
+                    like,
+                })
+            }
 
-        parent.classList.toggle("active");
+        });
+
+        tg.classList.toggle("active");
+        setIsFb(false);
+        proUpdate();
     }
 
-    if (productInfo === undefined || detailImgs.length === 0 || thumbImg.length === 0) {
+    if (productInfo === undefined || detailImgs.length === 0 || thumbImg.length === 0 || likeList === null) {
         return (<div></div>)
     }
 
@@ -414,14 +439,14 @@ export default function ProductDetail({ id }: Props) {
                                 <ul>
                                     <li><button onClick={onClickBuy}>구매하기</button></li>
                                     <li>
-                                        <LikeBtn>
-                                            <a onClick={onClickLike}></a>
-                                            <span>1000</span>
+                                        <LikeBtn onClick={onClickLike} className={isLike ? "active" : ""}>
+                                            <a></a>
+                                            <span>{productInfo.like}</span>
                                         </LikeBtn>
                                     </li>
                                     <li>
-                                        <CartBtn>
-                                            <a onClick={onClickCart}></a>
+                                        <CartBtn onClick={onClickCart}>
+                                            <a></a>
                                         </CartBtn>
                                     </li>
                                 </ul>

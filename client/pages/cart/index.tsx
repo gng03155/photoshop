@@ -342,8 +342,8 @@ export default function Cart() {
                                 <label>컬러</label>
                                 <select defaultValue="" onChange={onChangeColor}>
                                     <option value="">-필수 옵션을 선택해주세요.</option>
-                                    {Object.keys(optionList[modalProps.productId]).map((color, idx) => {
-                                        return <option key={idx} value={color}>{color}</option>
+                                    {Object.keys(optionList[modalProps.productId]).map((option, idx) => {
+                                        return <option key={idx} value={optionList[modalProps.productId][option]["name"]}>{optionList[modalProps.productId][option]["name"]}</option>
                                     })}
                                 </select>
                             </li>
@@ -351,8 +351,18 @@ export default function Cart() {
                                 <label>사이즈</label>
                                 <select defaultValue="">
                                     <option value="">-필수 옵션을 선택해주세요.</option>
-                                    {isOption && Object.keys(optionList[modalProps.productId][selColor]).map((size, idx) => {
-                                        return <option key={idx} value={size}>{size}</option>
+                                    {isOption && Object.keys(optionList[modalProps.productId]).map((option, idx) => {
+                                        if (optionList[modalProps.productId][option]["name"] === selColor) {
+                                            return Object.keys(optionList[modalProps.productId][option]).map((sub, idx) => {
+                                                if (idx === 0 || sub === "name") {
+                                                } else {
+                                                    console.log(optionList[modalProps.productId][option][sub]["name"]);
+                                                    console.log(optionList[modalProps.productId][option][sub]["num"]);
+                                                    return <option key={idx} value={optionList[modalProps.productId][option][sub]["name"]}>{optionList[modalProps.productId][option][sub]["name"]} 남은재고 {optionList[modalProps.productId][option][sub]["num"]}</option>
+                                                }
+                                            })
+                                        } else {
+                                        }
                                     })}
                                 </select>
                             </li>

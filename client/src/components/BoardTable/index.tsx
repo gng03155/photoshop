@@ -21,7 +21,7 @@ export default function BoardTable({ boardKey, userKey }: Props) {
 
     useEffect(() => {
         if (boardInfo !== undefined) {
-            if (boardInfo.userInfo.key === userKey) {
+            if (boardInfo.user_info.key === userKey) {
                 setIsUser(true);
             }
         }
@@ -91,7 +91,7 @@ export default function BoardTable({ boardKey, userKey }: Props) {
                     </tr>
                     <tr>
                         <th>작성자</th>
-                        <td className="title">{boardInfo.userInfo.name}</td>
+                        <td className="title">{boardInfo.user_info.name}</td>
                     </tr>
                     <tr>
                         <td colSpan={2}>

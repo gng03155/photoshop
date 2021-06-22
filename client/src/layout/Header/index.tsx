@@ -4,6 +4,8 @@ import { useRouter } from "next/router"
 
 import { Content, LeftCategory, RightCategory, Logo } from "./styles"
 import fb from '../../firebase'
+import useSWR from 'swr'
+import localFetcher from '../../util/localFetcher'
 
 
 
@@ -13,6 +15,8 @@ export default function Header() {
     const ref = useRef(null);
     const divRef = useRef(null);
     const router = useRouter();
+
+    const { data: load, mutate } = useSWR("load", localFetcher);
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
@@ -42,9 +46,10 @@ export default function Header() {
     }
 
     const test = async () => {
-        // for (let i = 2; i <= 8; i++) {
-        //     let storage1 = fb.storage().ref(`products/${i}/imgs/detail/test`);
-        //     let storage2 = fb.storage().ref(`products/${i}/imgs/thumb/test`);
+        mutate(!load, false);
+        // for (let i = 1; i <= 8; i++) {
+        //     let storage1 = fb.storage().ref(`products/A00${i}/imgs/detail/test`);
+        //     let storage2 = fb.storage().ref(`products/A00${i}/imgs/thumb/test`);
         //     await storage1.put(null);
         //     await storage2.put(null);
         // }
@@ -74,6 +79,7 @@ export default function Header() {
 
     return (
         <div ref={divRef} style={{ width: "100%", height: "100px" }}>
+            <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button>
             <Content ref={ref}>
                 <LeftCategory>
                     <ul>
@@ -99,7 +105,7 @@ export default function Header() {
                             userKey === null ?
                                 <li><Link as="/signup" href="/signup?name=agree"><a>JOIN US</a></Link></li>
                                 :
-                                <li><Link href="/mypage"><a>MY PAGE</a></Link></li>
+                                <li><Link href="/mypage/main"><a>MY PAGE</a></Link></li>
                         }
                         <li><Link href="/cart" ><a>CART</a></Link></li>
                         <li><Link href="/category"><a>CATEGORY</a></Link></li>

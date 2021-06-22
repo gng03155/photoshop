@@ -21,7 +21,7 @@ export const Content = styled.div`
 export const LeftCategory = styled.div`
     ul {        
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         li{
             a {
                 display: block;
@@ -44,6 +44,7 @@ export const Logo = styled.div`
 export const RightCategory = styled.div`
     ul {   
         display: flex;
+        justify-content: space-between;
         li{
             a {
                 display: block;

@@ -26,7 +26,7 @@ export default function ProductList({ proIdList }: Props) {
     useEffect(() => {
 
         for (let i = 0; i < 20; i++) {
-            proIdList.push(`${5}`);
+            proIdList.push(`A008`);
         }
 
         const totalIdx = parseInt(`${proIdList.length / 8}`);

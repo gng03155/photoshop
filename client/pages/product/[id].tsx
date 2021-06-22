@@ -10,8 +10,11 @@ export default function Product() {
 
     const router = useRouter();
 
+    const [userKey, setUserKey] = useState(null);
     const [id, setId] = useState("");
-
+    useEffect(() => {
+        setUserKey(window.sessionStorage.getItem("uid"));
+    }, []);
     useEffect(() => {
         if (typeof router.query.id === "string")
             setId(router.query.id);
@@ -19,7 +22,7 @@ export default function Product() {
 
     return (
         <div>
-            <ProductDetail id={id}></ProductDetail>
+            <ProductDetail id={id} userKey={userKey}></ProductDetail>
         </div>
     )
 }

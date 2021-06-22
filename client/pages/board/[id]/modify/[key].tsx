@@ -8,8 +8,15 @@ export default function Index() {
     const [boardKey, setBoardKey] = useState("");
     const [category, setCategory] = useState("");
     const [productId, setProductId] = useState("");
+    const [userKey, setUserKey] = useState("");
 
-
+    useEffect(() => {
+        if (window.sessionStorage.getItem("uid") !== null) {
+            setUserKey(window.sessionStorage.getItem("uid"));
+        } else {
+            router.push("/login");
+        }
+    }, [])
     useEffect(() => {
         if (typeof router.query.id === 'string') {
             setCategory(router.query.id);
@@ -25,14 +32,14 @@ export default function Index() {
     if (category === "" || boardKey === "") {
         return <div></div>
     } else {
-        if (category !== "free" && category !== "qna" && category !== "review") {
+        if (category !== "free" && category !== "qna" && category !== "review" && userKey !== "") {
             return <div></div>
         }
     }
 
     return (
         <div>
-            <Board boardKey={boardKey} category={category} productId={productId} />
+            <Board boardKey={boardKey} category={category} productId={productId} userKey={userKey} />
         </div>
     )
 }

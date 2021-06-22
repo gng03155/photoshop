@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import Link from 'next/link';
 
 import { fetcherData, fetcherStorage } from '../../util/fetcher';
-import { Wrap, ThumbNail, Description, Color, Promotion, Like } from "./styles"
+import { Wrap, ThumbNail, Description, Color, Promotion, Like, IconWrap } from "./styles"
 
 interface Props {
     id: string,
@@ -14,7 +14,6 @@ export default function ProductItem({ id }: Props) {
     const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true });
 
     useEffect(() => {
-        console.log(id);
     }, [])
 
     useEffect(() => {
@@ -47,7 +46,7 @@ export default function ProductItem({ id }: Props) {
                 </Promotion>
                 <Like>
                     <a></a>
-                    <span>1000</span>
+                    <span>{productInfo.like}</span>
                 </Like>
             </Description>
         </Wrap>

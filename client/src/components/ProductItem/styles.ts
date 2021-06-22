@@ -32,17 +32,25 @@ export const Description = styled.div`
         font-weight: bold;
     }
 `
+export const IconWrap = styled.div`
+    height:50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+`
 
 export const Like = styled.div`
     display: flex;
     align-items: center;
+    margin-right: 20px;
     a{
         display: inline-block;
         width: 20px;
         height: 20px;
         background : url("/img/icon_like.png") no-repeat;
         /* background-position: -150px -10px; */
-        margin-right: 10px;
+        margin-right: 4px;
     }
     span{
         color : red;
@@ -61,7 +69,7 @@ export const Color = styled.div<{ color: string }>`
 `
 
 export const Promotion = styled.div`
-    margin: 6px 0;
+    margin: 2px 0;
     img{
         display: inline-block;
         width: 25px;
