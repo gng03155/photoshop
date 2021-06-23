@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import { Content, LeftCategory, RightCategory, Logo } from "./styles"
+import { Content, LeftCategory, RightCategory, Logo, BoardCategory } from "./styles"
 import fb from '../../firebase'
 import useSWR from 'swr'
 import localFetcher from '../../util/localFetcher'
@@ -45,6 +45,13 @@ export default function Header() {
         setUserKey(null);
     }
 
+    const onClickBoard = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLAnchorElement;
+        const id = tg.dataset.id;
+        router.push(`/board/${id}`);
+    }
+
     const test = async () => {
         mutate(!load, false);
         // for (let i = 1; i <= 8; i++) {
@@ -85,7 +92,17 @@ export default function Header() {
                     <ul>
                         <li><Link href="/article/free?id=free&key=-McV-rHrRab1MvqYdjGL">test</Link></li>
                         <li><Link href="/product/1"><a>PRODUCT</a></Link></li>
-                        <li><Link href="/board/free"><a>BOARD</a></Link></li>
+                        <li className="board">
+                            <Link href="/board/free"><a>BOARD</a></Link>
+                            <BoardCategory>
+                                <ul>
+                                    <li><a onClick={onClickBoard} data-id="notice" href="#">notice</a></li>
+                                    <li><a onClick={onClickBoard} data-id="review" href="#">review</a></li>
+                                    <li><a onClick={onClickBoard} data-id="qna" href="#">q&a</a></li>
+                                    <li><a onClick={onClickBoard} data-id="free" href="#">free</a></li>
+                                </ul>
+                            </BoardCategory>
+                        </li>
                     </ul>
                 </LeftCategory>
                 <Logo>

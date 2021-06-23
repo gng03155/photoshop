@@ -15,6 +15,18 @@ export const BoardWrap = styled.div`
     }
 `
 
+export const ItemWrap = styled.div`
+    display: flex;
+    width : 100%;
+    border : 1px solid #ececec;
+    padding: 10px 5px;
+    margin-bottom: 20px;
+    select{
+        width : 150px;
+        height : 30px;
+    }
+`
+
 export const Title = styled.div`
     display : flex;
     align-items: center;

@@ -1,5 +1,17 @@
 import styled from "styled-components"
 
+export const ReviewBoard = styled.div`
+    width : 100%;
+    ul{
+        padding: 40px 20px;
+        border: 1px solid #ececec;
+    }
+    li{
+        border-bottom: 1px solid #ececec;
+        padding : 10px 0;
+    }
+`
+
 export const Table = styled.table`
     width: 100%;
     border-spacing: 0px;

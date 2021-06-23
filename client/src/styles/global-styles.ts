@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
+
 export const GlobalStyle = createGlobalStyle`
   html , body{
     width : 100vw;
@@ -8,6 +9,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     position: relative;
     overflow-x: hidden ;
+    font-family: 'Noto Sans KR', sans-serif;
   }
   * { margin : 0 ; padding : 0; box-sizing : border-box;}
   a { text-decoration : none; color : #333; cursor : pointer;}

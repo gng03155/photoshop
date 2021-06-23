@@ -29,6 +29,9 @@ export const LeftCategory = styled.div`
                 padding: 0px 10px;
             }
         }
+        li.board{
+            position: relative;
+        }
     }
 `;
 
@@ -54,3 +57,17 @@ export const RightCategory = styled.div`
         }
     }
 `;
+
+export const BoardCategory = styled.nav`
+    position: absolute;
+    left: 0;
+    ul{
+        display: block;
+    }
+    li{
+    
+    }
+    a{
+
+    }
+`

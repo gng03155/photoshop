@@ -16,8 +16,8 @@ export default function Product() {
         setUserKey(window.sessionStorage.getItem("uid"));
     }, []);
     useEffect(() => {
-        if (typeof router.query.id === "string")
-            setId(router.query.id);
+        if (typeof router.query.product === "string")
+            setId(router.query.product);
     }, [router])
 
     return (

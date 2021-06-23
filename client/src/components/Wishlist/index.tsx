@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import fb from '../../firebase';
 import { nanoid } from 'nanoid'
 
-import { Wrap, WishWrap, Button } from "./styles"
+import { Wrap, WishWrap, Button, None } from "./styles"
 import { fetcherData } from '../../util/fetcher'
 import ProductItem2 from '../ProductItem2'
 
@@ -83,7 +83,7 @@ export default function Wishlist({ userKey }: Props) {
     return (
         <Wrap>
             <h2>좋아요</h2>
-            {wishList !== undefined &&
+            {wishList !== undefined ?
                 <WishWrap>
                     <ul>
                         {wishList.map((item) => {
@@ -101,7 +101,8 @@ export default function Wishlist({ userKey }: Props) {
                             <button onClick={onClickCancel}>취소</button>
                         </div>
                     </Button>
-                </WishWrap>
+                </WishWrap> :
+                <None><h3>현재 등록된 상품이 없습니다~!</h3></None>
             }
         </Wrap>
     )

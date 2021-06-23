@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 
 export const Wrap = styled.div`
-    width: 100%;
+    /* width: 100%; */
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin-bottom: 40px;
     div{
         width : 100px;
         height : 100px;

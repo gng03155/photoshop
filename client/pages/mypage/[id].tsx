@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import Member from '../../src/components/Member';
 import Main from '../../src/components/Mypage/main'
 import Wishlist from '../../src/components/Wishlist';
 
@@ -28,8 +29,7 @@ export default function index() {
         <div>
             {query === "main" && <Main></Main>}
             {query === "like" && <Wishlist userKey={userKey}></Wishlist>}
-            {query === "mola" && <Main></Main>}
-            {query === "main" && <Main></Main>}
+            {query === "modify" && <Member userKey={userKey} />}
         </div>
     )
 }

@@ -15,6 +15,7 @@ export default function Index() {
     const [userKey, setUsetKey] = useState(null);
     const [boardKey, setBoardKey] = useState("");
     const [category, setCategory] = useState("");
+    const [productId, setProductId] = useState("");
 
     useEffect(() => {
         setUsetKey(window.sessionStorage.getItem("uid"));
@@ -25,7 +26,10 @@ export default function Index() {
             setBoardKey(router.query.key)
         } if (typeof router.query.category === "string") {
             setCategory(router.query.category);
+        } if (typeof router.query.product === "string") {
+            setProductId(router.query.product);
         }
+
 
     }, [router])
 
@@ -41,7 +45,7 @@ export default function Index() {
                 {category === "review" && <h2>상품후기</h2>}
                 {category === "qna" && <h2>Q&A</h2>}
             </Title>
-            {category === "review" && <ProductItem2 />}
+            {category === ("review" || "qna") && <ProductItem2 productId={productId} />}
             <BoardTable userKey={userKey} boardKey={boardKey}></BoardTable>
             <Comment boardKey={boardKey} />
         </div>

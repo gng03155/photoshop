@@ -19,7 +19,6 @@ export const WishWrap = styled.div`
     }
     li{
         width : 23.333333%;
-        padding-top: 40px;
         margin-top : 5px;
         background-color: #fff;
     }
@@ -44,5 +43,12 @@ export const Button = styled.div`
         top: 0;
         left: 0;
     }
+`
 
+export const None = styled.div`
+    h3{
+        text-align: center;
+        font-size: 18px;
+        color : coral;
+    }
 `

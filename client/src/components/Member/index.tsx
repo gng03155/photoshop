@@ -1,14 +1,22 @@
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/router';
-import React, { useState, useEffect, useCallback } from 'react'
-import fb from '../../../firebase';
-import MemberForm from '../../MemberForm'
+import fb from '../../firebase';
+import MemberForm from '../MemberForm'
 import crypto from "crypto";
 import SHA256 from 'crypto-js/sha256';
+import useSWR from 'swr';
+import { fetcherData } from '../../util/fetcher';
 import { Button } from './styles';
-
-export default function Join() {
+interface Props {
+    userKey: string,
+}
+export default function Member({ userKey }: Props) {
 
     const router = useRouter();
+
+    const { data: userInfo } = useSWR(`users/${userKey}`, fetcherData, { revalidateOnMount: true })
+
+    const formRef = useRef<HTMLFormElement>(null)
 
     const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -27,6 +35,8 @@ export default function Join() {
             salt: "",
         }
 
+        console.log(values);
+
         // 공백 및 비밀번호 체크
         const isEmpty = checkEmpty(values, target);
         if (isEmpty) {
@@ -36,20 +46,20 @@ export default function Join() {
             return;
         }
 
-        const { hashId, hashPw, salt } = await pswdHashing(values.id, values.pswd);
+        // const { hashId, hashPw, salt } = await pswdHashing(values.id, values.pswd);
 
-        values.pswd = hashPw;
-        values.salt = salt;
-        delete values.checkpswd;
+        // values.pswd = hashPw;
+        // values.salt = salt;
+        // delete values.checkpswd;
 
-        await fb.database().ref(`users/${hashId}`).set(values)
-            .then(() => {
-                console.log("회원가입이 성공적으로 이루어졌습니다!");
-            })
-            .catch((err) => { console.error(err) });
+        // await fb.database().ref(`users/${hashId}`).set(values)
+        //     .then(() => {
+        //         console.log("회원가입이 성공적으로 이루어졌습니다!");
+        //     })
+        //     .catch((err) => { console.error(err) });
 
 
-        router.push("/signup?name=complete", "/signup");
+        // router.push("/signup?name=complete", "/signup");
 
     }, [])
 
@@ -83,7 +93,16 @@ export default function Join() {
 
     const checkEmpty = useCallback((values, target) => {
 
-
+        if (values.pswd === null) {
+            target["pswd"].focus();
+            alert("비밀번호를 입력해주세요!");
+            return true;
+        }
+        if (values.checkpswd === null) {
+            target["checkpswd"].focus();
+            alert("비밀번호를 입력해주세요!");
+            return true;
+        }
         if (values.email === null) {
             alert("이메일을 입력해주세요!");
             target["email"].focus();
@@ -100,34 +119,59 @@ export default function Join() {
             target["adrs2"].focus();
             alert("주소를 입력해주세요!");
             return true;
-        } if (values.name === null) {
-            target["name"].focus();
-            alert("이름을 입력해주세요!");
-            return true;
-        } if (values.pswd === null) {
-            target["pswd"].focus();
-            alert("비밀번호를 입력해주세요!");
-            return true;
-
-        } if (values.checkpswd === null) {
-            target["checkpswd"].focus();
-            alert("비밀번호를 입력해주세요!");
-            return true;
-        } if (values.id === null) {
-            target["id"].focus();
-            alert("아이디를 입력해주세요!");
-            return true;
         }
 
         return false;
 
     }, [])
 
+    const onClickDelete = (e: React.DragEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        const isDelete = confirm("정말로 계정을 삭제하시겠습니까?");
+        if (!isDelete) {
+            return;
+        }
+
+
+        const target = formRef.current as HTMLFormElement;
+        const values = {
+            pswd: target["pswd"]["value"] || null,
+            checkpswd: target["checkpswd"]["value"] || null,
+        }
+
+        console.log(values);
+
+        // 공백 및 비밀번호 체크
+        const isEmpty = checkEmpty(values, target);
+        if (isEmpty) {
+            return;
+        } else if (checkPassword(values.pswd, values.checkpswd)) {
+            target["checkpswd"].focus();
+            return;
+        }
+    }
+
+    const onClickCancel = (e: React.DragEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        router.push("/mypage/main");
+    }
+
+    if (userInfo === undefined) {
+        return <div></div>
+    }
+
     return (
         <div>
-            <form onSubmit={onSubmit}>
-                <MemberForm />
-                <Button>가입하기</Button>
+            <form ref={formRef} onSubmit={onSubmit}>
+                <MemberForm
+                    userInfo={userInfo}
+                />
+                <Button>
+                    <button type="button" onClick={onClickCancel}>취소</button>
+                    <button type="submit">회원정보수정</button>
+                    <button type="button" onClick={onClickDelete}>회원탈퇴</button>
+                </Button>
             </form>
         </div>
     )

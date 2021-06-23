@@ -17,6 +17,10 @@ export default function Index() {
 
 
     useEffect(() => {
+        router.beforePopState(() => {
+            router.reload();
+            return false;
+        });
         setUserKey(window.sessionStorage.getItem("uid"));
     }, [])
 
@@ -29,7 +33,7 @@ export default function Index() {
         }
     }, [router])
 
-    if (boardList === null) {
+    if (boardList === null || query === null) {
         return <div></div>;
     }
 

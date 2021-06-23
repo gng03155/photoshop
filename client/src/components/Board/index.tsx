@@ -5,10 +5,11 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import moment from 'moment';
 
-import { Wrap, BoardWrap, Title, SubContent, File, PassWord, Button } from "./styles"
+import { Wrap, BoardWrap, Title, SubContent, File, PassWord, Button, ItemWrap } from "./styles"
 import fb from '../../firebase';
 import { fetcherData } from '../../util/fetcher';
 import ProductItem2 from '../ProductItem2';
+import localFetcher from '../../util/localFetcher';
 // import dynamic from 'next/dynamic'
 // const Editor = dynamic(() => import('../../src/components/test'), {
 //   ssr: false
@@ -27,10 +28,16 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
 
     const { data: userInfo, error } = useSWR(`${userKey ? `/users/${userKey}` : 'null'}`, fetcherData, { revalidateOnMount: true });
 
+    const { data: productList } = useSWR(category === ("review" || "qna") ? `/products/product` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
     const { data: boardInfo } = useSWR(boardKey ? `board/board_list/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
     const { data: fileInfo } = useSWR(boardKey ? `board/file/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
 
+    const { data: load, mutate } = useSWR("load", localFetcher);
+
+    const [product, setProduct] = useState(productId);
+
     const [data, setData] = useState("");
+
 
     const [fileName, setFileName] = useState(["파일을 선택해주세요", "파일을 선택해주세요", "파일을 선택해주세요"]);
     const [changeFiles, setChangeFiles] = useState([false, false, false]);
@@ -56,9 +63,10 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
 
 
 
-    const test = async (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
+        mutate(true, false);
         const tg = e.target as HTMLFormElement;
         const radios = tg["radio"] as HTMLInputElement[];
         let type = "";
@@ -84,8 +92,8 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
             info["fileList"] = getFiles(tg);
             await writeBoard(info);
         }
-
-        // router.back();
+        mutate(false, false);
+        router.back();
 
     }
 
@@ -200,16 +208,19 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
             pswd: info.pswd,
         }
         if (category === "qna" || category === "review") {
-            board["product_id"] = productId;
-            await fb.database().ref(`products/${category}/${productId}`).once("value").then((snapshot) => {
+            board["product_info"] = {
+                id: product,
+                name: productList[product]["name"],
+            };
+            await fb.database().ref(`products/${category}/${product}`).once("value").then((snapshot) => {
                 if (snapshot.exists()) {
                     const copy = snapshot.val();
                     console.log(copy);
                     copy.push(info.key);
-                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${productId} 데이터 저장 완료`) });
+                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${product} 데이터 저장 완료`) });
                 } else {
                     const copy = [info.key];
-                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${productId} 데이터 저장 완료`) });
+                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${product} 데이터 저장 완료`) });
                 }
             })
         }
@@ -224,7 +235,7 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
             .catch(err => { console.log(err) });
     }
 
-    const onChangePass = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangePswd = (e: React.ChangeEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
         const id = tg.id;
         // console.log(passRef.current);
@@ -235,6 +246,16 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
         }
         passRef.current.value = "";
 
+    }
+
+    const onChangeProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLSelectElement;
+        const val = tg.value;
+        if (val === "none") {
+            return;
+        }
+        setProduct(val);
     }
 
     const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -261,16 +282,27 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
         }
     }
 
-    if (boardInfo === null || fileInfo === null) {
+    if (boardInfo === null || fileInfo === null || productList === null) {
         return <div></div>
     }
 
     return (
         <Wrap>
-            <form onSubmit={(e) => test(e)}>
+            <form onSubmit={(e) => onSubmit(e)}>
                 <BoardWrap>
                     <h2>게시글 작성</h2>
-                    {(category === "review" || category === "qna") && <ProductItem2 />}
+                    {(category === "review" || category === "qna") &&
+                        <ItemWrap>
+                            <ProductItem2 productId={product} />
+                            <select onChange={onChangeProduct}>
+                                <option value="none">-----상품 선택-----</option>
+                                {productList && Object.keys(productList).map((item, idx) => {
+                                    return (
+                                        <option key={productList[item]["id"]} value={productList[item]["id"]}>{productList[item]["name"]}</option>
+                                    )
+                                })}
+                            </select>
+                        </ItemWrap>}
                     <Title>
                         <label>제목</label>
                         <input name="Title" type="text" defaultValue={boardInfo !== undefined ? boardInfo.title : ""} required />
@@ -338,9 +370,9 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
                             <li>
                                 <PassWord>
                                     <label>비밀글설정</label>
-                                    <input id="public" name="radio" type="radio" onChange={onChangePass} defaultChecked />
+                                    <input id="public" name="radio" type="radio" onChange={onChangePswd} defaultChecked />
                                     <label className="set">공개글</label>
-                                    <input id="private" name="radio" type="radio" onChange={onChangePass} />
+                                    <input id="private" name="radio" type="radio" onChange={onChangePswd} />
                                     <label className="set">비밀글</label>
                                 </PassWord>
                             </li>

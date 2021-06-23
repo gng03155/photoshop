@@ -4,8 +4,10 @@ import useSWR from 'swr';
 
 import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation'
+import ReviewItem from '../ReviewItem';
 
-import { NoBoard, Table, WriteButton } from "./styles"
+import { NoBoard, Table, WriteButton, ReviewBoard } from "./styles"
+
 interface Props {
     boardKeyList: string[] | undefined,
     userKey: string,
@@ -13,22 +15,29 @@ interface Props {
 }
 export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
+    const router = useRouter();
 
     const [data, setData] = useState([[]]);
     const [pageNumber, setPageNumber] = useState(0);
     const [curPage, setCurPage] = useState(0);
 
-    const router = useRouter();
 
-    const { data: allList } = useSWR(`board/board_list`, fetcherData, { revalidateOnMount: true });
+    const [isRoute, setIsRoute] = useState(false);
 
-
-
-    useEffect(() => {
-    }, [])
+    const { data: allList, revalidate, mutate } = useSWR(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
 
     useEffect(() => {
-        if (allList !== undefined && boardKeyList !== undefined) {
+        router.events.on('routeChangeStart', () => { setIsRoute(false); })
+    }, []);
+
+    useEffect(() => {
+        console.log(isRoute);
+        revalidate();
+    }, [router])
+
+    useEffect(() => {
+        setIsRoute(true);
+        if (allList !== (undefined || null) && boardKeyList !== undefined) {
             setBoardList();
         }
     }, [allList])
@@ -41,7 +50,6 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
             if (num === -1) {
                 continue;
             }
-            // const value = await fb.database().ref(`board/board_list/${key}`).once("value").then((temp) => { return temp.val() })
             const value = allList[listKeys[num]];
             if (temp !== null)
                 temp.push(value)
@@ -76,24 +84,41 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
     }
 
     const onClickBoard = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        const tg = e.target as HTMLAnchorElement;
+        const tg = e.currentTarget as HTMLAnchorElement;
         e.preventDefault();
         const type = tg.dataset.type;
         const user = tg.dataset.user;
         const key = tg.dataset.key;
         const category = tg.dataset.category;
+        const productId = tg.dataset.product;
         if (type === "private") {
             if (userKey === user) {
-                router.push({
-                    pathname: `/article/${category}/${key}`
-                });
+                if (category === ("review" || "qna")) {
+
+                    router.push({
+                        pathname: `/article/${category}/${key}`,
+                        query: { product: productId },
+                    });
+                } else {
+                    router.push({
+                        pathname: `/article/${category}/${key}`
+                    });
+                }
             } else {
                 alert("비밀글로 작성자만 볼 수 있습니다.");
             }
         } else if (type === "public") {
-            router.push({
-                pathname: `/article/${category}/${key}`
-            });
+            if (category === ("review" || "qna")) {
+
+                router.push({
+                    pathname: `/article/${category}/${key}`,
+                    query: { product: productId },
+                });
+            } else {
+                router.push({
+                    pathname: `/article/${category}/${key}`
+                });
+            }
         }
 
 
@@ -102,15 +127,44 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
     const onClickWrite = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-        router.push({
-            pathname: `/board/${category}/write`
-        });
+        if (router.query.product) {
+            router.push({
+                pathname: `/board/${category}/write`,
+                query: {
+                    product: router.query.product,
+                }
+            });
+        } else {
+            router.push({
+                pathname: `/board/${category}/write`
+            });
+        }
+    }
+
+    if (allList === null || isRoute === false) {
+        return <div></div>
     }
 
 
     return (
         <div>
-            <Table>
+            {console.log(data)}
+            {category === "review" &&
+                <ReviewBoard>
+                    <ul>
+                        {pageNumber !== 0 ? data[curPage].map((value, idx) => {
+                            return (
+                                <li key={value.id}>
+                                    <a data-product={value.product_info ? `${value.product_info.id}` : ""} data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>
+                                        <ReviewItem productInfo={value.product_info} boardKey={value.id} />
+                                    </a>
+                                </li>
+                            )
+                        }) :
+                            <h3>등록된 게시글이 없습니다.</h3>}
+                    </ul>
+                </ReviewBoard>}
+            {category !== "review" && <Table>
                 <colgroup>
                     <col style={{ width: "10%" }} />
                     <col style={{ width: "50%" }} />
@@ -132,7 +186,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                         return (
                             <tr key={idx}>
                                 <td>{(8 * curPage) + idx + 1}</td>
-                                <td><a data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>{value.title}</a></td>
+                                <td><a data-product={value.product_info ? `${value.product_info.id}` : ""} data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>{value.title}</a></td>
                                 <td>{value.user_info.name}</td>
                                 <td>{value.date}</td>
                                 <td>{value.hits}</td>
@@ -145,7 +199,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                     }
 
                 </tbody>
-            </Table>
+            </Table>}
             <WriteButton>
                 <button onClick={onClickWrite}>글쓰기</button>
             </WriteButton>
