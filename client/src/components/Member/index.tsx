@@ -7,6 +7,7 @@ import SHA256 from 'crypto-js/sha256';
 import useSWR from 'swr';
 import { fetcherData } from '../../util/fetcher';
 import { Button } from './styles';
+import localFetcher from '../../util/localFetcher';
 interface Props {
     userKey: string,
 }
@@ -16,6 +17,8 @@ export default function Member({ userKey }: Props) {
 
     const { data: userInfo } = useSWR(`users/${userKey}`, fetcherData, { revalidateOnMount: true })
 
+    const { data: load, mutate } = useSWR("load", localFetcher);
+
     const formRef = useRef<HTMLFormElement>(null)
 
     const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,15 +26,14 @@ export default function Member({ userKey }: Props) {
         const target = e.target as HTMLTextAreaElement;
 
         const values = {
-            name: target["name"]["value"] || null,
+            id: target["id"]["value"] || null,
             pswd: target["pswd"]["value"] || null,
             checkpswd: target["checkpswd"]["value"] || null,
-            id: target["id"]["value"] || null,
             adrs: [target["zone"]["value"] || null, target["adrs"]["value"] || null, target["adrs2"]["value"] || null],
             phone: [target["phone1"]["value"], target["phone2"]["value"] || null, target["phone3"]["value"] || null] || "",
             mobile: [target["mobile1"]["value"], target["mobile2"]["value"] || null, target["mobile3"]["value"] || null],
             email: target["email"]["value"] || null,
-            birth: null,
+            birth: [target["year"]["value"] || null, target["month"]["value"], target["day"]["value"]],
             salt: "",
         }
 
@@ -46,20 +48,27 @@ export default function Member({ userKey }: Props) {
             return;
         }
 
-        // const { hashId, hashPw, salt } = await pswdHashing(values.id, values.pswd);
+        mutate(true, false);
 
-        // values.pswd = hashPw;
-        // values.salt = salt;
-        // delete values.checkpswd;
+        const { hashId, hashPw, salt } = await pswdHashing(values.id, values.pswd);
 
-        // await fb.database().ref(`users/${hashId}`).set(values)
-        //     .then(() => {
-        //         console.log("회원가입이 성공적으로 이루어졌습니다!");
-        //     })
-        //     .catch((err) => { console.error(err) });
+        values.pswd = hashPw;
+        values.salt = salt;
+        delete values.checkpswd;
 
+        await fb.database().ref(`users/${userKey}`).update({
+            pswd: values.pswd,
+            adrs: [values.adrs[0], values.adrs[1], values.adrs[2]],
+            phone: [values.phone[0], values.phone[1], values.phone[2]],
+            mobile: [values.mobile[0], values.mobile[1], values.mobile[2]],
+            email: values.email,
+            birth: values.birth,
+            salt: values.salt,
+        })
 
-        // router.push("/signup?name=complete", "/signup");
+        mutate(false, false);
+
+        router.push("/mypage/main");
 
     }, [])
 
@@ -125,7 +134,7 @@ export default function Member({ userKey }: Props) {
 
     }, [])
 
-    const onClickDelete = (e: React.DragEvent<HTMLButtonElement>) => {
+    const onClickDelete = async (e: React.DragEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         const isDelete = confirm("정말로 계정을 삭제하시겠습니까?");
@@ -149,6 +158,18 @@ export default function Member({ userKey }: Props) {
         } else if (checkPassword(values.pswd, values.checkpswd)) {
             target["checkpswd"].focus();
             return;
+        }
+
+        const pwHash = await new Promise((resolve, reject) => {
+            crypto.pbkdf2(values.pswd, userInfo.salt, 1, 64, 'sha512', (err, key) => {
+                resolve(key.toString('base64'));
+            });
+        })
+
+        if (pwHash === userInfo.pswd) {
+            console.log("비밀번호가 일치합니다!");
+        } else {
+            alert("비밀번호가 일치하지 않습니다!");
         }
     }
 

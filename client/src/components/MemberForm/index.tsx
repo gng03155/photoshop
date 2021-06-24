@@ -250,11 +250,11 @@ export default function MemberForm({ userInfo }: Props) {
                                     <label htmlFor="chk_birt2">음력</label>
                                 </li>
                                 <li>
-                                    <input type="text" id="year" maxLength={4} />
+                                    <input type="text" id="year" maxLength={4} defaultValue={userInfo !== undefined ? userInfo.birth[0] !== undefined ? userInfo.birth[0] : "" : ""} />
                                     <label>년</label>
-                                    <input type="text" id="month" maxLength={2} />
+                                    <input type="text" id="month" maxLength={2} defaultValue={userInfo !== undefined ? userInfo.birth[1] !== undefined ? userInfo.birth[1] : "" : ""} />
                                     <label>월</label>
-                                    <input type="text" id="day" maxLength={2} />
+                                    <input type="text" id="day" maxLength={2} defaultValue={userInfo !== undefined ? userInfo.birth[2] !== undefined ? userInfo.birth[2] : "" : ""} />
                                     <label>일</label>
                                 </li>
                             </ul>

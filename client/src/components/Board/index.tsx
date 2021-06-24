@@ -87,7 +87,7 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
             info["key"] = boardInfo.id;
             await editBoard(info);
         } else {
-            info["date"] = moment().format("YYYY-MM-DD HH:mm:ss")
+            info["date"] = moment().format("YYYY-MM-DD HH:mm:ss");
             info["key"] = fb.database().ref(`board`).push().key;
             info["fileList"] = getFiles(tg);
             await writeBoard(info);

@@ -5,8 +5,13 @@ import MemberForm from '../../MemberForm'
 import crypto from "crypto";
 import SHA256 from 'crypto-js/sha256';
 import { Button } from './styles';
+import moment from 'moment';
+import useSWR from 'swr';
+import localFetcher from '../../../util/localFetcher';
 
 export default function Join() {
+
+    const { data: load, mutate } = useSWR("load", localFetcher);
 
     const router = useRouter();
 
@@ -23,8 +28,10 @@ export default function Join() {
             phone: [target["phone1"]["value"], target["phone2"]["value"] || null, target["phone3"]["value"] || null] || "",
             mobile: [target["mobile1"]["value"], target["mobile2"]["value"] || null, target["mobile3"]["value"] || null],
             email: target["email"]["value"] || null,
-            birth: null,
+            birth: [target["year"]["value"] || null, target["month"]["value"], target["day"]["value"]],
             salt: "",
+            date: moment().format("YYYY-MM-DD HH:mm:ss"),
+            level: 1,
         }
 
         // 공백 및 비밀번호 체크
@@ -35,11 +42,12 @@ export default function Join() {
             target["checkpswd"].focus();
             return;
         }
-
+        mutate(true, false);
         const { hashId, hashPw, salt } = await pswdHashing(values.id, values.pswd);
 
         values.pswd = hashPw;
         values.salt = salt;
+        values["key"] = hashId;
         delete values.checkpswd;
 
         await fb.database().ref(`users/${hashId}`).set(values)
@@ -48,8 +56,22 @@ export default function Join() {
             })
             .catch((err) => { console.error(err) });
 
+        const data = {
+            name: values.name,
+            id: values.id,
+            email: values.email,
+        }
 
-        router.push("/signup?name=complete", "/signup");
+        window.sessionStorage.setItem("uid", hashId);
+        mutate(false, false);
+
+        router.push({
+            pathname: "/signup",
+            query: {
+                name: "complete",
+                data: JSON.stringify(data),
+            }
+        }, "/signup");
 
     }, [])
 

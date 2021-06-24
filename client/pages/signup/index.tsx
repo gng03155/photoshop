@@ -10,17 +10,26 @@ import Complete from '../../src/components/Signup/complete'
 
 export default function signup() {
 
-    const [query, setQuery] = useState("");
     const router = useRouter();
+    const [query, setQuery] = useState("");
+    const [userData, setUserData] = useState<any>({});
 
     useEffect(() => {
 
-        if (typeof router.query.name === "string") {
-            setQuery(router.query.name);
+        const name = router.query.name;
+        if (typeof name === "string") {
+            setQuery(name);
+            if (name === "complete") {
+                if (typeof router.query.data === "string")
+                    setUserData(JSON.parse(router.query.data));
+            }
         }
 
     }, [router])
 
+    if (query === "") {
+        return <div></div>
+    }
 
     return (
         <div>
@@ -40,7 +49,7 @@ export default function signup() {
             </Title>
             {query === "agree" && <Agreement />}
             {query === "join" && <Join />}
-            {query === "complete" && <Complete />}
+            {query === "complete" && <Complete userData={userData} />}
         </div>
     )
 }
