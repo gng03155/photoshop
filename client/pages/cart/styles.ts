@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export const Wrap = styled.div`
+    margin : 100px 0;
     h2{
         height : 40px;
         line-height: 40px;

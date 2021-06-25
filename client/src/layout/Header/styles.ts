@@ -18,19 +18,24 @@ export const Content = styled.div`
 
 `;
 
-export const LeftCategory = styled.div`
-    ul {        
+export const MainMenu = styled.div`
+    & > ul {        
         display: flex;
         justify-content: space-between;
-        li{
+        & > li{
+            padding : 10px 0;
             a {
                 display: block;
                 font-size : 20px;
-                padding: 0px 10px;
+                padding: 0 10px;
             }
         }
         li.board{
             position: relative;
+            height: auto;
+        }
+        li.board:hover nav{
+            display: block;
         }
     }
 `;
@@ -44,30 +49,31 @@ export const Logo = styled.div`
     }
 `;
 
-export const RightCategory = styled.div`
-    ul {   
-        display: flex;
-        justify-content: space-between;
-        li{
-            a {
-                display: block;
-                font-size : 20px;
-                padding: 0px 10px;
-            }
-        }
-    }
-`;
-
 export const BoardCategory = styled.nav`
+    display: none;
     position: absolute;
-    left: 0;
+    width : 130%;
+    left: -15%;
+    top : 100%;
+    background-color : #fff;
+    box-shadow : 0px 0px 15px 0px rgb(4 0 0 / 7%);
+    text-transform: uppercase;
     ul{
-        display: block;
+        
     }
     li{
     
     }
-    a{
-
+    li:hover {
+        background-color : #ccc;
     }
+    li:hover a{
+        color : #fff !important;
+    }
+    a{
+        font-size: 16px !important;
+        padding: 0px 10px !important;
+        color : #ccc !important;
+    }   
+    
 `

@@ -27,11 +27,13 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
     const { data: allList, revalidate, mutate } = useSWR(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
 
     useEffect(() => {
-        router.events.on('routeChangeStart', () => { setIsRoute(false); })
+        router.events.on('routeChangeComplete', init);
+        return () => {
+            router.events.off('routeChangeComplete', init);
+        }
     }, []);
 
     useEffect(() => {
-        console.log(isRoute);
         revalidate();
     }, [router])
 
@@ -41,6 +43,12 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
             setBoardList();
         }
     }, [allList])
+
+    const init = (url) => {
+        console.log("init");
+        setIsRoute(false);
+    }
+
 
     const setBoardList = async () => {
         let listKeys = Object.keys(allList)
@@ -148,7 +156,6 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
     return (
         <div>
-            {console.log(data)}
             {category === "review" &&
                 <ReviewBoard>
                     <ul>
@@ -203,7 +210,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
             <WriteButton>
                 <button onClick={onClickWrite}>글쓰기</button>
             </WriteButton>
-            <PageNation onSetPage={onSetPage} pageNumber={pageNumber}></PageNation>
+            <PageNation onSetPage={onSetPage} pageNumber={pageNumber} curNumber={0}></PageNation>
         </div>
     )
 }

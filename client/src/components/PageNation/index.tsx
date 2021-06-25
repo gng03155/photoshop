@@ -1,13 +1,20 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Page } from "./styles"
 interface Props {
     onSetPage: (num) => void
     pageNumber: number,
+    curNumber: number,
 }
-export default function PageNation({ onSetPage, pageNumber }: Props) {
+export default function PageNation({ onSetPage, pageNumber, curNumber }: Props) {
     const [pageList, setPageList] = useState<string[][]>([[null]]);
 
-    const [curPage, setCurPage] = useState(0);
+
+    const [curPage, setCurPage] = useState(curNumber);
+
+    useEffect(() => {
+        setCurPage(curNumber);
+    }, [curNumber])
+
     const onClickPage = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;

@@ -99,7 +99,7 @@ export default function ProductDetail({ id, userKey }: Props) {
             query: {
                 data: JSON.stringify(copy),
             },
-        }, `/order/${userKey}`);
+        }, `/order`);
 
     }, [userKey, buyProductInfo])
 
@@ -116,7 +116,7 @@ export default function ProductDetail({ id, userKey }: Props) {
                 option: info.option,
                 delivery: info.delivery,
                 key: key,
-                thumbnail_src: thumbImg[0],
+                thumb_src: thumbImg[0],
             })
             info.key = key;
         }

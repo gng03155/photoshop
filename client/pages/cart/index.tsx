@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react'
 import { promises } from 'stream';
 import useSWR from 'swr'
@@ -8,6 +9,8 @@ import { BasketItem, BasketWrap, Wrap, ProductInfo, Quantity, OrderPrice, OrderB
 
 export default function Cart() {
 
+
+    const router = useRouter();
 
     const [userKey, setUserKey] = useState("");
 
@@ -21,7 +24,6 @@ export default function Cart() {
     const [selColor, setSelColor] = useState("");
 
     const ref = new Array(50).fill(0).map(() => { return useRef<HTMLInputElement>(null) })
-
 
 
     useEffect(() => {
@@ -115,19 +117,19 @@ export default function Cart() {
 
 
         const keyList = [];
-
         ref.forEach((elem, idx) => {
             if (elem.current !== null) {
+
                 if (elem.current.checked) {
                     keyList.push(elem.current.id);
-                    elem.current.checked = false;
                 }
 
             }
         })
 
-        if (keyList === undefined) {
+        if (keyList.length === 0) {
             alert("선택된 항목이 없습니다.");
+            return;
         } else {
             for (let key of keyList) {
                 await fb.database().ref(`cart/${userKey}/${key}`).remove();
@@ -135,6 +137,8 @@ export default function Cart() {
             alert("삭제가 완료되었습니다.");
             cartUpdate();
         }
+
+
 
     }
 
@@ -151,6 +155,45 @@ export default function Cart() {
         alert("삭제가 완료되었습니다.");
         cartUpdate();
     }
+
+    const onClickOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+        if (cartList === undefined) {
+            alert("주문 가능한 상품이 없습니다.");
+            return;
+        }
+
+        const tg = e.target as HTMLButtonElement;
+        const name = tg.name;
+        const copy = [];
+        if (name === "all") {
+            for (let key in cartList) {
+                copy.push(cartList[key]);
+            }
+        } else if (name === "sel") {
+            ref.forEach((elem, idx) => {
+                if (elem.current !== null) {
+
+                    if (elem.current.checked) {
+                        copy.push(cartList[elem.current.id]);
+                    }
+                }
+            })
+            if (copy.length === 0) {
+                alert("선택된 항목이 없습니다.")
+                return;
+            }
+        }
+        router.push({
+            pathname: "/order",
+            query: {
+                data: JSON.stringify(copy),
+            },
+        }, `/order`);
+
+
+    }
+
 
     const onSubmitOption = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -170,7 +213,6 @@ export default function Cart() {
         fb.database().ref(`cart/${userKey}/${key}`).update(copy[key]);
         alert("옵션이 수정되었습니다.")
         cartUpdate();
-
     }
 
     const openOptionModal = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -208,9 +250,7 @@ export default function Cart() {
         setSelColor(value);
     }
 
-    const tt = (e: any) => {
-        e.preventDefault();
-    }
+
 
     if (cartList === null) {
         return <div></div>
@@ -218,7 +258,6 @@ export default function Cart() {
 
     return (
         <Wrap>
-            <button onClick={tt}>테스트</button>
             <h2>장바구니</h2>
             <BasketWrap>
                 <table>
@@ -249,13 +288,13 @@ export default function Cart() {
                     <tbody>
                         {(cartList !== undefined && cartList !== null) && Object.keys(cartList).map((id, idx) => {
                             return (
-                                <tr key={idx}>
+                                <tr key={cartList[id]["key"]}>
                                     <td> <input ref={ref[idx + 1]} id={cartList[id].key} type="checkbox" /></td>
                                     <td><span>{idx + 1}</span></td>
                                     <td>
                                         <ProductInfo>
                                             <div>
-                                                <img src={cartList[id].thumbnail_src} alt="썸네일" />
+                                                <img src={cartList[id].thumb_src} alt="썸네일" />
                                             </div>
                                             <ul>
                                                 <li><p>{cartList[id].name}</p></li>
@@ -327,8 +366,8 @@ export default function Cart() {
                 </table>
             </OrderPrice>
             <OrderButton>
-                <button>전체 상품 주문</button>
-                <button>선택 상품 주문</button>
+                <button name="all" onClick={onClickOrder}>전체 상품 주문</button>
+                <button name="sel" onClick={onClickOrder} >선택 상품 주문</button>
             </OrderButton>
             {isModal &&
                 <Modal x={modalProps.x} y={modalProps.y}>

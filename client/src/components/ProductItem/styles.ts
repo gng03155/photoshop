@@ -14,42 +14,44 @@ export const ThumbNail = styled.div`
 `
 
 export const Description = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+`
+export const Desc = styled.div`
     span{
         display: block;
-        margin-top: 22px;
         font-size: 12px;
         color: #555555;
     }
     p{
-        margin-top: 6px;
         font-size: 12px;
-        color : #888888;
+        color : #a0a0a0;
     }
     strong{
         display: block;
-        margin-top: 6px;
         color : #232323;
         font-weight: bold;
     }
 `
+
 export const IconWrap = styled.div`
-    height:50px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    
 `
 
 export const Like = styled.div`
     display: flex;
+    text-align: center;
     align-items: center;
-    margin-right: 20px;
     a{
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        background : url("/img/icon_like.png") no-repeat;
-        /* background-position: -150px -10px; */
+        width: 14px;
+        height: 12px;
+        background : url("/img/icon.png") no-repeat;
+        background-position: -329px -205px;
         margin-right: 4px;
     }
     span{
@@ -60,12 +62,21 @@ export const Like = styled.div`
     }
 `
 
+export const ColorWrap = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin : 10px 0;
+`
+
 export const Color = styled.div<{ color: string }>`
     display: inline-block;
-    width: 22px;
-    height: 7px;
-    margin-right: 10px;
+    width: 13px;
+    height:13px;
+    border-radius: 100%;
     background-color: ${(props) => props.color};
+    margin: 0 2px;
 `
 
 export const Promotion = styled.div`
@@ -75,5 +86,8 @@ export const Promotion = styled.div`
         width: 25px;
         height: 14px;
         margin-right: 10px;
+    }
+    img:last-child{
+        margin-right: 0;
     }
 `

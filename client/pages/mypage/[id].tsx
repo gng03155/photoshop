@@ -16,6 +16,7 @@ export default function index() {
     useEffect(() => {
         if (window.sessionStorage.getItem("uid") === null) {
             router.push("/login");
+            return;
         }
         setUserKey(window.sessionStorage.getItem("uid"));
     }, [])
@@ -26,10 +27,11 @@ export default function index() {
         } if (typeof router.query.orderKey === "string") {
             setOrderKey(router.query.orderKey);
         }
-        console.log(router);
     }, [router])
 
-
+    if (userKey === "") {
+        return <div></div>
+    }
 
     return (
         <div>

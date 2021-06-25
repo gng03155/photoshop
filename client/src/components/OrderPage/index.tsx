@@ -60,7 +60,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
 
     useEffect(() => {
         const price = cartList.reduce((prev, cur) => {
-            return prev + Number(cur.buy_price) * Number(cur.num);
+            return prev + Number(cur.price) * Number(cur.num);
         }, 0);
         setTotalPrice(price);
     }, [cartList])
@@ -190,9 +190,6 @@ export default function OrderPage({ userKey, cartData }: Props) {
     const onClickPayment = async (e: React.DragEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        // console.log(cartList);
-        // console.log(name, adrs1, adrs2, adrs3, mobile1, mobile2, mobile3, email1, email2, delMsg);
-
         const mob = mobile2 + mobile3;
         if (checkMobNumber(mob)) {
             console.log("숫자임");
@@ -212,8 +209,6 @@ export default function OrderPage({ userKey, cartData }: Props) {
         const rand2 = Math.floor(Math.random() * (999 - 100)) + 100;
 
         const orderNum = rand1 + String(rand2);
-
-        console.log(orderNum);
 
         mutate(true, false);
         const mainRef = await fb.database().ref(`order/order_list`).push();
@@ -243,6 +238,8 @@ export default function OrderPage({ userKey, cartData }: Props) {
                 shipping: "payed",
                 order_num: orderNum,
             }
+
+            await fb.database().ref(`cart/${userKey}/${list.key}`).remove().then(() => { (`cart/${userKey}/${list.key} 데이터 삭제 성공`) });
 
             await proRef.set(productOrderInfo).then(() => {
                 console.log("order/p_list 데이터 성공");
@@ -433,6 +430,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
                 <OrderInfo>
                     <ul>
                         {cartList.map((info, idx) => {
+                            console.log(info.thumb_src);
                             return (
                                 <li key={info.key}>
                                     <ThumbNail>

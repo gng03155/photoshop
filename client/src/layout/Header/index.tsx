@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import { Content, LeftCategory, RightCategory, Logo, BoardCategory } from "./styles"
+import { Content, Logo, BoardCategory, MainMenu } from "./styles"
 import fb from '../../firebase'
 import useSWR from 'swr'
 import localFetcher from '../../util/localFetcher'
@@ -49,7 +49,7 @@ export default function Header() {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const id = tg.dataset.id;
-        router.push(`/board/${id}`);
+        router.push(`/board/${id}`, undefined, { shallow: true });
     }
 
     const test = async () => {
@@ -88,7 +88,7 @@ export default function Header() {
         <div ref={divRef} style={{ width: "100%", height: "100px" }}>
             <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button>
             <Content ref={ref}>
-                <LeftCategory>
+                <MainMenu>
                     <ul>
                         <li><Link href="/article/free?id=free&key=-McV-rHrRab1MvqYdjGL">test</Link></li>
                         <li><Link href="/product/1"><a>PRODUCT</a></Link></li>
@@ -104,13 +104,13 @@ export default function Header() {
                             </BoardCategory>
                         </li>
                     </ul>
-                </LeftCategory>
+                </MainMenu>
                 <Logo>
                     <Link href="/">
                         <a><img src="/img/Logo.png" alt="logo" /></a>
                     </Link>
                 </Logo>
-                <RightCategory>
+                <MainMenu>
                     <ul>
                         {
                             userKey === null ?
@@ -127,7 +127,7 @@ export default function Header() {
                         <li><Link href="/cart" ><a>CART</a></Link></li>
                         <li><Link href="/category"><a>CATEGORY</a></Link></li>
                     </ul>
-                </RightCategory>
+                </MainMenu>
             </Content>
         </div>
     )

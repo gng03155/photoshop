@@ -4,6 +4,97 @@ export const Wrap = styled.div`
 
 `
 
+export const Filter = styled.div`
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 200px;
+    border-top : 1px solid #ececec;
+    border-bottom : 1px solid #ececec;
+    padding: 10px 0;
+    h3{
+       margin-bottom: 10px;
+    }
+    
+`
+
+export const Option = styled.div`
+    p{
+        margin: 20px 0;
+    }
+    a.all{
+        display: inline-block;
+        width: auto;
+        height: auto;
+        padding: 5px 10px;
+        margin-right: 20px;
+        border : 1px solid #999;
+    }
+`
+
+export const CategoryWrap = styled.div`
+    display: flex;
+    height : 40px;
+    justify-content: center;
+    align-items: center;
+    label{
+        margin-right: 5px;
+    }
+    input{
+        margin-right: 20px;
+    }
+    input:last-child{
+        margin-right: 0;
+    }
+    a{
+        margin-right: 20px;
+    }
+`
+
+export const ColorWrap = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height : 40px;
+`
+
+export const Color = styled.a<{ color?}>`
+    
+    display: inline-block;
+    width: 21px;
+    height :21px;
+    margin-right: 10px;
+    background-color: ${props => props.color ? props.color : "white"} ;
+
+    &:last-child{
+        margin-right: 0;
+    }
+
+    &:hover{
+        border : 1px solid #fff;
+    }
+
+    &.active{
+        outline : 2px solid #000;
+    }
+`
+
+export const FilterButton = styled.div`
+    display: flex;
+    justify-content: center;
+    button{
+        padding: 5px 20px;
+    }
+    button:first-child {
+        margin-right: 20px;
+    }
+`
+
+
 export const ListMenu = styled.div`
     display: flex;
     justify-content: space-between;
@@ -51,12 +142,15 @@ export const List = styled.div`
     margin : 20px 0;
     ul{
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
     }
     li{
-        width: 23.3333%;
+        width: 22%;
         margin: 10px 0;
+        margin-right: 3%;
+    }
+    li:nth-child(4n){
+        margin-right: 0;
     }
 `
 
