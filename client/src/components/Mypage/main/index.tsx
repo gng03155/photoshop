@@ -1,8 +1,23 @@
+import { useRouter } from 'next/router';
 import React from 'react'
 import { Wrap, Maileage, Delivery, Menu } from "./styles"
 
 
 export default function Main() {
+
+
+    const router = useRouter();
+
+    const onClickCategory = (e: React.MouseEvent<HTMLLIElement>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLLinkElement;
+        const name = tg.dataset.name;
+
+        router.push(`/mypage/${name}`);
+        return;
+
+    }
+
     return (
         <Wrap>
             <h2>마이페이지</h2>
@@ -60,23 +75,29 @@ export default function Main() {
             </Delivery>
             <Menu>
                 <ul>
-                    <li>
+                    <li data-name="order" onClick={onClickCategory}>
                         <div></div>
                         <strong>Order</strong>
                         <p>주문내역</p>
                         <span>고객님께서 주문하신 상품의 주문내역을 확인하실 수 있습니다.</span>
                     </li>
-                    <li>
+                    <li data-name="modify" onClick={onClickCategory}>
                         <div></div>
                         <strong>Profile</strong>
                         <p>회원정보</p>
                         <span>회원이신 고객님의 개인정보를 관리하는 공간입니다.</span>
                     </li>
-                    <li>
+                    <li data-name="like" onClick={onClickCategory}>
                         <div></div>
                         <strong>Wishlist</strong>
                         <p>관심상품</p>
                         <span>관심상품으로 등록하신 상품의 목록을 보여드립니다.</span>
+                    </li>
+                    <li data-name="board" onClick={onClickCategory}>
+                        <div></div>
+                        <strong>Board</strong>
+                        <p>게시물 관리</p>
+                        <span>고객님께서 작성하신 게시물을 관리하는 공간입니다.</span>
                     </li>
                     <li>
                         <div></div>
@@ -89,12 +110,6 @@ export default function Main() {
                         <strong>Coupon</strong>
                         <p>쿠폰</p>
                         <span>고객님이 보유하고 계신 쿠폰내역을 보여드립니다.</span>
-                    </li>
-                    <li>
-                        <div></div>
-                        <strong>Board</strong>
-                        <p>게시물 관리</p>
-                        <span>고객님께서 작성하신 게시물을 관리하는 공간입니다.</span>
                     </li>
                     <li>
                         <div></div>

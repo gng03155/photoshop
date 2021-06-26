@@ -45,7 +45,15 @@ export default function ProductList({ proIdList }: Props) {
     }, [productList, categoryList])
 
     const setPage = (idList) => {
-        let totalIdx = parseInt(`${idList.length / 8}`);
+        const num = idList.length;
+        if (num === 0) {
+            setCurPage(0)
+            setPageNumber(0);
+            setData([[]]);
+            setCurIdList([]);
+            return;
+        }
+        let totalIdx = Math.floor(num / 8);
         // totalIdx = totalIdx !== 0 ? totalIdx : 1;
         const copy = [[]];
         for (let i = 0; i <= totalIdx; i++) {
@@ -58,17 +66,19 @@ export default function ProductList({ proIdList }: Props) {
             }
             copy.push(list);
         }
+        if (num % 8 === 0) {
+            copy.splice(-1, 1);
+        }
         copy.splice(0, 1);
         setPageNumber(copy.length);
-        setData(copy);
         setCurIdList(idList);
+        setCurPage(0);
+        setData(copy);
     }
 
     const onChangeCategory = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
         const id = tg.id;
-        console.log(id);
-        console.log(tg.checked);
         if (tg.checked) {
             const copy = [...selectCategory];
             copy.push(id);
@@ -150,7 +160,6 @@ export default function ProductList({ proIdList }: Props) {
                     //컬러체크
                     for (let color of selectColor) {
                         if (productList[name]["color"].includes(color)) {
-                            console.log(name);
                             idList.push(name);
                             break;
                         }
@@ -160,7 +169,6 @@ export default function ProductList({ proIdList }: Props) {
             }
         }
 
-        console.log(idList);
         setPage(idList);
 
     }
@@ -238,7 +246,6 @@ export default function ProductList({ proIdList }: Props) {
         }
         let result = [];
         let sortList = [];
-        console.log(nameList);
         sortList = nameList.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0);
         result = sortList.map((list) => list.id);
         setPage(result);
@@ -259,12 +266,10 @@ export default function ProductList({ proIdList }: Props) {
             }
             rList.push(temp);
         }
-        console.log(rList);
         let result = [];
         let sortList = [];
         sortList = rList.sort((a, b) => b.review - a.review);
         result = sortList.map((list) => list.id);
-        setCurPage(0);
         setPage(result);
 
     }
@@ -324,7 +329,7 @@ export default function ProductList({ proIdList }: Props) {
             <ListWrap>
                 <List>
                     <ul>
-                        {data[curPage].map((item, idx) => {
+                        {data[0].length !== 0 && data[curPage].map((item, idx) => {
                             return <li key={idx}><ProductItem id={item}></ProductItem></li>
                         })}
                     </ul>

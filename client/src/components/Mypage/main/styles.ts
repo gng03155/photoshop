@@ -128,13 +128,13 @@ export const Menu = styled.div`
             div{background-position: -188px 0;}
         }
         li:nth-child(4){
-            div{background-position: 8px -100px;}
+            div{background-position: 12px -200px;}
         }
         li:nth-child(5){
             div{background-position: -292px -96px;}
         }
         li:nth-child(6){
-            div{background-position: 12px -200px;}
+            div{background-position: 8px -100px;}
         }
         li:nth-child(7){
             div{background-position: -102px -194px;}

@@ -4,6 +4,7 @@ import Member from '../../src/components/Member';
 import Main from '../../src/components/Mypage/main'
 import OrderDetail from '../../src/components/OrderDetail';
 import OrderHistory from '../../src/components/OrderHistory';
+import UserBoardManager from '../../src/components/UserBoardManager';
 import Wishlist from '../../src/components/Wishlist';
 
 export default function index() {
@@ -40,6 +41,7 @@ export default function index() {
             {query === "modify" && <Member userKey={userKey} />}
             {query === "order" && <OrderHistory userKey={userKey} />}
             {query === "order_detail" && <OrderDetail userKey={userKey} orderKey={orderKey} />}
+            {query === "board" && <UserBoardManager userKey={userKey} />}
         </div>
     )
 }

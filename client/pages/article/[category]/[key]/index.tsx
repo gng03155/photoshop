@@ -12,7 +12,7 @@ export default function Index() {
 
 
     const router = useRouter();
-    const [userKey, setUsetKey] = useState(null);
+    const [userKey, setUsetKey] = useState("");
     const [boardKey, setBoardKey] = useState("");
     const [category, setCategory] = useState("");
     const [productId, setProductId] = useState("");
@@ -33,7 +33,7 @@ export default function Index() {
 
     }, [router])
 
-    if (userKey === null || boardKey === "" || category === "") {
+    if (userKey === "" || boardKey === "" || category === "") {
         return <div></div>
     }
 

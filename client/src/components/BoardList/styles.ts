@@ -10,6 +10,9 @@ export const ReviewBoard = styled.div`
         border-bottom: 1px solid #ececec;
         padding : 10px 0;
     }
+    h3{
+        text-align: center;
+    }
 `
 
 export const Table = styled.table`
@@ -33,6 +36,14 @@ export const Table = styled.table`
     td{
         text-align: center;
     }
+`
+
+export const Lock = styled.span`
+    display: inline-block;
+    margin-left: 10px;
+    width : 16px;
+    height : 16px;
+    background: url("/img/icon_lock.gif");
 `
 
 export const PageNation = styled.div`

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Wrap = styled.div`
     width : 100%;
+    margin-bottom: 200px;
     h2{
         margin : 100px 0;
         text-align: center;
@@ -11,7 +12,6 @@ export const Wrap = styled.div`
 export const Table = styled.table`
     width : 100%;
     border-collapse: collapse;
-    margin-bottom: 200px;
     thead{
         border-top : 1px solid #ccc;
         border-bottom : 1px solid #ccc;

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { fetcherData } from '../../util/fetcher'
+import PageNation from '../PageNation';
 import { ProductInfo, Table, Wrap } from './styles';
 
 interface Props {
@@ -15,12 +16,14 @@ export default function OrderHistory({ userKey }: Props) {
 
     const router = useRouter();
 
-    const [orderList, setOrderList] = useState(null);
+    const [orderList, setOrderList] = useState([]);
+
+    const [data, setData] = useState<string[][]>([[null]]);
+    const [pageNumber, setPageNumber] = useState(0);
+    const [curPage, setCurPage] = useState(0);
 
     useEffect(() => {
         if (orderKey !== undefined && allList !== undefined) {
-            console.log(allList);
-            console.log(orderKey);
 
             const temp = Object.keys(allList).reduce((prev, cur) => {
                 if (orderKey.includes(cur)) {
@@ -29,9 +32,29 @@ export default function OrderHistory({ userKey }: Props) {
                 }
                 return prev;
             }, []);
-            setOrderList(temp);
+            setPage(temp);
+            // setOrderList(temp);
         }
     }, [orderKey, allList])
+
+    const setPage = (idList) => {
+        let totalIdx = parseInt(`${idList.length / 8}`);
+        // totalIdx = totalIdx !== 0 ? totalIdx : 1;
+        const copy = [[]];
+        for (let i = 0; i <= totalIdx; i++) {
+            let list: string[] = [];
+            for (let j = i * 8; j < (i * 8) + 8; j++) {
+                if (j >= idList.length) {
+                    break;
+                }
+                list.push(idList[j])
+            }
+            copy.push(list);
+        }
+        copy.splice(0, 1);
+        setPageNumber(copy.length);
+        setData(copy);
+    }
 
     const onClickDetail = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
@@ -47,7 +70,11 @@ export default function OrderHistory({ userKey }: Props) {
 
     }, [router])
 
-    if (orderList === null) {
+    const onSetPage = (num) => {
+        setCurPage(num);
+    }
+
+    if (data[0] === null) {
         return <div></div>
     }
 
@@ -74,20 +101,20 @@ export default function OrderHistory({ userKey }: Props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {orderList.length !== 0 &&
-                        Object.keys(orderList).map((item, idx) => {
+                    {pageNumber !== 0 &&
+                        data[curPage].map((item, idx) => {
                             return (
-                                <tr key={orderList[item]["key"]}>
-                                    <td><a data-key={orderList[item]["main_key"]} onClick={onClickDetail}>{orderList[item]["order_num"]}</a></td>
+                                <tr key={item["key"]}>
+                                    <td><a data-key={item["main_key"]} onClick={onClickDetail}>{item["order_num"]}</a></td>
                                     <td>
                                         <ProductInfo>
-                                            <div className="img"><img src={orderList[item]["product_info"]["thumb_src"]} alt="#" /></div>
-                                            <div className="desc"><p>{orderList[item]["product_info"]["name"]}</p><span>옵션 : {orderList[item]["product_info"]["option"]}</span></div>
+                                            <div className="img"><img src={item["product_info"]["thumb_src"]} alt="#" /></div>
+                                            <div className="desc"><p>{item["product_info"]["name"]}</p><span>옵션 : {item["product_info"]["option"]}</span></div>
                                         </ProductInfo>
                                     </td>
-                                    <td>{orderList[item]["date"]}</td>
-                                    <td><p>{orderList[item]["product_info"]["price"]}원</p><p>{orderList[item]["product_info"]["num"]}개</p></td>
-                                    <td>{orderList[item]["shipping"]}</td>
+                                    <td>{item["date"]}</td>
+                                    <td><p>{item["product_info"]["price"]}원</p><p>{item["product_info"]["num"]}개</p></td>
+                                    <td>{item["shipping"]}</td>
                                     <td></td>
                                 </tr>
                             )
@@ -95,6 +122,7 @@ export default function OrderHistory({ userKey }: Props) {
                     }
                 </tbody>
             </Table>
+            <PageNation onSetPage={onSetPage} pageNumber={pageNumber} curNumber={curPage} />
         </Wrap>
     )
 }

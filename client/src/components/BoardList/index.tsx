@@ -6,7 +6,7 @@ import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation'
 import ReviewItem from '../ReviewItem';
 
-import { NoBoard, Table, WriteButton, ReviewBoard } from "./styles"
+import { NoBoard, Table, WriteButton, ReviewBoard, Lock } from "./styles"
 
 interface Props {
     boardKeyList: string[] | undefined,
@@ -45,14 +45,15 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
     }, [allList])
 
     const init = (url) => {
-        console.log("init");
         setIsRoute(false);
     }
 
 
     const setBoardList = async () => {
+
         let listKeys = Object.keys(allList)
         let temp = [];
+
         for (let key of boardKeyList) {
             const num = listKeys.indexOf(key);
             if (num === -1) {
@@ -65,11 +66,13 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
         if (temp.length === 0) {
             return;
         }
+
         temp.reverse();
         let totalIdx = parseInt(`${temp.length / 8}`);
         if (totalIdx === 0) {
             totalIdx = 1;
         }
+
         const copy = [[]];
         for (let i = 0; i < totalIdx; i++) {
             let list = [];
@@ -81,6 +84,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
             }
             copy.push(list);
         }
+
         copy.splice(0, 1);
         setPageNumber(copy.length);
         setData(copy);
@@ -171,7 +175,46 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                             <h3>등록된 게시글이 없습니다.</h3>}
                     </ul>
                 </ReviewBoard>}
-            {category !== "review" && <Table>
+            {category === "user" &&
+                <Table>
+                    <colgroup>
+                        <col style={{ width: "8%" }} />
+                        <col style={{ width: "8%" }} />
+                        <col style={{ width: "30%" }} />
+                        <col style={{ width: "8%" }} />
+                        <col style={{ width: "8%" }} />
+                        <col style={{ width: "8%" }} />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>분류</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>작성일</th>
+                            <th>조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {pageNumber !== 0 ? data[curPage].map((value, idx) => {
+                            return (
+                                <tr key={idx}>
+                                    <td>{(8 * curPage) + idx + 1}</td>
+                                    <td>{value.category}</td>
+                                    <td><a data-product={value.product_info ? `${value.product_info.id}` : ""} data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>{value.title}</a></td>
+                                    <td>{value.user_info.name}</td>
+                                    <td>{value.date}</td>
+                                    <td>{value.hits}</td>
+                                </tr>
+                            )
+                        }) :
+                            <tr>
+                                <td colSpan={5}><NoBoard><h3>등록된 게시글이 없습니다.</h3></NoBoard></td>
+                            </tr>
+                        }
+                    </tbody>
+                </Table>}
+            {(category !== "review" && category !== "user") && <Table>
                 <colgroup>
                     <col style={{ width: "10%" }} />
                     <col style={{ width: "50%" }} />
@@ -190,10 +233,11 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                 </thead>
                 <tbody>
                     {pageNumber !== 0 ? data[curPage].map((value, idx) => {
+                        console.log(value.type);
                         return (
                             <tr key={idx}>
                                 <td>{(8 * curPage) + idx + 1}</td>
-                                <td><a data-product={value.product_info ? `${value.product_info.id}` : ""} data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>{value.title}</a></td>
+                                <td><a data-product={value.product_info ? `${value.product_info.id}` : ""} data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>{value.title}</a>{value.type === "private" && <Lock />}</td>
                                 <td>{value.user_info.name}</td>
                                 <td>{value.date}</td>
                                 <td>{value.hits}</td>
@@ -207,6 +251,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
                 </tbody>
             </Table>}
+
             <WriteButton>
                 <button onClick={onClickWrite}>글쓰기</button>
             </WriteButton>

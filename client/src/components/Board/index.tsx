@@ -66,6 +66,21 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
+
+
+        if (data === "") {
+            alert("내용을 입력해주세요");
+            return;
+        }
+
+
+        if (category === "qna" || category === "review") {
+            if (product === "") {
+                alert("상품을 선택해주세요");
+                return;
+            }
+        }
+
         mutate(true, false);
         const tg = e.target as HTMLFormElement;
         const radios = tg["radio"] as HTMLInputElement[];
@@ -212,20 +227,22 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
                 id: product,
                 name: productList[product]["name"],
             };
-            await fb.database().ref(`products/${category}/${product}`).once("value").then((snapshot) => {
+            await fb.database().ref(`products/${category}/${product}`).once("value").then(async (snapshot) => {
                 if (snapshot.exists()) {
                     const copy = snapshot.val();
                     console.log(copy);
                     copy.push(info.key);
-                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${product} 데이터 저장 완료`) });
+                    await snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${product} 데이터 저장 완료`) });
                 } else {
                     const copy = [info.key];
-                    snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${product} 데이터 저장 완료`) });
+                    await snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${product} 데이터 저장 완료`) });
                 }
             })
         }
-        console.log(board);
 
+        await fb.database().ref(`board/user/${userKey}/${info.key}`).set(info.key).then(() => {
+            console.log(`board/user/${userKey}/${info.key} 데이터 저장 완료`);
+        })
         await fb.database().ref(`board/board_list/${info.key}`).set(board).then((snapshot) => {
             console.log("성공");
         })
@@ -238,7 +255,6 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
     const onChangePswd = (e: React.ChangeEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
         const id = tg.id;
-        // console.log(passRef.current);
         if (id === "public") {
             passRef.current.disabled = true;
         } else if (id === "private") {
