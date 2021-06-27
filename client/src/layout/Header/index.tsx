@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import { Content, Logo, BoardCategory, MainMenu } from "./styles"
+import { Content, Logo, BoardCategory, MainMenu, SearchWrap, SearchInput } from "./styles"
 import fb from '../../firebase'
 import useSWR from 'swr'
 import localFetcher from '../../util/localFetcher'
@@ -11,12 +11,20 @@ import localFetcher from '../../util/localFetcher'
 
 export default function Header() {
 
-    const [userKey, setUserKey] = useState("");
-    const ref = useRef(null);
-    const divRef = useRef(null);
-    const router = useRouter();
+
+
 
     const { data: load, mutate } = useSWR("load", localFetcher);
+
+    const router = useRouter();
+
+    const ref = useRef(null);
+    const divRef = useRef(null);
+    const searchRef = useRef<HTMLDivElement>(null);
+
+    const [keyword, setKeyword] = useState("");
+    const [userKey, setUserKey] = useState("");
+
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
@@ -33,10 +41,13 @@ export default function Header() {
         if (scrollTop > 0) {
             const tt = divRef.current.clientWidth;
             ref.current.style.position = "fixed";
+            ref.current.style.height = "80px";
             ref.current.style.width = tt + "px";
         } else {
             ref.current.style.position = "relative";
             ref.current.style.width = "100%";
+            ref.current.style.height = "100px";
+
         }
     }
 
@@ -49,11 +60,53 @@ export default function Header() {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const id = tg.dataset.id;
-        router.push(`/board/${id}`, undefined, { shallow: true });
+        router.push(`/board/${id}`);
+    }
+
+    const onClickSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        const isActive = searchRef.current.classList.contains("active");
+        console.log(isActive);
+        if (!isActive) {
+            searchRef.current.classList.add("active");
+            searchRef.current.style.display = "block";
+        } else {
+            searchRef.current.classList.remove("active");
+            searchRef.current.style.display = "none";
+            setKeyword("");
+        }
+    }
+
+    const moveSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        searchRef.current.classList.remove("active");
+        searchRef.current.style.display = "none";
+        const pathName = router.pathname;
+        setKeyword("");
+        if (pathName !== "/category/search") {
+            router.push({
+                pathname: "/category/search",
+                query: {
+                    keyword,
+                },
+            });
+        } else {
+            console.log("같은페이지");
+            router.push({
+                pathname: "/category/search",
+                query: {
+                    keyword,
+                },
+            }, "/category/search", { shallow: true });
+        }
     }
 
     const test = async () => {
-        mutate(!load, false);
+
+        router.push("/signup?name=agree", "/signup");
+        return;
+
+        // mutate(!load, false);
         // for (let i = 1; i <= 8; i++) {
         //     let storage1 = fb.storage().ref(`products/A00${i}/imgs/detail/test`);
         //     let storage2 = fb.storage().ref(`products/A00${i}/imgs/thumb/test`);
@@ -86,12 +139,12 @@ export default function Header() {
 
     return (
         <div ref={divRef} style={{ width: "100%", height: "100px" }}>
-            <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button>
+            {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
             <Content ref={ref}>
                 <MainMenu>
                     <ul>
                         <li><Link href="/article/free?id=free&key=-McV-rHrRab1MvqYdjGL">test</Link></li>
-                        <li><Link href="/product/1"><a>PRODUCT</a></Link></li>
+                        <li><Link href="/category"><a>PRODUCT</a></Link></li>
                         <li className="board">
                             <Link href="/board/free"><a>BOARD</a></Link>
                             <BoardCategory>
@@ -120,14 +173,30 @@ export default function Header() {
                         }
                         {
                             userKey === null ?
-                                <li><Link as="/signup" href="/signup?name=agree"><a>JOIN US</a></Link></li>
+                                <li>
+                                    <Link href="/signup?name=agree" as="signup">
+                                        <a>JOIN US</a>
+                                    </Link>
+                                </li>
                                 :
                                 <li><Link href="/mypage/main"><a>MY PAGE</a></Link></li>
                         }
                         <li><Link href="/cart" ><a>CART</a></Link></li>
-                        <li><Link href="/category"><a>CATEGORY</a></Link></li>
+                        <li className="search">
+                            <a onClick={onClickSearch}>SEARCH</a>
+                        </li>
                     </ul>
                 </MainMenu>
+                <SearchWrap ref={searchRef}>
+                    <div>
+                        <span>X</span>
+                        <SearchInput>
+                            <form onSubmit={moveSearch}>
+                                <input type="text" value={keyword} onChange={(e) => { setKeyword(e.target.value) }} placeholder="검색어를 입력해주세요." /><a onClick={moveSearch}></a>
+                            </form>
+                        </SearchInput>
+                    </div>
+                </SearchWrap>
             </Content>
         </div>
     )

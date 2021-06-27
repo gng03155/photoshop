@@ -6,23 +6,31 @@ import { Title, Progress } from "./styles"
 import Agreement from '../../src/components/Signup/agreement'
 import Join from '../../src/components/Signup/join'
 import Complete from '../../src/components/Signup/complete'
+import { addAbortSignal } from 'stream'
 
 
-export default function signup() {
+export default function signup({ props }) {
 
     const router = useRouter();
     const [query, setQuery] = useState("");
     const [userData, setUserData] = useState<any>({});
 
     useEffect(() => {
+    }, [])
+
+    useEffect(() => {
 
         const name = router.query.name;
+        if (name === undefined) {
+            router.push("/signup?name=agree", "/signup");
+            return;
+        }
         if (typeof name === "string") {
-            setQuery(name);
             if (name === "complete") {
                 if (typeof router.query.data === "string")
                     setUserData(JSON.parse(router.query.data));
             }
+            setQuery(name);
         }
 
     }, [router])
@@ -52,4 +60,13 @@ export default function signup() {
             {query === "complete" && <Complete userData={userData} />}
         </div>
     )
+}
+
+export const getServerSideProps = (ctx) => {
+    console.log(ctx.query);
+    return {
+        props: {
+            hello: "hello",
+        }
+    }
 }

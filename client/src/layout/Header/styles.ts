@@ -40,6 +40,51 @@ export const MainMenu = styled.div`
     }
 `;
 
+export const SearchWrap = styled.div`
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width : 100vw !important;
+    height : 200px;
+    margin-left: calc(-50vw + 50%);
+    background-color : rgba(255,255,255,0.4);
+    flex: none;
+    & > div{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    span{
+        display: inline-block;
+        height : 70px;
+        line-height: 70px;
+        font-size: 30px;
+        margin-left: 50%;
+    }
+`
+
+export const SearchInput = styled.div`
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #ccc;
+    input{
+        width : 700px;
+        height : 40px;
+        font-size: 24px;
+        background: none;
+        border : none;
+    }
+    a{
+        display: inline-block;
+        width: 32px;
+        height : 32px;
+        background: url("/img/search_icon.png") no-repeat;
+        background-size: cover;
+        margin-left: 10px;
+    }
+`
+
 export const Logo = styled.div`
     a {
         display: block;

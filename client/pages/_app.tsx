@@ -5,7 +5,7 @@ import { theme } from '../src/styles/theme';
 
 import { useEffect, useLayoutEffect } from "react";
 import useSWR, { SWRConfig } from "swr";
-
+import { useRouter } from 'next/router';
 
 import Header from "../src/layout/Header"
 import Footer from '../src/layout/Footer';
@@ -15,6 +15,16 @@ import Loading from '../src/components/Loading';
 function App({ Component, pageProps }: AppProps) {
 
     const { data: localLoad } = useSWR("load", localFetcher);
+
+    const router = useRouter();
+
+    useEffect(() => {
+        router.beforePopState(({ url, as }) => {
+            router.reload();
+            console.log('뒤로가기누름!!');
+            return true
+        })
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>

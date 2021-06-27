@@ -9,10 +9,11 @@ import { Wrap, ListMenu, ListWrap, List, Filter, CategoryWrap, ColorWrap, Option
 
 interface Props {
     proIdList: string[],
+    isSearch?: boolean,
 }
 
 
-export default function ProductList({ proIdList }: Props) {
+export default function ProductList({ proIdList, isSearch }: Props) {
 
     const { data: productList } = useSWR(`/products/product`, fetcherData, { revalidateOnMount: true });
 
@@ -32,17 +33,15 @@ export default function ProductList({ proIdList }: Props) {
 
     useEffect(() => {
 
-        for (let i = 0; i < 20; i++) {
-            proIdList.push(`A008`);
-        }
-
-        setPage(proIdList);
+        // for (let i = 0; i < 20; i++) {
+        //     proIdList.push(`A008`);
+        // }
 
     }, []);
 
     useEffect(() => {
-
-    }, [productList, categoryList])
+        setPage(proIdList);
+    }, [proIdList])
 
     const setPage = (idList) => {
         const num = idList.length;
@@ -283,7 +282,7 @@ export default function ProductList({ proIdList }: Props) {
 
     return (
         <Wrap>
-            <Filter>
+            {!isSearch && <Filter>
                 <h3>필터</h3>
                 <Option>
                     <p>카테고리</p>
@@ -316,9 +315,9 @@ export default function ProductList({ proIdList }: Props) {
                     <button>선택 초기화</button>
                     <button>적용</button>
                 </FilterButton> */}
-            </Filter>
+            </Filter>}
             <ListMenu>
-                <p>총<span>{curIdList.length}</span>개의 상품이 있습니다.</p>
+                {!isSearch ? <p>총<span>{curIdList.length}</span>개의 상품이 있습니다.</p> : <p></p>}
                 <ul>
                     <li><a onClick={onClickNameeSort}>상품명</a></li>
                     <li><a data-type="high" onClick={onClickPriceSort}>높은 가격순</a></li>
