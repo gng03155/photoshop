@@ -15,10 +15,19 @@ export const NewItem = styled.div`
      ul{
          display:flex ;
          justify-content: space-between;
+         flex-wrap: wrap;
          width: 100%;
          li{
             width: 23%;
          }
+         ${props => props.theme.media.tablet}{
+         ul{
+
+         }
+         li{
+            width : 47%;
+         }
+     }
      }
     
 `
@@ -39,7 +48,16 @@ export const BestItem = styled.div`
             width: 23%;
             margin-bottom: 20px;
          }
+         ${props => props.theme.media.tablet}{
+         ul{
+
+         }
+         li{
+            width : 47%;
+         }
      }
+     }
+
     
 `
 

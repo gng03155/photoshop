@@ -12,8 +12,12 @@ export const Content = styled.div`
     align-items : center;
     text-align: center;
 
-    & > div {
-        width: 33.3333%;
+    & > div:first-child {
+        width: 40%;
+    }
+
+    & > div:nth-child(3) {
+        width: 40%;
     }
 
 `;
@@ -21,12 +25,12 @@ export const Content = styled.div`
 export const MainMenu = styled.div`
     & > ul {        
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
         & > li{
             padding : 10px 0;
             a {
                 display: block;
-                font-size : 20px;
+                font-size : 13px;
                 padding: 0 10px;
             }
         }
@@ -37,6 +41,14 @@ export const MainMenu = styled.div`
         li.board:hover nav{
             display: block;
         }
+    }
+
+    & > ul.left {
+        justify-content: flex-start;
+    }
+
+    & > ul.right {
+        justify-content: flex-end;
     }
 `;
 
@@ -61,6 +73,7 @@ export const SearchWrap = styled.div`
         line-height: 70px;
         font-size: 30px;
         margin-left: 50%;
+        cursor : pointer;
     }
 `
 
@@ -86,10 +99,13 @@ export const SearchInput = styled.div`
 `
 
 export const Logo = styled.div`
+    &  {
+        width: 19.99999%;
+    }
     a {
-        display: block;
+        display: inline-block;
         img{
-            
+            width : 100%;
         }
     }
 `;

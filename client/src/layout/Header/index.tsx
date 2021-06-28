@@ -79,6 +79,10 @@ export default function Header() {
 
     const moveSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (keyword === "") {
+            alert("검색어를 입력해주세요");
+            return;
+        }
         searchRef.current.classList.remove("active");
         searchRef.current.style.display = "none";
         const pathName = router.pathname;
@@ -99,6 +103,13 @@ export default function Header() {
                 },
             }, "/category/search", { shallow: true });
         }
+    }
+
+    const onClickCancelSearch = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+        e.preventDefault();
+        searchRef.current.classList.remove("active");
+        searchRef.current.style.display = "none";
+        setKeyword("");
     }
 
     const test = async () => {
@@ -142,7 +153,7 @@ export default function Header() {
             {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
             <Content ref={ref}>
                 <MainMenu>
-                    <ul>
+                    <ul className="left">
                         <li><Link href="/article/free?id=free&key=-McV-rHrRab1MvqYdjGL">test</Link></li>
                         <li><Link href="/category"><a>PRODUCT</a></Link></li>
                         <li className="board">
@@ -164,7 +175,7 @@ export default function Header() {
                     </Link>
                 </Logo>
                 <MainMenu>
-                    <ul>
+                    <ul className="right">
                         {
                             userKey === null ?
                                 <li><Link href="/login"><a>LOGIN</a></Link></li>
@@ -189,7 +200,7 @@ export default function Header() {
                 </MainMenu>
                 <SearchWrap ref={searchRef}>
                     <div>
-                        <span>X</span>
+                        <span onClick={onClickCancelSearch} >X</span>
                         <SearchInput>
                             <form onSubmit={moveSearch}>
                                 <input type="text" value={keyword} onChange={(e) => { setKeyword(e.target.value) }} placeholder="검색어를 입력해주세요." /><a onClick={moveSearch}></a>

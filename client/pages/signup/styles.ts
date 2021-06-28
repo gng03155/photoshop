@@ -7,7 +7,6 @@ export const Title = styled.div`
         margin: 40px 0;
         font-weight: 500;
     }
-    
 `
 
 export const Progress = styled.div<{ state: string }>`

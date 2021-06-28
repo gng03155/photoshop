@@ -1,5 +1,5 @@
 import React from 'react'
-import { FooterWrap, FooterBg, FooterMenu, Content, CompanyInfo, CScontent, BANKcontent, Gap } from "./styles"
+import { FooterWrap, FooterBg, FooterMenu, Content, CompanyInfo, CScontent, BANKcontent, Gap, ContentWrap } from "./styles"
 export default function Footer() {
     return (
         <FooterWrap>
@@ -35,24 +35,26 @@ export default function Footer() {
                         <span>홍길동</span>
                     </div>
                 </CompanyInfo>
-                <CScontent>
-                    <h3>COSTOMER CENTER</h3>
-                    <div></div>
-                    <strong>010-1234-5678</strong><br />
-                    <strong>070-1234-5678</strong>
-                    <Gap></Gap>
-                    <p>MON-FRI AM 10:00 ~ PM 06:00</p>
-                    <p>SAT-SUN HOLIDAY OFF</p>
-                </CScontent>
-                <BANKcontent>
-                    <h3>BANK INFO</h3>
-                    <div></div>
-                    <p>국민 000000-00-000000</p>
-                    <p>우리 0000-00-000000</p>
-                    <p>신한 000-000-000000</p>
-                    <Gap></Gap>
-                    <p>예금주 홍길동</p>
-                </BANKcontent>
+                <ContentWrap>
+                    <CScontent>
+                        <h3>COSTOMER CENTER</h3>
+                        <div></div>
+                        <strong>010-1234-5678</strong><br />
+                        <strong>070-1234-5678</strong>
+                        <Gap></Gap>
+                        <p>MON-FRI AM 10:00 ~ PM 06:00</p>
+                        <p>SAT-SUN HOLIDAY OFF</p>
+                    </CScontent>
+                    <BANKcontent>
+                        <h3>BANK INFO</h3>
+                        <div></div>
+                        <p>국민 000000-00-000000</p>
+                        <p>우리 0000-00-000000</p>
+                        <p>신한 000-000-000000</p>
+                        <Gap></Gap>
+                        <p>예금주 홍길동</p>
+                    </BANKcontent>
+                </ContentWrap>
             </Content>
         </FooterWrap>
     )

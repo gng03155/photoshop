@@ -396,8 +396,6 @@ export default function CartList({ userKey }: Props) {
                                             return Object.keys(optionList[modalProps.productId][option]).map((sub, idx) => {
                                                 if (idx === 0 || sub === "name") {
                                                 } else {
-                                                    console.log(optionList[modalProps.productId][option][sub]["name"]);
-                                                    console.log(optionList[modalProps.productId][option][sub]["num"]);
                                                     return <option key={idx} value={optionList[modalProps.productId][option][sub]["name"]}>{optionList[modalProps.productId][option][sub]["name"]} 남은재고 {optionList[modalProps.productId][option][sub]["num"]}</option>
                                                 }
                                             })

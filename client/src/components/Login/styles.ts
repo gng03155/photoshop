@@ -2,50 +2,55 @@ import styled from "styled-components"
 
 
 export const Wrap = styled.div`
-    /* width: 1440px; */
-    height : 500px;
-    margin : 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width : 100%;
+    margin: 150px 0 200px;
+    text-align: center;
 `;
 
 export const Titlearea = styled.div`
-    width: 400px;
-    margin : 50px auto;
-    text-align: center;
     h2{
         font-size : 25px;
         font-weight: 400;
+        margin-bottom: 50px;
     }
 `;
 
 export const Form = styled.form`
     width: 400px;
-    margin : 0 auto;
 `;
 
 export const Label = styled.label`
     display: block;
-    width: 400px;
-    height : 40px;
-    margin-bottom : 5px;
+    width: 100%;
 `;
 
 export const Input = styled.input`
     width: 100%;
-    height: 100%;
-    padding: 2px 5px;
+    height : 40px;
     border : 1px solid #ececec;
+    padding: 0 10px;
+    margin-top: 5px;
 `;
 
 export const Find = styled.div`
-    width: 400px;
-    margin : 15px auto;
     ul{
+        width : 100%;
         display: flex;
+        justify-content: center;
+        align-items: center;
+        margin : 10px 0;
         li{
             a{
                 display: block;
                 font-size: 16px;
                 padding: 5px 20px;
+            }
+            span{
+                margin: 0 5px;
+                font-size: 14px;
             }
         }
     }
@@ -53,12 +58,12 @@ export const Find = styled.div`
 
 export const Button = styled.button`
     display: block;
-    width: 400px;
+    width: 100%;
     height : 60px;
-    margin : 0 auto;
     color : #fff;
     background : #333;
     font-size : 20px;
+    
 `
 
 

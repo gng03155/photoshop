@@ -5,5 +5,10 @@ declare module 'styled-components' {
         color: {
 
         };
+        media: {
+            desktop: string | undefined,
+            tablet: string | undefined,
+            mobile: string | undefined,
+        }
     }
 }

@@ -2,12 +2,14 @@ import React, { useCallback } from 'react'
 import useSWR from "swr";
 import { useRouter } from "next/router"
 
+import crypto from 'crypto';
+import { SHA256 } from 'crypto-js';
+
 import { Wrap, Titlearea, Form, Label, Input, Find, Button } from "./styles"
 
 import { fetcherData } from '../../util/fetcher';
-import crypto from 'crypto';
-import { SHA256 } from 'crypto-js';
 import localFetcher from '../../util/localFetcher';
+import Link from 'next/link';
 
 
 export default function Login() {
@@ -40,6 +42,7 @@ export default function Login() {
             if (pwHash === userInfo.pswd) {
                 console.log("비밀번호가 일치합니다!");
                 sessionStorage.setItem("uid", key);
+                console.log(window.location);
                 router.back();
 
 
@@ -57,16 +60,12 @@ export default function Login() {
                     <h2>로그인</h2>
                 </Titlearea>
                 <Form onSubmit={(e) => onSubmitLogin(e)}>
-                    <Label>
-                        <Input type="text" id="id" placeholder="아이디"></Input>
-                    </Label>
-                    <Label>
-                        <Input type="password" id="pswd" placeholder="비밀번호"></Input>
-                    </Label>
+                    <Input type="text" id="id" placeholder="아이디"></Input>
+                    <Input type="password" id="pswd" placeholder="비밀번호"></Input>
                     <Find>
                         <ul>
-                            <li><a href="#">아이디 찾기</a></li>
-                            <li><a href="#">비밀번호 찾기</a></li>
+                            <li><Link href="/member/find"><a href="#">계정찾기</a></Link></li>
+                            <li><span>/</span></li>
                             <li><a href="#">회원가입</a></li>
                         </ul>
                     </Find>

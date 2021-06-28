@@ -1,22 +1,48 @@
 import styled from "styled-components"
 
 export const FooterWrap = styled.footer`
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: #444;
     width : 100%;
-    height : 300px;
+    height: auto;
+    padding: 25px 0;
     color : #111;
 
     &:before{
         position: absolute;
+        top: 0;
+        left: -20%;
+        content: "";
+        width : 20%;
+        height : 100%;
+        background-color: #444;
+        /* position: absolute;
         left: 0;
         content: "";
         width : 100vw;
         height : 300px;
         background-color: #444;
-        z-index: -1;
+        z-index: -1; */
     }
+    &:after{
+        position: absolute;
+        top: 0;
+        right: -20%;
+        content: "";
+        width : 20%;
+        height : 100%;
+        background-color: #444;
+        /* position: absolute;
+        left: 0;
+        content: "";
+        width : 100vw;
+        height : 300px;
+        background-color: #444;
+        z-index: -1; */
+    } 
 
 `
 
@@ -31,9 +57,10 @@ export const FooterBg = styled.div`
 `
 
 export const FooterMenu = styled.div`
+    width: 100%;
     ul{
+        width: 100%;
         display: flex;
-        margin-left: -15px;
         li{
             a{
                 display: block;
@@ -42,8 +69,45 @@ export const FooterMenu = styled.div`
                 color : #111;
             }
         }
+        ${props => props.theme.media.tablet}{
+            justify-content: space-between;
+            li{
+
+                a{
+                    font-size: 12px;
+                    padding: 0;
+                }
+            }
+        }
     }
 `;
+
+
+export const Content = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width : 100%;
+
+    ${props => props.theme.media.tablet}{
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }        
+
+`;
+
+export const ContentWrap = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width : 55%;
+    h3 {
+
+    }
+    div {
+        margin: 10px 0;
+        width: 200px;
+    }
+`
 
 export const CScontent = styled.div`
     
@@ -62,29 +126,6 @@ export const BANKcontent = styled.div`
     }
 `;
 
-
-export const Content = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width : 100%;
-    padding: 25px 0;
-    margin : 0 auto;
-
-    ${CScontent}, ${BANKcontent} {
-
-        h3 {
-
-        }
-        div {
-            margin: 10px 0;
-            width: 200px;
-            height: 2px;
-            background: #ccc;
-        }
-    }
-`;
-
 export const CompanyInfo = styled.div`
     width: 40%;
     display: flex;
@@ -99,6 +140,10 @@ export const CompanyInfo = styled.div`
             }
         }
     }
+
+    ${props => props.theme.media.tablet}{
+        width : 100%;
+    }      
 `;
 
 export const Gap = styled.p`

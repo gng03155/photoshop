@@ -10,9 +10,9 @@ export default function Main() {
 
     const onClickCategory = (e: React.MouseEvent<HTMLLIElement>) => {
         e.preventDefault();
-        const tg = e.target as HTMLLinkElement;
+        const tg = e.currentTarget as EventTarget & HTMLLIElement;
         const name = tg.dataset.name;
-
+        console.log(name);
         router.push(`/mypage/${name}`);
         return;
 
