@@ -11,13 +11,25 @@ export const AgreeArea = styled.div`
 `;
 
 export const CheckBox = styled.div`
-    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+
     width: 100%;
     height: 50px;
-    line-height: 40px;
-    padding: 5px 10px;
+    padding: 0px 10px;
     border: 1px solid #ececec;
-
+    label{
+        display: inline-block;
+        font-weight: 400;
+        margin-left: 15px;
+    }
+    input{
+            display: inline-block;
+            flex-shrink : 0;
+            width: 18px;
+            height: 18px;
+    }
 `
 
 export const Label = styled.label`

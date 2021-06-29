@@ -45,9 +45,11 @@ export const ProductAdd = styled.div`
     border-top: 2px solid #ccc;
     padding-top: 20px;
     margin : 20px 0;
-    label{
-        display: inline-block;
-        width: 35%;
+    div{
+        width :35%;
+        label{
+            display: block;
+        }
     }
     ul{
         display: flex;

@@ -3,7 +3,7 @@ import baseStyled, { DefaultTheme, ThemedStyledInterface } from 'styled-componen
 
 
 const sizes: { [key: string]: number; } = {
-    mobile: 320,
+    mobile: 480,
     tablet: 768,
     desktop: 1024,
 };

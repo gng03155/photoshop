@@ -22,7 +22,10 @@ export default function ProductDetail({ id, userKey }: Props) {
     const { data: productInfo, revalidate: proUpdate } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: reviewList } = useSWR(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: qnaList } = useSWR(`products/qna/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: stock } = useSWR(`products/stock/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: likeList } = useSWR(`like/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
+
+
     const ref = new Array(4).fill(0).map((i) => { return useRef<HTMLDivElement>(null) });
 
     const router = useRouter();
@@ -267,11 +270,29 @@ export default function ProductDetail({ id, userKey }: Props) {
             delivery: productInfo.delivery,
             thumb_src: thumbImg[0],
         };
+
         if (option.includes(selOption + name)) {
             alert("이미 등록된 옵션입니다!");
             return;
         }
+        const num = checkStock(selOption.replace("/", ""), name);
+        info["stock"] = num;
+
         setBuyList(name, info);
+    }
+
+    const checkStock = (optionName, sub) => {
+        let num = 0;
+        for (let key in stock) {
+            if (stock[key]["name"] === optionName) {
+                for (let option in stock[key]) {
+                    if (stock[key][option]["name"] === sub) {
+                        num = Number(stock[key][option]["num"]);
+                    }
+                }
+            }
+        }
+        return num;
     }
 
     const onClickCart = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -422,7 +443,10 @@ export default function ProductDetail({ id, userKey }: Props) {
                         </OptionAdd>
                         {isProduct && buyProductInfo.map((item, idx) => {
                             return <ProductAdd key={idx}>
-                                <label>{item.name} - {item.option}</label>
+                                <div>
+                                    <label>{item.name} - {item.option}</label>
+                                    <label>남은재고 {item.stock}</label>
+                                </div>
                                 <ul>
                                     <li><a id={`${idx}`} onClick={onClickMinus}></a></li>
                                     <li><input name={String(idx)} type="text" value={item.num} onChange={onChangeNum} maxLength={2}

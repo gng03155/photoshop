@@ -7,6 +7,8 @@ import { useEffect, useLayoutEffect } from "react";
 import useSWR, { SWRConfig } from "swr";
 import { useRouter } from 'next/router';
 
+import Head from 'next/head'
+
 import Header from "../src/layout/Header"
 import Footer from '../src/layout/Footer';
 import localFetcher from '../src/util/localFetcher';
@@ -30,6 +32,9 @@ function App({ Component, pageProps }: AppProps) {
 
     return (
         <ThemeProvider theme={theme}>
+            <Head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1" />
+            </Head>
             <GlobalStyle></GlobalStyle>
             <SWRConfig value={{ revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false }}>
                 {/* <div style={{ width: "1260px", minHeight: "100vh", margin: "0 auto", display: "flex", flexDirection: "column", justifyContent: "space-between" }}> */}

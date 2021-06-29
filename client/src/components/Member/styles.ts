@@ -13,4 +13,10 @@ export const Button = styled.div`
         width : 30%;
         height : 45px;
     }
+
+    ${props => props.theme.media.mobile}{
+       button{
+        font-size: 10px;
+       } 
+    }
 `

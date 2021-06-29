@@ -5,10 +5,11 @@ import { useRouter } from 'next/router'
 import DaumPostcode from 'react-daum-postcode';
 
 import { fetcherData } from '../../../src/util/fetcher';
-import { OrderArea, ShippingInfo, AddressBox, PhoneBox, EmailBox, OrderInfo, ThumbNail, Description, PaymentArea, OrderEnd, Wrap } from './styles';
+import { OrderArea, ShippingInfo, AddressBox, PhoneBox, EmailBox, OrderInfo, ThumbNail, Description, PaymentArea, OrderEnd, Wrap, PostWrap } from './styles';
 import fb from '../../../src/firebase';
 import moment from 'moment';
 import localFetcher from '../../util/localFetcher';
+import { NewItem } from '../Home/Section/styles';
 
 
 interface Props {
@@ -38,6 +39,9 @@ export default function OrderPage({ userKey, cartData }: Props) {
     const [email2, setEmail2] = useState("");
     const [delMsg, setDelMsg] = useState("");
 
+
+    const [postPos, setPostPos] = useState({ x: 0, y: 0 });
+
     const [totalPrice, setTotalPrice] = useState(0);
 
 
@@ -66,6 +70,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
     }, [cartList])
 
     const handleComplete = (data) => {
+        console.log(data);
         let fullAddress = data.address;
         let extraAddress = '';
 
@@ -90,10 +95,19 @@ export default function OrderPage({ userKey, cartData }: Props) {
     const onSearchAdress = useCallback(
         (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.preventDefault();
+            const tg = e.target as HTMLButtonElement;
+            const parent = tg.parentElement.parentElement;
+            const x = window.pageXOffset + parent.getBoundingClientRect().left;
+            const y = window.pageYOffset + parent.getBoundingClientRect().top;
+            setPostPos({ x, y });
             setIsAdress(true);
         },
         [],
     );
+
+    const onCloseAddress = useCallback(() => {
+        setIsAdress(false);
+    }, [])
 
     const onClickArrow = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -343,21 +357,24 @@ export default function OrderPage({ userKey, cartData }: Props) {
                                     <ul>
                                         <li>
                                             <input type="text" id="zone" placeholder="우편주소" value={adrs1} disabled />
-                                            <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSearchAdress(e)}>주소검색
-                                                {isAdress &&
-                                                    <DaumPostcode style={{
-                                                        display: 'block',
-                                                        position: 'absolute',
-                                                        top: "-50px",
-                                                        left: "0px",
-                                                        width: '400px',
-                                                        height: '400px',
-                                                    }} onComplete={handleComplete} />
-                                                }
-                                            </button>
+                                            <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSearchAdress(e)}>주소검색</button>
                                         </li>
                                         <li><input type="text" id="adrs" value={adrs2} placeholder="기본주소" disabled /></li>
                                         <li><input type="text" id="adrs2" placeholder="상세 주소를 입력해주세요. (선택)" value={adrs3} onChange={e => onChangeValue(e, setAdrs3)} /></li>
+                                        {isAdress &&
+                                            <PostWrap x={postPos.x} y={postPos.y}>
+                                                <a onClick={onCloseAddress}><img src="/img/close.png" alt="닫기" /></a>
+                                                <DaumPostcode style={{
+                                                    display: 'block',
+                                                    position: 'absolute',
+                                                    top: "0px",
+                                                    left: "0px",
+                                                    width: '100%',
+                                                    height: '400px',
+                                                    border: "5px solid #000",
+                                                }} onComplete={handleComplete} />
+                                            </PostWrap>
+                                        }
                                     </ul>
                                 </td>
                             </AddressBox>

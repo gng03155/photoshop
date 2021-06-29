@@ -8,6 +8,34 @@ export const Wrap = styled.div`
     border-bottom : 1px solid #ececec;
 `
 
+export const PostWrap = styled.div<{ x, y }>`
+    position: absolute;
+    width: 400px;
+    height:400px;
+    top: ${props => props.y}px;
+    left: ${props => props.x}px;
+    z-index: 100;
+    a{
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width:20px;
+        height:20px;
+        z-index: 10;
+    }
+    img{
+        vertical-align: top;
+        width:100%;
+        height:100%;
+    }
+
+    ${props => props.theme.media.mobile}{
+        width : 90%;
+        left: 0px;
+    }
+`
+
 export const OrderArea = styled.div`
     & > div:first-child{
         display: flex;
@@ -67,18 +95,25 @@ export const ShippingInfo = styled.div`
             
         }
     }
+
     table{
         width: 100%;
         padding : 10px;
         padding-top: 0;
+
+        table-layout: fixed;
+
         tr{
             height : 50px;
+            line-height: 50px;
         }
         th{
-            width : 150px;
             text-align: left;
             font-size: 16px;
             color : #666;
+            ${props => props.theme.media.tablet}{
+                font-size: 12px;
+            }
         }
         td{
             width : auto;
@@ -93,6 +128,14 @@ export const ShippingInfo = styled.div`
         select{
             border: 1px solid #ececec;
         }
+
+        ${props => props.theme.media.tablet}{
+            col:first-child{
+                width:25% !important;
+            }
+        }
+
+
     }
     & > div:last-child{
         padding : 10px 15px;
@@ -107,10 +150,10 @@ export const ShippingInfo = styled.div`
             display: inline-block;
             width: 100%;
             height : 40px;
-            input{
+            & > input{
                 display: none;
                 position: absolute;
-                width : 85% !important;
+                width : 85%;
                 height : 40px;
                 top: 0;
                 left: 0;
@@ -125,17 +168,11 @@ export const ShippingInfo = styled.div`
 export const AddressBox = styled.tr`
     th{
         vertical-align: top;
-        padding-top: 10px;
     }
     ul{
-
-    }
-    input{
-        width : 100%;
-        height : 35px;
     }
     li{
-        line-height: 45px;
+        margin-bottom: 5px;
     }
     li:first-child {
         input{
@@ -143,23 +180,53 @@ export const AddressBox = styled.tr`
         }
         button{
             position : relative;
+            height: 40px;
             margin-left: 20px;
-            width : 100px;
-            height: 35px;
+            padding: 0 8px;
+            
         }
+
+        ${props => props.theme.media.tablet}{
+            input{
+                width : 60px;
+            }
+            button{
+                margin-left: 10px;
+            }
+        }
+    }
+    li:last-child{
+        margin-bottom: 0;
     }
 `
 
 export const PhoneBox = styled.tr`
-    select , input{
-        width : 20% !important;
-        height : 40px;
+
+    td{
+        select{
+            width : 20%;
+            height : 40px;
+        }
+        input{
+            width : 20%;
+            height : 40px;
+        }
+
+        ${props => props.theme.media.tablet}{
+            select{
+                width : 30%;
+            }
+            input{
+                width : 25%;
+            }
+        }
     }
+
 `
 
 export const EmailBox = styled.tr`
-    input{
-        width : 25% !important;
+    && input{
+        width : 25%;
         height : 40px;
     }
     select{
@@ -174,12 +241,26 @@ export const EmailBox = styled.tr`
         input{
             display: none;
             position: absolute;
-            width : 85% !important;
+            width : 85%;
             top: 0;
             left: 0;
             border-right: 0;
         }   
     }
+
+    ${props => props.theme.media.tablet}{
+            && input{
+                width : 45%;
+            }
+            select{
+            }
+            span.wrap {
+                width: 45%;
+                input{
+                    
+                }   
+            }
+        }
     
 `
 

@@ -32,6 +32,14 @@ export const Table = styled.table`
         padding : 50px;
         line-height: 1.5;
     }
+
+    ${props => props.theme.media.mobile}{
+        colgroup{
+            col:first-child{
+                width : 100px !important;
+            }
+        }
+    }
 `
 
 export const Button = styled.div`
@@ -46,7 +54,6 @@ export const Button = styled.div`
     }
     button
     {
-            width :100px;
-            padding : 5px 0;
+            padding : 5px 12px;
     }
 `

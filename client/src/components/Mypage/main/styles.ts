@@ -56,6 +56,7 @@ export const Delivery = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         height: 100px;
     }
     li.item {
@@ -87,7 +88,15 @@ export const Delivery = styled.div`
             height : 2px;
             background: #333;
             top: 6px;
-            left: 100px;
+            left: -6px;
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        li{
+            p{
+                font-size: 10px;
+            }
         }
     }
 `
@@ -102,9 +111,9 @@ export const Menu = styled.div`
             display: flex;
             flex-direction: column;
             align-items: center;
-            width : 22.5%;
+            width : 24%;
             margin-bottom : 20px;
-            margin-right: 3.3333333%;
+            margin-right: 1.33333%;
             border: 1px solid #ececec;
             cursor: pointer;
         }
@@ -130,18 +139,6 @@ export const Menu = styled.div`
         li:nth-child(4){
             div{background-position: 12px -200px;}
         }
-        li:nth-child(5){
-            div{background-position: -292px -96px;}
-        }
-        li:nth-child(6){
-            div{background-position: 8px -100px;}
-        }
-        li:nth-child(7){
-            div{background-position: -102px -194px;}
-        }
-        li:nth-child(8){
-            div{background-position: -292px -200px;}
-        }
 
         strong{
             display: block;
@@ -161,6 +158,32 @@ export const Menu = styled.div`
             text-align: center;
         }
 
+    }
+
+    ${props => props.theme.media.desktop}{
+        ul{
+            span{
+                width :150px;
+            }
+        }
+    }
+
+    ${props => props.theme.media.tablet}{
+        ul{
+            justify-content: space-around;
+            li{
+                width:49%;
+                margin-right: 0;
+            }
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        ul{
+            span{
+                width : 100px;
+            }
+        }
     }
 `
 

@@ -25,6 +25,11 @@ export const ItemWrap = styled.div`
         width : 150px;
         height : 30px;
     }
+
+    ${props => props.theme.media.mobile}{
+        flex-direction: column;
+        align-items: center;
+    }
 `
 
 export const Title = styled.div`
@@ -96,6 +101,17 @@ export const File = styled.div`
         border-radius: 3px;
         font-size: 16px;
         text-align: center;
+    }
+
+    ${props => props.theme.media.mobile}{
+        input{
+            width : 110px;
+            font-size: 10px;
+        }
+        label.fileLabel{
+            width : 50px;
+            font-size: 12px;
+        }
     }
 `
 

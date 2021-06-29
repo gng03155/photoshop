@@ -6,6 +6,7 @@ export const Wrap = styled.div`
     align-items: center;
     margin-bottom: 10px;
     div{
+        flex-shrink: 0;
         width : 100px;
         height : 100px;
         margin-right: 10px;
@@ -15,6 +16,7 @@ export const Wrap = styled.div`
         }
     }
     nav{
+        flex-shrink: 0;
         p{
             font-size: 14px;
             font-weight: bold;
@@ -40,13 +42,28 @@ export const Wrap = styled.div`
             color : red;
         }
         button{
-            width : 110px;
-            padding : 5px 0;
+            padding : 5px 12px;
             color : #777;
             font-weight: 500;
         }
         button:hover{
             border : 1px solid #555;
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        & > div{
+            width : 80px;
+            height : 80px;
+        }
+
+        nav {
+            p{
+                font-size: 12px;
+            }
+            button{
+
+            }
         }
     }
 `

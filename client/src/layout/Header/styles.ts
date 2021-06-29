@@ -57,7 +57,7 @@ export const SearchWrap = styled.div`
     position: absolute;
     top: 100%;
     left: 0;
-    width : 100vw !important;
+    width : 100vw;
     height : 200px;
     margin-left: calc(-50vw + 50%);
     background-color : rgba(255,255,255,0.4);
@@ -128,13 +128,13 @@ export const BoardCategory = styled.nav`
     li:hover {
         background-color : #ccc;
     }
-    li:hover a{
-        color : #fff !important;
+    && li:hover a{
+        color : #fff;
     }
-    a{
-        font-size: 16px !important;
-        padding: 0px 10px !important;
-        color : #ccc !important;
+    && a{
+        font-size: 16px;
+        padding: 0px 10px;
+        color : #555;
     }   
     
 `

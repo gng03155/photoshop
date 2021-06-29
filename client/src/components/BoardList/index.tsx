@@ -178,12 +178,12 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
             {category === "user" &&
                 <Table>
                     <colgroup>
-                        <col style={{ width: "8%" }} />
-                        <col style={{ width: "8%" }} />
+                        <col style={{ width: "10%" }} />
+                        <col style={{ width: "10%" }} />
                         <col style={{ width: "30%" }} />
-                        <col style={{ width: "8%" }} />
-                        <col style={{ width: "8%" }} />
-                        <col style={{ width: "8%" }} />
+                        <col style={{ width: "10%" }} />
+                        <col style={{ width: "10%" }} />
+                        <col style={{ width: "10%" }} />
                     </colgroup>
                     <thead>
                         <tr>

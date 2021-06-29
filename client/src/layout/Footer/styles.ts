@@ -1,60 +1,43 @@
 import styled from "styled-components"
 
+
+export const Wrap = styled.div`
+    position: absolute;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    /* bottom: 0; */
+    /* height : auto; */
+    background-color: #444;
+`
+
 export const FooterWrap = styled.footer`
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background-color: #444;
-    width : 100%;
+    width : 1260px;
     height: auto;
-    padding: 25px 0;
+    margin : 0 auto;
+    padding: 30px 20px;
     color : #111;
-
-    &:before{
-        position: absolute;
-        top: 0;
-        left: -20%;
-        content: "";
-        width : 20%;
-        height : 100%;
-        background-color: #444;
-        /* position: absolute;
-        left: 0;
-        content: "";
-        width : 100vw;
-        height : 300px;
-        background-color: #444;
-        z-index: -1; */
+    
+    @media (max-width : 1259px){
+        width  : 100%;
     }
-    &:after{
-        position: absolute;
-        top: 0;
-        right: -20%;
-        content: "";
-        width : 20%;
-        height : 100%;
-        background-color: #444;
-        /* position: absolute;
-        left: 0;
-        content: "";
-        width : 100vw;
-        height : 300px;
-        background-color: #444;
-        z-index: -1; */
-    } 
 
 `
 
-export const FooterBg = styled.div`
-    position: absolute;
-    width: 100vw;
-    height : 300px;
-    left: 0;
-    top: 0;
-    background: #333;
-    z-index: -1;
-`
+// export const FooterBg = styled.div`
+//     position: absolute;
+//     width: 100vw;
+//     height : 300px;
+//     left: 0;
+//     top: 0;
+//     background: #333;
+//     z-index: -1;
+// `
 
 export const FooterMenu = styled.div`
     width: 100%;
@@ -74,7 +57,7 @@ export const FooterMenu = styled.div`
             li{
 
                 a{
-                    font-size: 12px;
+                    font-size: 1.2vw;
                     padding: 0;
                 }
             }
@@ -96,26 +79,38 @@ export const Content = styled.div`
 
 `;
 
-export const ContentWrap = styled.div`
+export const CsBankInfo = styled.div`
     display: flex;
-    justify-content: space-between;
-    width : 55%;
+    justify-content: flex-end;
     h3 {
 
     }
     div {
-        margin: 10px 0;
-        width: 200px;
+        margin: 10px 0px 10px 0;
     }
+    div:last-child{
+        margin-right: 0;
+    }
+
+    ${props => props.theme.media.tablet}{
+        width: 100%;
+        justify-content: space-between;
+    }  
+
+    ${props => props.theme.media.mobile}{
+        flex-direction: column;
+    }  
 `
 
 export const CScontent = styled.div`
-    
     strong{
         font-size: 20px;
     }
     p{
         font-size : 16px;
+    }
+    span {
+        font-size: 12px;
     }
 `;
 
@@ -127,10 +122,10 @@ export const BANKcontent = styled.div`
 `;
 
 export const CompanyInfo = styled.div`
-    width: 40%;
     display: flex;
     justify-content: space-between;
     div{
+        margin-right: 20px;
         p {
             font-size: 16px;
             margin-top: 10px;
@@ -140,9 +135,15 @@ export const CompanyInfo = styled.div`
             }
         }
     }
+    div:last-child{
+        margin : 0;
+    }
 
     ${props => props.theme.media.tablet}{
         width : 100%;
+        & > div > p{
+            font-size : 1.5vw;
+        }
     }      
 `;
 

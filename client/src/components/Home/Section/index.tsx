@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 
-import { SectionWrap, NewItem, InteraciveImg, BestItem } from "./styles"
+import { SectionWrap, NewItem, InteraciveImg, BestItem, InteractiveWrap } from "./styles"
 
 import ProductItem from '../../ProductItem'
 import useSWR from 'swr';
@@ -68,9 +68,11 @@ export default function Section() {
                         </li>
                     </ul>
                 </NewItem>
-                <InteraciveImg ref={divRef}>
-                    <img src="/img/ch2.jpg" alt="#" />
-                </InteraciveImg>
+                <InteractiveWrap>
+                    <InteraciveImg ref={divRef}>
+                        <img src="/img/ch2.jpg" alt="#" />
+                    </InteraciveImg>
+                </InteractiveWrap>
                 <BestItem>
                     <h3>BEST ITEM</h3>
                     <ul>

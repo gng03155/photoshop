@@ -42,6 +42,15 @@ export const CommentWrite = styled.div`
         height :50px;
         margin-left: 1.99999%;
     }
+
+    ${props => props.theme.media.mobile}{
+        textarea{
+            width : 80%;
+        }
+        button{
+            width : 16%;
+        }
+    }
 `
 
 export const CommentList = styled.div`
@@ -69,7 +78,7 @@ export const CommentTop = styled.div`
     }
     span{
         display: inline-block;
-        width: 150px;
+        color : #999;
     }
     a{
         display: inline-block;
@@ -78,6 +87,12 @@ export const CommentTop = styled.div`
         background-color: #fff;
         border : 1px solid #dfdfdf;
         text-align: center;
+    }
+
+    ${props => props.theme.media.mobile}{
+       strong{
+           width : 60px;
+       }
     }
 
 `

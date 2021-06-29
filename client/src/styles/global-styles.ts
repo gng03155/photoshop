@@ -2,16 +2,19 @@ import { createGlobalStyle } from 'styled-components';
 
 
 export const GlobalStyle = createGlobalStyle`
-  html , body{
-    width : 100vw;
-    min-height: 100vh;
+  html {
+    
   }
   body {
     position: relative;
+    max-width : 100%;
+    min-height: 100vh;
     overflow-x: hidden ;
     font-family: 'Noto Sans KR', sans-serif;
   }
-  * { margin : 0 ; padding : 0; box-sizing : border-box;}
+  * { margin : 0 ; padding : 0; -webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;}
   a { text-decoration : none; color : #333; cursor : pointer;}
   ul,li{list-style : none;}
   button {

@@ -18,6 +18,14 @@ export const ThumbWrap = styled.div`
     }
 `
 
+export const RightBox = styled.div`
+    width : 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+`
+
 export const DescWrap = styled.div`
     width : 60%;
     h4{
@@ -33,13 +41,21 @@ export const DescWrap = styled.div`
         display: inline-block;
         color : #999
     }
+
+    ${props => props.theme.media.tablet}{
+        width : 100%;
+    }
 `
 
 export const SubWrap = styled.div`
-    margin-left: auto;
     span{
+        color : #999;
+    }
+    span:last-child{
         margin-left: 10px;
-        color : #999
+    }
+    ${props => props.theme.media.mobile}{
+        font-size: 8px;
     }
 `
 

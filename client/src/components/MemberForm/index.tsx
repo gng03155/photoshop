@@ -5,7 +5,7 @@ import crypto from "crypto";
 import SHA256 from 'crypto-js/sha256';
 
 
-import { TitleArea, Form, Table, IdBox, TextBox, AddressBox, PhoneBox, EmailBox, BirthBox, Button } from "./styles"
+import { TitleArea, Form, Table, IdBox, TextBox, AddressBox, PhoneBox, EmailBox, BirthBox, Button, PostWrap } from "./styles"
 
 import fb from '../../firebase';
 
@@ -21,6 +21,7 @@ export default function MemberForm({ userInfo }: Props) {
     const [zoneCode, setZoneCode] = useState<string>(userInfo !== undefined ? userInfo.adrs[0] : "");
     const [address, setAddress] = useState<string>(userInfo !== undefined ? userInfo.adrs[1] : "");
 
+    const [postPos, setPostPos] = useState({ x: 0, y: 0 });
 
 
     const handleComplete = (data) => {
@@ -48,10 +49,19 @@ export default function MemberForm({ userInfo }: Props) {
     const onSearchAdress = useCallback(
         (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.preventDefault();
+            const tg = e.target as HTMLButtonElement;
+            const parent = tg.parentElement.parentElement;
+            const x = window.pageXOffset + parent.getBoundingClientRect().left;
+            const y = window.pageYOffset + parent.getBoundingClientRect().top;
+            setPostPos({ x, y });
             setIsAdress(true);
         },
         [],
     );
+
+    const onCloseAddress = useCallback(() => {
+        setIsAdress(false);
+    }, [])
 
     const checkPassword = useCallback(
         (pswd, chpswd) => {
@@ -149,21 +159,24 @@ export default function MemberForm({ userInfo }: Props) {
                             <ul>
                                 <li>
                                     <input type="text" id="zone" value={zoneCode} placeholder="우편번호" disabled />
-                                    <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSearchAdress(e)}>주소검색
-                                        {isAdress &&
-                                            <DaumPostcode style={{
-                                                display: 'block',
-                                                position: 'absolute',
-                                                top: "-50px",
-                                                left: "0px",
-                                                width: '400px',
-                                                height: '400px',
-                                            }} onComplete={handleComplete} />
-                                        }
-                                    </button>
+                                    <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSearchAdress(e)}>주소검색</button>
                                 </li>
                                 <li><input type="text" id="adrs" value={address} placeholder="기본주소" disabled /></li>
                                 <li><input type="text" id="adrs2" placeholder="상세 주소를 입력해주세요. (선택)" defaultValue={userInfo !== undefined ? userInfo.adrs[2] : ""} /></li>
+                                {isAdress &&
+                                    <PostWrap x={postPos.x} y={postPos.y}>
+                                        <a onClick={onCloseAddress}><img src="/img/close.png" alt="닫기" /></a>
+                                        <DaumPostcode style={{
+                                            display: 'block',
+                                            position: 'absolute',
+                                            top: "0px",
+                                            left: "0px",
+                                            width: '100%',
+                                            height: '400px',
+                                            border: "5px solid #000",
+                                        }} onComplete={handleComplete} />
+                                    </PostWrap>
+                                }
                             </ul>
                         </td>
                     </AddressBox>
@@ -250,12 +263,12 @@ export default function MemberForm({ userInfo }: Props) {
                                     <label htmlFor="chk_birt2">음력</label>
                                 </li>
                                 <li>
-                                    <input type="text" id="year" maxLength={4} defaultValue={userInfo !== undefined ? userInfo.birth[0] !== undefined ? userInfo.birth[0] : "" : ""} />
-                                    <label>년</label>
-                                    <input type="text" id="month" maxLength={2} defaultValue={userInfo !== undefined ? userInfo.birth[1] !== undefined ? userInfo.birth[1] : "" : ""} />
-                                    <label>월</label>
-                                    <input type="text" id="day" maxLength={2} defaultValue={userInfo !== undefined ? userInfo.birth[2] !== undefined ? userInfo.birth[2] : "" : ""} />
-                                    <label>일</label>
+                                    <div><input type="text" id="year" maxLength={4} defaultValue={userInfo !== undefined ? userInfo.birth[0] !== undefined ? userInfo.birth[0] : "" : ""} />
+                                        <label>년</label></div>
+                                    <div><input type="text" id="month" maxLength={2} defaultValue={userInfo !== undefined ? userInfo.birth[1] !== undefined ? userInfo.birth[1] : "" : ""} />
+                                        <label>월</label></div>
+                                    <div><input type="text" id="day" maxLength={2} defaultValue={userInfo !== undefined ? userInfo.birth[2] !== undefined ? userInfo.birth[2] : "" : ""} />
+                                        <label>일</label></div>
                                 </li>
                             </ul>
                         </td>

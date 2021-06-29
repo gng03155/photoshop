@@ -12,13 +12,14 @@ interface Props {
 }
 export default function Wishlist({ userKey }: Props) {
 
-    const { data: wishList, revalidate: wishUpdate } = useSWR(userKey ? `like/${userKey}` : "null", fetcherData, { revalidateOnMount: true, compare: (a, b) => { return false } });
+    const { data: wishList, revalidate: wishUpdate } = useSWR(userKey ? `like/${userKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => { return false } });
 
     const [isEdit, setIsEdit] = useState(false);
     const [selList, setSelList] = useState([]);
 
     const ref1 = useRef<HTMLButtonElement>(null);
     const ref2 = useRef<HTMLDivElement>(null);
+    const ref3 = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
     }, []);
@@ -34,6 +35,12 @@ export default function Wishlist({ userKey }: Props) {
         e.preventDefault();
         ref1.current.style.display = "inline-block"
         ref2.current.style.display = "none"
+        const collection = ref3.current.children;
+        Array.from(collection).forEach((node) => {
+            if (node.tagName === "LI") {
+                node.classList.remove("sel");
+            }
+        })
         setIsEdit(false);
     }
 
@@ -80,12 +87,16 @@ export default function Wishlist({ userKey }: Props) {
         }
     }
 
+    if (wishList === null) {
+        return <div></div>
+    }
+
     return (
         <Wrap>
             <h2>좋아요</h2>
             {wishList !== undefined ?
                 <WishWrap>
-                    <ul>
+                    <ul ref={ref3}>
                         {wishList.map((item) => {
                             return (
                                 <li key={item} data-id={item} onClick={onSelect}>

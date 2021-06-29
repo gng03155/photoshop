@@ -16,6 +16,7 @@ export const Form = styled.form`
 `
 
 export const Table = styled.table`
+    table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
     tr{
@@ -85,6 +86,45 @@ export const AddressBox = styled.tr`
             width : 100px;
             height: 35px;
         }
+
+        ${props => props.theme.media.mobile}{
+            input{
+                width:70px;
+            }
+            button{
+                margin-left: 10px;
+                width:70px;
+            }
+        }
+    }
+    
+`
+
+export const PostWrap = styled.div<{ x, y }>`
+    position: absolute;
+    width: 400px;
+    height:400px;
+    top: ${props => props.y}px;
+    left: ${props => props.x}px;
+    z-index: 100;
+    a{
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width:20px;
+        height:20px;
+        z-index: 10;
+    }
+    img{
+        vertical-align: top;
+        width:100%;
+        height:100%;
+    }
+
+    ${props => props.theme.media.mobile}{
+        width : 90%;
+        left: 0px;
     }
 `
 
@@ -93,6 +133,15 @@ export const PhoneBox = styled.tr`
         width : 20%;
         height : 35px;
         border: 1px solid #ececec;
+    }
+
+    ${props => props.theme.media.mobile}{
+        select{
+            width : 28%;
+        }
+        input{
+            width : 25%;
+        }
     }
 `
 
@@ -118,12 +167,22 @@ export const BirthBox = styled.tr`
         height : 10px;
     }
     li:last-child input{
-        width : 100px;
+        width : 80px;
         height : 35px;
         text-align: right;
     }
     label{
         margin : 0 5px;
+    }
+
+    div{
+        display: inline-block;
+    }
+
+    ${props => props.theme.media.mobile}{
+        div{
+            display: block;
+        }
     }
 `
 

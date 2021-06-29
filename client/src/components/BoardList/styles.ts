@@ -36,6 +36,10 @@ export const Table = styled.table`
     td{
         text-align: center;
     }
+
+    ${props => props.theme.media.mobile}{
+        font-size: 1.2vw;
+    }
 `
 
 export const Lock = styled.span`
@@ -94,9 +98,15 @@ export const WriteButton = styled.div`
     justify-content: flex-end;
     margin-top: 20px;
     button{
-        width : 110px;
-        padding: 11px 27px 10px;
+        padding: 8px 20px;
         font-size: 15px;
         color : #777;
+    }
+
+    ${props => props.theme.media.mobile}{
+        button{
+            padding: 6px 14px;
+            font-size: 12px;
+        }
     }
 `

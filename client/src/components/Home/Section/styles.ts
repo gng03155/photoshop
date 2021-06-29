@@ -61,11 +61,17 @@ export const BestItem = styled.div`
     
 `
 
+export const InteractiveWrap = styled.div`
+   height : 480px;
+`
+
 export const InteraciveImg = styled.div`
-    position: relative;
-    width:100vw;
+    position: absolute;
+    left:0;
+    width:100%;
+    max-width: 100%;
     height : 480px;
-    margin-left: calc(-50vw + 50%);
+    /* margin-left: calc(-50vw + 50%); */
     overflow: hidden;
      img{
          position: absolute;

@@ -32,10 +32,8 @@ export default function Agreement() {
         <Contnent onSubmit={(e: React.FormEvent<HTMLFormElement>) => onSubmit(e)} >
             <AgreeArea>
                 <CheckBox>
-                    <Label>
-                        <input type="checkbox" name="check_1" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[0]} />
-                        이용약관 동의 (필수)
-                    </Label>
+                    <input type="checkbox" name="check_1" id="check1" onChange={(e) => onChangeCheck(e)} ref={inputRefs[0]} />
+                    <label htmlFor="check1">이용약관 동의 (필수)</label>
                 </CheckBox>
                 <TextBox>
                     <p>
@@ -75,10 +73,8 @@ export default function Agreement() {
             </AgreeArea>
             <AgreeArea>
                 <CheckBox>
-                    <Label>
-                        <input type="checkbox" name="check_2" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[1]} />
-                        개인정보 처리방침 동의 (필수)
-                    </Label>
+                    <input type="checkbox" name="check_2" id="check2" onChange={(e) => onChangeCheck(e)} ref={inputRefs[1]} />
+                    <label htmlFor="check2">개인정보 처리방침 동의 (필수)</label>
                 </CheckBox>
                 <TextBox>
                     <p>
@@ -134,10 +130,8 @@ export default function Agreement() {
             </AgreeArea>
             <AgreeArea>
                 <CheckBox>
-                    <Label>
-                        <input type="checkbox" name="check_3" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[2]} />
-                        쇼핑정보 수신 동의 (선택)
-                    </Label>
+                    <input type="checkbox" name="check_3" id="check3" onChange={(e) => onChangeCheck(e)} ref={inputRefs[2]} />
+                    <label htmlFor="check3">쇼핑정보 수신 동의 (선택)</label>
                 </CheckBox>
                 <TextBox style={{ height: 70 }}>
                     <p>
@@ -147,10 +141,9 @@ export default function Agreement() {
                 </TextBox>
             </AgreeArea>
             <CheckBox>
-                <Label style={{ color: "blue" }}>
-                    <input type="checkbox" name="check_4" id="check" onChange={(e) => onChangeCheck(e)} ref={inputRefs[3]} />
-                    이용약관 및 개인정보수집 및 이용,쇼핑정보 수신(선택)에 모두 동의합니다.
-                </Label>
+                <input type="checkbox" name="check_4" id="check4" onChange={(e) => onChangeCheck(e)} ref={inputRefs[3]} />
+                <label htmlFor="check4" style={{ color: "blue" }}>이용약관 및 개인정보수집 및 이용,쇼핑정보 수신(선택)에 모두 동의합니다.</label>
+
             </CheckBox>
             <ButtonBox>
                 <button type="submit">다음</button>

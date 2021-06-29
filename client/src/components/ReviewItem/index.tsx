@@ -1,7 +1,7 @@
 import React from 'react'
 import useSWR from 'swr'
 import { fetcherData, fetcherStorage } from '../../util/fetcher'
-import { Wrap, ThumbWrap, DescWrap, SubWrap } from "./styles"
+import { Wrap, ThumbWrap, DescWrap, SubWrap, RightBox } from "./styles"
 interface Props {
     productInfo: {
         [id: string]: string,
@@ -24,15 +24,17 @@ export default function ReviewItem({ productInfo, boardKey }: Props) {
             <ThumbWrap>
                 <img src={thumbImg[0]} alt="#" />
             </ThumbWrap>
-            <DescWrap>
-                <h4>{productInfo.name}</h4>
-                <p>{boardInfo.content}</p>
-                <span>...더보기</span>
-            </DescWrap>
-            <SubWrap>
-                <span>{boardInfo.user_info.name}</span>
-                <span>{boardInfo.date}</span>
-            </SubWrap>
+            <RightBox>
+                <DescWrap>
+                    <h4>{productInfo.name}</h4>
+                    <p>{boardInfo.content}</p>
+                    <span>...더보기</span>
+                </DescWrap>
+                <SubWrap>
+                    <span>{boardInfo.user_info.name}</span>
+                    <span>{boardInfo.date}</span>
+                </SubWrap>
+            </RightBox>
         </Wrap>
     )
 }
