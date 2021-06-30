@@ -276,6 +276,11 @@ export default function ProductDetail({ id, userKey }: Props) {
             return;
         }
         const num = checkStock(selOption.replace("/", ""), name);
+        if (num === 0) {
+            alert("해당 옵션은 품절되었습니다.");
+            return;
+        }
+
         info["stock"] = num;
 
         setBuyList(name, info);

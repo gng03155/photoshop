@@ -16,6 +16,7 @@ export const BasketWrap = styled.div`
         width: 100%;
         margin-bottom: 20px;
         border-collapse: collapse;
+        table-layout: fixed;
     }
     thead {
         border : 1px solid #ececec;
@@ -49,13 +50,10 @@ export const BasketWrap = styled.div`
     }
 `
 
-export const BasketItem = styled.div`
-`
-
 export const ProductInfo = styled.div`
     display: flex;
     align-items: center;
-    div:first-child{
+    & > div:first-child{
         margin-right: 10px;
         width : 80px;
         height: 80px;
@@ -64,18 +62,18 @@ export const ProductInfo = styled.div`
             height: 100%;
         }
     }
-    ul{
+    & > ul{
         text-align: left;
         height: auto;
-        li{
+        & > li{
             margin-bottom: 5px;
-            p{
+            & > p{
                 color : #000;
             }
-            p.option{
+            & > p.option{
                 color : #999;
             }
-            a{
+            & > a{
                 display: inline-block;
                 padding: 5px 10px;
                 border : 1px solid #ececec;
@@ -143,6 +141,18 @@ export const OrderPrice = styled.div`
     td:last-child{
         border : 0;
     }
+
+    ${props => props.theme.media.tablet}{
+        table{
+            font-size: 16px;
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        table{
+            font-size: 10px;
+        }
+    }
 `
 export const OrderButton = styled.div`
     display: flex;
@@ -155,6 +165,110 @@ export const OrderButton = styled.div`
         margin-right: 5px;
     }
 `
+
+export const MiniBasket = styled.div`
+    width : 100%;
+    margin-bottom: 100px;
+    & > ul{
+        border-top : 10px solid 	#DCDCDC;
+        border-bottom : 10px solid 	#DCDCDC;
+
+        & > li{
+            margin: 0;
+            border-bottom : 10px solid 	#DCDCDC;
+        }
+
+        & > li:last-child{
+            border: 0;
+        }
+    }
+
+`
+
+export const MiniBox = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    div{
+        display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    input{
+        width : 20px;
+        height : 20px;
+        margin-right: 10px;
+    }
+    label{
+
+    }
+    a{
+        padding: 6px 8px;
+    }
+`
+
+export const MiniHead = styled.div`
+    display: flex;
+    padding: 10px 0;
+    label{
+
+    }
+    input{
+        width : 20px;
+        height : 20px;
+        margin-right: 10px;
+    }
+    a{
+        margin-left: auto;
+        font-size: 18px;
+    }
+`
+
+export const MiniContent = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0px 0 10px;
+    ul{
+        li:last-child{
+            ul{
+                justify-content: flex-start;
+            }
+            li{
+                margin: 0;
+            }
+        }
+    }
+    && > li{
+    }
+
+
+`
+
+export const SideContent = styled.div`
+    height : 100%;
+    text-align: right;
+`
+
+export const MiniSide = styled.div`
+    padding: 10px 0;
+    div{
+        display: flex;
+        justify-content: space-between;
+    }
+    div:first-child{
+        margin-bottom: 10px;
+    }
+    strong{
+
+    }
+    span{
+
+    }
+`
+
+
 
 export const Modal = styled.div<{ x, y }>`
     /* display: none; */
@@ -210,3 +324,4 @@ export const Modal = styled.div<{ x, y }>`
         background-color: #ccc;
     }
 `
+

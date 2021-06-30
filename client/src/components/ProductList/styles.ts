@@ -8,7 +8,6 @@ export const Filter = styled.div`
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-transform: uppercase;
     text-align: center;
@@ -34,11 +33,19 @@ export const Option = styled.div`
         margin-right: 20px;
         border : 1px solid #999;
     }
+
+    ${props => props.theme.media.mobile}{
+        a.all{
+            padding: 2px 0;
+            margin-right: 10px;
+            font-size: 10px;
+        }
+    }
 `
 
 export const CategoryWrap = styled.div`
     display: flex;
-    height : 40px;
+    height : 60px;
     justify-content: center;
     align-items: center;
     label{
@@ -53,13 +60,27 @@ export const CategoryWrap = styled.div`
     a{
         margin-right: 20px;
     }
+    ${props => props.theme.media.mobile}{
+        input{
+            margin-right: 10px;
+        }
+        input:last-child{
+            margin-right: 0;
+        }
+        label{
+            font-size: 10px;
+        }
+        a{
+            margin-right: 10px;
+        }
+    }
 `
 
 export const ColorWrap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    height : 40px;
+    height : 60px;
 `
 
 export const Color = styled.a<{ color?}>`
@@ -81,6 +102,12 @@ export const Color = styled.a<{ color?}>`
     &.active{
         outline : 2px solid #000;
     }
+
+    ${props => props.theme.media.mobile}{
+        width : 16px;
+        height : 16px;
+        margin-right: 10px;
+    }
 `
 
 export const FilterButton = styled.div`
@@ -97,10 +124,13 @@ export const FilterButton = styled.div`
 
 export const ListMenu = styled.div`
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    margin : 10px 0;
     p{
         font-size: 12px;
+        margin-left: 15px;
         span{
             margin : 0 5px;
             color : lightcoral;
@@ -108,7 +138,7 @@ export const ListMenu = styled.div`
     }
     ul{
         display: flex;
-        justify-content: space-space-around;
+        justify-content: space-around;
         align-items: center;
     }
     li{
@@ -132,6 +162,25 @@ export const ListMenu = styled.div`
         display: inline-block;
         padding: 5px 15px;
     }
+
+    ${props => props.theme.media.tablet}{
+        justify-content: flex-start;
+        p{
+            width : 100%;
+            margin-bottom: 5px;
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        p{
+            margin-left: 10px;
+        }
+        a{
+            font-size: 10px;
+            padding : 5px 10px;
+        }
+
+    }
 `
 
 export const ListWrap = styled.div`
@@ -139,7 +188,6 @@ export const ListWrap = styled.div`
 `
 
 export const List = styled.div`
-    margin : 20px 0;
     ul{
         display: flex;
         flex-wrap: wrap;
@@ -151,6 +199,27 @@ export const List = styled.div`
     }
     li:nth-child(4n){
         margin-right: 0;
+    }
+
+    ${props => props.theme.media.tablet}{
+        li{
+            width : 32%;
+            margin-right: 2%;
+        }
+        li:nth-child(3n){
+            margin-right: 0;
+        }
+
+    }
+    ${props => props.theme.media.mobile}{
+        && li{
+            width : 49%;
+            margin-right: 1%;
+        }
+        && li:nth-child(2n){
+            margin-right: 0;
+        }
+
     }
 `
 

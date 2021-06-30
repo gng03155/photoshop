@@ -20,6 +20,10 @@ export const Titlearea = styled.div`
 
 export const Form = styled.form`
     width: 400px;
+
+    ${props => props.theme.media.mobile}{
+        width : 90%;
+    }
 `;
 
 export const Label = styled.label`
@@ -63,7 +67,10 @@ export const Button = styled.button`
     color : #fff;
     background : #333;
     font-size : 20px;
-    
+    ${props => props.theme.media.mobile}{
+        height : 40px;
+        font-size: 16px;
+    }
 `
 
 

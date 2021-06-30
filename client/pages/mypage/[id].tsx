@@ -14,6 +14,8 @@ export default function index() {
     const [userKey, setUserKey] = useState("");
     const [orderKey, setOrderKey] = useState("");
 
+    const [init, setInit] = useState(false);
+
     useEffect(() => {
         if (window.sessionStorage.getItem("uid") === null) {
             router.push("/login");
@@ -28,19 +30,21 @@ export default function index() {
         } if (typeof router.query.orderKey === "string") {
             setOrderKey(router.query.orderKey);
         }
+        setInit(true);
     }, [router])
 
-    if (userKey === "") {
+    if (userKey === "" || query === "" || init === false) {
         return <div></div>
     }
 
     return (
         <div>
+            {console.log(orderKey)}
             {query === "main" && <Main></Main>}
             {query === "like" && <Wishlist userKey={userKey}></Wishlist>}
             {query === "modify" && <Member userKey={userKey} />}
             {query === "order" && <OrderHistory userKey={userKey} />}
-            {query === "order_detail" && <OrderDetail userKey={userKey} orderKey={orderKey} />}
+            {query === "order_detail" && orderKey !== "" && <OrderDetail userKey={userKey} orderKey={orderKey} />}
             {query === "board" && <UserBoardManager userKey={userKey} />}
         </div>
     )

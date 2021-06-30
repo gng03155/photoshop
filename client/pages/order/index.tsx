@@ -17,7 +17,6 @@ export default function Order() {
         if (typeof router.query.data === "string") {
             const data = JSON.parse(router.query.data);
             setCartData(data);
-            console.log(data);
         }
 
     }, [router])

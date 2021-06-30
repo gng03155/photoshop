@@ -1,11 +1,13 @@
-import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef, RefObject, MutableRefObject } from 'react'
-import { promises } from 'stream';
+import { useRouter } from 'next/router';
+import { useMediaQuery } from 'react-responsive'
 import useSWR from 'swr'
-import OptionModal from '../Modal/OptionModal';
+
+import { BasketWrap, Wrap, ProductInfo, Quantity, OrderPrice, OrderButton, Modal, MiniBasket, MiniHead, MiniContent, MiniSide, SideContent, MiniBox } from './styles'
+
 import fb from '../../../src/firebase';
 import { fetcherData } from '../../../src/util/fetcher'
-import { BasketItem, BasketWrap, Wrap, ProductInfo, Quantity, OrderPrice, OrderButton, Modal } from './styles'
+
 
 interface Props {
     userKey: string,
@@ -30,9 +32,10 @@ export default function CartList({ userKey }: Props) {
     // /[useRef<HTMLInputElement>(null)]
     const ref = new Array(50).fill(0).map(() => { return useRef<HTMLInputElement>(null) })
 
+    const isTablet = useMediaQuery({ minWidth: 768 });
+
     useEffect(() => {
         if (cartList !== null && cartList !== undefined) {
-
             let keys = [];
             for (let key in cartList) {
                 keys.push(cartList[key].id);
@@ -260,7 +263,7 @@ export default function CartList({ userKey }: Props) {
     return (
         <Wrap>
             <h2>장바구니</h2>
-            <BasketWrap>
+            {isTablet ? <BasketWrap>
                 <table>
                     <colgroup>
                         <col style={{ width: "4%" }} />
@@ -307,14 +310,15 @@ export default function CartList({ userKey }: Props) {
                                         </ProductInfo>
                                     </td>
                                     <td><p>{cartList[id].price}</p></td>
-                                    <td><Quantity>
-                                        <ul>
-                                            <li><a id={cartList[id].key} onClick={onClickMinus}></a></li>
-                                            <li><input type="text" value={cartList[id].num} maxLength={2}
-                                                readOnly /></li>
-                                            <li><a id={cartList[id].key} onClick={onClickPlus}></a></li>
-                                        </ul>
-                                    </Quantity></td>
+                                    <td>
+                                        <Quantity>
+                                            <ul>
+                                                <li><a id={cartList[id].key} onClick={onClickMinus}></a></li>
+                                                <li><input type="text" value={cartList[id].num} maxLength={2}
+                                                    readOnly /></li>
+                                                <li><a id={cartList[id].key} onClick={onClickPlus}></a></li>
+                                            </ul>
+                                        </Quantity></td>
                                     <td><p>100원</p></td>
                                     <td><p>무료배송</p></td>
                                     <td><p>{cartList[id].price * cartList[id].num}원</p></td>
@@ -332,13 +336,79 @@ export default function CartList({ userKey }: Props) {
                     <button onClick={onClickAllDelete}>장바구니 비우기</button>
                 </div>
             </BasketWrap>
+                :
+                <MiniBasket>
+                    <ul>
+                        <li>
+                            <MiniBox>
+                                <div>
+                                    <input ref={ref[0]} type="checkbox" onChange={onChangeAllCheck} />
+                                    <label>전체 선택</label>
+                                </div>
+                                <div>
+                                    <a>선택삭제</a>
+                                    <a>전체삭제</a>
+                                </div>
+                            </MiniBox>
+                        </li>
+                        {(cartList !== undefined && cartList !== null) && Object.keys(cartList).map((id, idx) => {
+                            return (
+                                <li>
+                                    <MiniHead>
+                                        <input ref={ref[idx + 1]} id={cartList[id].key} type="checkbox" />
+                                        <label>선택</label>
+                                        <a id={cartList[id].key} onClick={onClickDelete}>X</a>
+                                    </MiniHead>
+                                    <MiniContent>
+                                        <ProductInfo>
+                                            <div>
+                                                <img src={cartList[id].thumb_src} alt="썸네일" />
+                                            </div>
+                                            <ul>
+                                                <li><p>{cartList[id].name}</p></li>
+                                                <li><p className="option">[옵션 : {cartList[id].option}]</p></li>
+                                                <li>
+                                                    <a id={cartList[id].id} data-key={cartList[id].key} onClick={openOptionModal}>옵션 변경</a>
+                                                </li>
+                                                <li>
+                                                    <Quantity>
+                                                        <ul>
+                                                            <li><a id={cartList[id].key} onClick={onClickMinus}></a></li>
+                                                            <li><input type="text" value={cartList[id].num} maxLength={2}
+                                                                readOnly /></li>
+                                                            <li><a id={cartList[id].key} onClick={onClickPlus}></a></li>
+                                                        </ul>
+                                                    </Quantity>
+                                                </li>
+                                            </ul>
+                                        </ProductInfo>
+                                        <SideContent>
+                                            <p>재고 5개 이상</p>
+                                            <p>{cartList[id].price * cartList[id].num}원</p>
+                                        </SideContent>
+                                    </MiniContent>
+                                    <MiniSide>
+                                        <div>
+                                            <span>배송비</span>
+                                            <span>무료배송</span>
+                                        </div>
+                                        <div>
+                                            <span>적립금</span>
+                                            <span>100원</span>
+                                        </div>
+                                    </MiniSide>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </MiniBasket>}
             <OrderPrice>
                 <table>
                     <colgroup>
-                        <col style={{ width: "15%" }} />
-                        <col style={{ width: "15%" }} />
-                        <col style={{ width: "15%" }} />
-                        <col style={{ width: "50%" }} />
+                        <col style={{ width: "20%" }} />
+                        <col style={{ width: "20%" }} />
+                        <col style={{ width: "20%" }} />
+                        <col style={{ width: "40%" }} />
                     </colgroup>
                     <thead>
                         <tr>

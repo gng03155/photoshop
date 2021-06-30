@@ -2,27 +2,37 @@ import styled from 'styled-components';
 
 export const Content = styled.div`
     position: relative;
-    z-index: 100;
+    z-index: 1000;
     display : flex;
     width: 100%;
-    height: 100px;
-    padding: 10px 0;
+    height: 100%;
     margin: 0 auto;
-    justify-content: flex-start;
+    justify-content: center;
     align-items : center;
     text-align: center;
 
     & > div:first-child {
-        width: 40%;
+        position: absolute;
+        height : 100%;
+        left: 0;
+        top: 0;
     }
 
     & > div:nth-child(3) {
-        width: 40%;
+        position: absolute;
+        height : 100%;
+        right: 0;
+        top: 0;
     }
 
 `;
 
+export const WideMenu = styled.div`
+`
+
 export const MainMenu = styled.div`
+    display: flex;
+    align-items: center;
     & > ul {        
         display: flex;
         flex-wrap: wrap;
@@ -43,14 +53,18 @@ export const MainMenu = styled.div`
         }
     }
 
-    & > ul.left {
-        justify-content: flex-start;
-    }
-
-    & > ul.right {
-        justify-content: flex-end;
-    }
 `;
+
+export const BG = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width : 100vw;
+    height : 100%;
+    margin-left: calc(-50vw + 50%);
+    background-color : rgba(255,255,255,0.9);
+    z-index: -1;
+`
 
 export const SearchWrap = styled.div`
     display: none;
@@ -66,46 +80,74 @@ export const SearchWrap = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100%;
     }
     span{
         display: inline-block;
+        align-self: flex-end;
+        margin-right: 50px;
         height : 70px;
         line-height: 70px;
         font-size: 30px;
-        margin-left: 50%;
         cursor : pointer;
     }
 `
 
 export const SearchInput = styled.div`
-    display: flex;
-    align-items: center;
+    position: relative;
+    width : 700px;
     border-bottom: 2px solid #ccc;
     input{
-        width : 700px;
+        width : 90%;
         height : 40px;
         font-size: 24px;
         background: none;
         border : none;
     }
     a{
+        position: absolute;
         display: inline-block;
+        bottom: 10px;
+        right: 0;
         width: 32px;
         height : 32px;
         background: url("/img/search_icon.png") no-repeat;
         background-size: cover;
-        margin-left: 10px;
+    }
+
+    ${props => props.theme.media.desktop}{
+        width : 70%;
+        input{font-size: 18px;}
+        a{
+            width : 26px;
+            height : 26px;
+        }
+    }
+    ${props => props.theme.media.tablet}{
+        width : 70%;
+        input{font-size: 16px;}
+        a{
+            width : 22px;
+            height : 22px;
+        }
     }
 `
 
 export const Logo = styled.div`
     &  {
-        width: 19.99999%;
     }
     a {
         display: inline-block;
         img{
-            width : 100%;
+            width : 150px;
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        a{
+            img{
+                width : 100px;
+            }
         }
     }
 `;
@@ -137,4 +179,92 @@ export const BoardCategory = styled.nav`
         color : #555;
     }   
     
+`
+
+export const MenuIcon = styled.div`
+    a{
+        display: inline-block;
+        width : 25px;
+        height : 25px;
+    }
+    a.toggle{
+        background : url("/img/menu.png") no-repeat;
+        background-size: cover;
+    }
+
+    a.search{
+        background : url("/img/search_icon.png") no-repeat;
+        background-size: cover;
+    }
+`
+
+export const SideMenu = styled.nav`
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    left: -20px;
+    width : 250px;
+    height : 100vh;
+    background-color : rgba(255,255,255);
+    text-transform: uppercase;
+    text-align: left;
+    transition:visibility 0.3s linear,opacity 0.3s linear;
+
+`
+
+export const SideClose = styled.div`
+    position: absolute;
+    top: 0;
+    right: -49px;
+    width : 50px;
+    height : 50px;
+    background-color: inherit;
+    img{
+        width : 100%;
+        height : 100%;
+    }
+`
+
+export const Inner = styled.ul`
+    padding: 40px;
+    li{
+        position: relative;
+        a{
+            font-size: 14px;
+        }
+    }
+    & > li:first-child{
+        margin-bottom: 20px;
+    }
+    li.page{
+        margin-bottom: 5px;
+        a{
+            font-size: 20px;
+            font-weight: bold;  
+        }
+    }
+    span{
+        margin : 0 4px;
+    }
+`
+
+export const SubMenuWrap = styled.ul`
+    
+    position: absolute;
+    height : 0;
+    left: 0;
+    overflow: hidden;
+    transition: all linear 0.5s ;
+    li{
+
+    }
+    a{
+
+    }
+
+    &.active{
+        height : auto;
+        padding: 10px 10px;
+    }
 `

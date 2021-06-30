@@ -3,10 +3,9 @@ import { useRouter } from "next/router"
 
 import { Title, Progress } from "./styles"
 
-import Agreement from '../../src/components/Signup/agreement'
-import Join from '../../src/components/Signup/join'
-import Complete from '../../src/components/Signup/complete'
-import { addAbortSignal } from 'stream'
+import Agreement from '../../../src/components/Signup/agreement'
+import Join from '../../../src/components/Signup/join'
+import Complete from '../../../src/components/Signup/complete'
 
 
 export default function signup({ props }) {
@@ -22,7 +21,7 @@ export default function signup({ props }) {
 
         const name = router.query.name;
         if (name === undefined) {
-            router.push("/signup?name=agree", "/signup");
+            router.push("/member/signup?name=agree", "/signup");
             return;
         }
         if (typeof name === "string") {

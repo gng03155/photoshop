@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import DaumPostcode from 'react-daum-postcode';
 
 import { fetcherData } from '../../../src/util/fetcher';
-import { OrderArea, ShippingInfo, AddressBox, PhoneBox, EmailBox, OrderInfo, ThumbNail, Description, PaymentArea, OrderEnd, Wrap, PostWrap } from './styles';
+import { OrderArea, ShippingInfo, AddressBox, PhoneBox, EmailBox, OrderInfo, ThumbNail, Description, PaymentArea, OrderEnd, Wrap, PostWrap, ContentArea } from './styles';
 import fb from '../../../src/firebase';
 import moment from 'moment';
 import localFetcher from '../../util/localFetcher';
@@ -117,10 +117,11 @@ export default function OrderPage({ userKey, cartData }: Props) {
         chlid.classList.toggle("active");
 
         const contentArea = tg.nextElementSibling as HTMLDivElement;
-        const ht = window.getComputedStyle(contentArea).maxHeight;
-        // const dp = contentArea.style.visibility;
-        // contentArea.style.visibility = dp === "visible" ? "hidden" : "visible";
-        contentArea.style.maxHeight = ht === "0px" ? "500px" : "0px";
+
+        const clientHt = contentArea.firstElementChild.clientHeight;
+        const ht = window.getComputedStyle(contentArea).height;
+
+        contentArea.style.height = ht === "0px" ? `${clientHt}px` : "0px";
 
 
     }
@@ -232,6 +233,8 @@ export default function OrderPage({ userKey, cartData }: Props) {
         for (let list of cartList) {
             const proRef = await fb.database().ref(`order/p_list`).push();
             const pKey = proRef.key;
+            const optionList = list.option.split("/");
+
             pKeyList.push(pKey);
             const proInfo = {
                 name: list.name,
@@ -261,6 +264,36 @@ export default function OrderPage({ userKey, cartData }: Props) {
 
             await fb.database().ref(`order/shipping/payed/${pKey}`).set(pKey).then(() => { console.log(`order/shipping 데이터 성공`) });
 
+            await fb.database().ref(`products/stock/${list.id}`).once("value").then((data) => {
+                if (data.exists()) {
+                    const main = data.val();
+                    let mainKey = "";
+                    let subKey = "";
+                    for (let key in main) {
+                        if (main[key].name === optionList[0]) {
+                            mainKey = key;
+                            break;
+                        }
+                    }
+                    if (mainKey !== "") {
+                        for (let key in main[mainKey]) {
+                            if (main[mainKey][key]["name"] === optionList[1]) {
+                                subKey = key;
+                            }
+                        }
+
+                        let temp = main[mainKey][subKey]["num"];
+                        temp = Number(temp) - Number(proInfo.num);
+                        temp = temp < 0 ? 0 : temp;
+
+                        data.ref.child(`${mainKey}/${subKey}`).update({
+                            num: temp,
+                        }).then(() => { console.log(`${mainKey}/${subKey} 재고 업데이트 완료`) })
+
+                    }
+                }
+            })
+
         }
 
         const shippingInfo = {
@@ -285,9 +318,9 @@ export default function OrderPage({ userKey, cartData }: Props) {
             date,
         }
 
-        mainRef.set(mainInfo).then(() => { console.log(`order/order_list 데이터 성공`) })
+        await mainRef.set(mainInfo).then(() => { console.log(`order/order_list 데이터 성공`) })
 
-        fb.database().ref(`order/user/${userKey}`).once("value").then((data) => {
+        await fb.database().ref(`order/user/${userKey}`).once("value").then((data) => {
             let copy = [];
             if (data.exists()) {
                 copy = data.val();
@@ -299,6 +332,14 @@ export default function OrderPage({ userKey, cartData }: Props) {
         })
 
         mutate(false, false);
+
+        router.push({
+            pathname: "/mypage/[id]",
+            query: {
+                orderKey: mKey,
+            },
+        }, "/mypage/order_detail");
+        return;
     }
 
 
@@ -334,190 +375,197 @@ export default function OrderPage({ userKey, cartData }: Props) {
                     <h2>배송지</h2>
                     <a><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
-                <ShippingInfo>
-                    <div>
-                        <ul>
-                            <li><label>회원 정보와 동일</label><input type="radio" name="shipping" defaultChecked={true} value="standard" onClick={onClickShipping} /></li>
-                            <li><label>새로운 배송지</label><input type="radio" name="shipping" value="new" onClick={onClickShipping} /></li>
-                        </ul>
-                    </div>
-                    <table>
-                        <colgroup>
-                            <col style={{ width: "150px" }} />
-                            <col style={{ width: "auto" }} />
-                        </colgroup>
-                        <tbody>
-                            <tr>
-                                <th>받는사람</th>
-                                <td><input type="text" value={name} onChange={e => onChangeValue(e, setName)} /></td>
-                            </tr>
-                            <AddressBox>
-                                <th>주소</th>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            <input type="text" id="zone" placeholder="우편주소" value={adrs1} disabled />
-                                            <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSearchAdress(e)}>주소검색</button>
-                                        </li>
-                                        <li><input type="text" id="adrs" value={adrs2} placeholder="기본주소" disabled /></li>
-                                        <li><input type="text" id="adrs2" placeholder="상세 주소를 입력해주세요. (선택)" value={adrs3} onChange={e => onChangeValue(e, setAdrs3)} /></li>
-                                        {isAdress &&
-                                            <PostWrap x={postPos.x} y={postPos.y}>
-                                                <a onClick={onCloseAddress}><img src="/img/close.png" alt="닫기" /></a>
-                                                <DaumPostcode style={{
-                                                    display: 'block',
-                                                    position: 'absolute',
-                                                    top: "0px",
-                                                    left: "0px",
-                                                    width: '100%',
-                                                    height: '400px',
-                                                    border: "5px solid #000",
-                                                }} onComplete={handleComplete} />
-                                            </PostWrap>
-                                        }
-                                    </ul>
-                                </td>
-                            </AddressBox>
-                            <PhoneBox>
-                                <th>휴대전화</th>
-                                <td>
-                                    <select id="mobile1">
-                                        {mobile1 !== undefined ? <option value="none" hidden>{userInfo.mobile[0]}</option> : <></>}
-                                        <option value="010">010</option>
-                                        <option value="011">011</option>
-                                        <option value="016">016</option>
-                                        <option value="017">017</option>
-                                        <option value="018">018</option>
-                                        <option value="019">019</option>
-                                    </select>
-                                    <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                                    <input type="text" id="mobile2" maxLength={4} pattern="^[0-9]+$" title="올바른 휴대번호를 입력해주세요" value={mobile2} onChange={e => onChangeValue(e, setMobile2)} />
-                                    <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
-                                    <input type="text" id="mobile3" maxLength={4} pattern="^[0-9]+$" title="올바른 휴대번호를 입력해주세요"
-                                        value={mobile3} onChange={e => onChangeValue(e, setMobile3)} />
-                                </td>
-                            </PhoneBox>
-                            <EmailBox>
-                                <th>이메일</th>
-                                <td>
-                                    <input type="text" value={email1} onChange={e => onChangeValue(e, setEmail1)} />
-                                    <span>@</span>
-                                    <span className="wrap">
-                                        <select onChange={e => onChangeSelect(e, setEmail2)}>
-                                            {email1 !== undefined ? <option value="none" hidden>{userInfo.email.split("@")[1]}</option> : <></>}
-                                            <option value="">-이메일 선택-</option>
-                                            <option value="naver.com">naver.com</option>
-                                            <option value="daum.net">daum.net</option>
-                                            <option value="nate.com">nate.com</option>
-                                            <option value="hotmail.com">hotmail.com</option>
-                                            <option value="yahoo.com">yahoo.com</option>
-                                            <option value="empas.com">empas.com</option>
-                                            <option value="korea.com">korea.com</option>
-                                            <option value="dreamwiz.com">dreamwiz.com</option>
-                                            <option value="gmail.com">gmail.com</option>
-                                            <option value="etc">직접입력</option>
+                <ContentArea>
+                    <ShippingInfo>
+                        <div>
+                            <ul>
+                                <li><label>회원 정보와 동일</label><input type="radio" name="shipping" defaultChecked={true} value="standard" onClick={onClickShipping} /></li>
+                                <li><label>새로운 배송지</label><input type="radio" name="shipping" value="new" onClick={onClickShipping} /></li>
+                            </ul>
+                        </div>
+                        <table>
+                            <colgroup>
+                                <col style={{ width: "150px" }} />
+                                <col style={{ width: "auto" }} />
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th>받는사람</th>
+                                    <td><input type="text" value={name} onChange={e => onChangeValue(e, setName)} /></td>
+                                </tr>
+                                <AddressBox>
+                                    <th>주소</th>
+                                    <td>
+                                        <ul>
+                                            <li>
+                                                <input type="text" id="zone" placeholder="우편주소" value={adrs1} disabled />
+                                                <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => onSearchAdress(e)}>주소검색</button>
+                                            </li>
+                                            <li><input type="text" id="adrs" value={adrs2} placeholder="기본주소" disabled /></li>
+                                            <li><input type="text" id="adrs2" placeholder="상세 주소를 입력해주세요. (선택)" value={adrs3} onChange={e => onChangeValue(e, setAdrs3)} /></li>
+                                            {isAdress &&
+                                                <PostWrap x={postPos.x} y={postPos.y}>
+                                                    <a onClick={onCloseAddress}><img src="/img/close.png" alt="닫기" /></a>
+                                                    <DaumPostcode style={{
+                                                        display: 'block',
+                                                        position: 'absolute',
+                                                        top: "0px",
+                                                        left: "0px",
+                                                        width: '100%',
+                                                        height: '400px',
+                                                        border: "5px solid #000",
+                                                    }} onComplete={handleComplete} />
+                                                </PostWrap>
+                                            }
+                                        </ul>
+                                    </td>
+                                </AddressBox>
+                                <PhoneBox>
+                                    <th>휴대전화</th>
+                                    <td>
+                                        <select id="mobile1">
+                                            {mobile1 !== undefined ? <option value="none" hidden>{userInfo.mobile[0]}</option> : <></>}
+                                            <option value="010">010</option>
+                                            <option value="011">011</option>
+                                            <option value="016">016</option>
+                                            <option value="017">017</option>
+                                            <option value="018">018</option>
+                                            <option value="019">019</option>
                                         </select>
-                                        <input type="text" onChange={e => onChangeValue(e, setEmail2)} />
-                                    </span>
-                                </td>
-                            </EmailBox>
-                        </tbody>
-                    </table>
-                    <div>
-                        <span className="wrap">
-                            <select id="omessage_select" name="omessage_select" onChange={e => onChangeSelect(e, setDelMsg)}>
-                                <option value="">-- 메시지 선택 (선택사항) --</option>
-                                <option value="배송 전에 미리 연락바랍니다.">배송 전에 미리 연락바랍니다.</option>
-                                <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
-                                <option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
-                                <option value="빠른 배송 부탁드립니다.">빠른 배송 부탁드립니다.</option>
-                                <option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
-                                <option value="etc">직접 입력</option>
-                            </select>
-                            <input type="text" onChange={e => onChangeValue(e, setDelMsg)} />
-                        </span>
-                    </div>
-                </ShippingInfo>
+                                        <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                                        <input type="text" id="mobile2" maxLength={4} pattern="^[0-9]+$" title="올바른 휴대번호를 입력해주세요" value={mobile2} onChange={e => onChangeValue(e, setMobile2)} />
+                                        <span>&nbsp;&nbsp;-&nbsp;&nbsp;</span>
+                                        <input type="text" id="mobile3" maxLength={4} pattern="^[0-9]+$" title="올바른 휴대번호를 입력해주세요"
+                                            value={mobile3} onChange={e => onChangeValue(e, setMobile3)} />
+                                    </td>
+                                </PhoneBox>
+                                <EmailBox>
+                                    <th>이메일</th>
+                                    <td>
+                                        <input type="text" value={email1} onChange={e => onChangeValue(e, setEmail1)} />
+                                        <span>@</span>
+                                        <span className="wrap">
+                                            <select onChange={e => onChangeSelect(e, setEmail2)}>
+                                                {email1 !== undefined ? <option value="none" hidden>{userInfo.email.split("@")[1]}</option> : <></>}
+                                                <option value="">-이메일 선택-</option>
+                                                <option value="naver.com">naver.com</option>
+                                                <option value="daum.net">daum.net</option>
+                                                <option value="nate.com">nate.com</option>
+                                                <option value="hotmail.com">hotmail.com</option>
+                                                <option value="yahoo.com">yahoo.com</option>
+                                                <option value="empas.com">empas.com</option>
+                                                <option value="korea.com">korea.com</option>
+                                                <option value="dreamwiz.com">dreamwiz.com</option>
+                                                <option value="gmail.com">gmail.com</option>
+                                                <option value="etc">직접입력</option>
+                                            </select>
+                                            <input type="text" onChange={e => onChangeValue(e, setEmail2)} />
+                                        </span>
+                                    </td>
+                                </EmailBox>
+                            </tbody>
+                        </table>
+                        <div>
+                            <span className="wrap">
+                                <select id="omessage_select" name="omessage_select" onChange={e => onChangeSelect(e, setDelMsg)}>
+                                    <option value="">-- 메시지 선택 (선택사항) --</option>
+                                    <option value="배송 전에 미리 연락바랍니다.">배송 전에 미리 연락바랍니다.</option>
+                                    <option value="부재 시 경비실에 맡겨주세요.">부재 시 경비실에 맡겨주세요.</option>
+                                    <option value="부재 시 문 앞에 놓아주세요.">부재 시 문 앞에 놓아주세요.</option>
+                                    <option value="빠른 배송 부탁드립니다.">빠른 배송 부탁드립니다.</option>
+                                    <option value="택배함에 보관해 주세요.">택배함에 보관해 주세요.</option>
+                                    <option value="etc">직접 입력</option>
+                                </select>
+                                <input type="text" onChange={e => onChangeValue(e, setDelMsg)} />
+                            </span>
+                        </div>
+                    </ShippingInfo>
+                </ContentArea>
             </OrderArea>
             <OrderArea>
                 <div onClick={onClickArrow}>
                     <h2>주문상품</h2>
                     <a ><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
-                <OrderInfo>
-                    <ul>
-                        {cartList.map((info, idx) => {
-                            console.log(info.thumb_src);
-                            return (
-                                <li key={info.key}>
-                                    <ThumbNail>
-                                        <img src={info.thumb_src} alt="썸네일" />
-                                    </ThumbNail>
-                                    <Description>
-                                        <h3>{info.name}</h3>
-                                        <strong>옵션 : {info.option}</strong>
-                                        <p>수량 : {info.num}</p>
-                                        <p>상품 구매 금액 : {info.price * info.num}</p>
-                                        <p>배송 : 무료배송</p>
-                                    </Description>
-                                    <a id={`${idx}`} onClick={onClickDeleteList}>X</a>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </OrderInfo>
+                <ContentArea>
+                    <OrderInfo>
+                        <ul>
+                            {cartList.map((info, idx) => {
+                                return (
+                                    <li key={info.key}>
+                                        <ThumbNail>
+                                            <img src={info.thumb_src} alt="썸네일" />
+                                        </ThumbNail>
+                                        <Description>
+                                            <h3>{info.name}</h3>
+                                            <strong>옵션 : {info.option}</strong>
+                                            <p>수량 : {info.num}</p>
+                                            <p>상품 구매 금액 : {info.price * info.num}</p>
+                                            <p>배송 : 무료배송</p>
+                                        </Description>
+                                        <a id={`${idx}`} onClick={onClickDeleteList}>X</a>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </OrderInfo>
+                </ContentArea>
             </OrderArea>
             <OrderArea>
                 <div onClick={onClickArrow}>
                     <h2>결제 정보</h2>
                     <a ><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
-                <PaymentArea>
-                    <ul>
-                        <li>
-                            <p>주문상품</p>
-                            <p>{totalPrice.toLocaleString()}원</p>
-                        </li>
-                        <li>
-                            <p>할인/부가결제</p>
-                            <p>-0원</p>
-                        </li>
-                        <li>
-                            <p>배송비</p>
-                            <p>+0원</p>
-                        </li>
-                        <li>
-                            <strong>결제금액</strong>
-                            <strong>{totalPrice.toLocaleString()}원</strong>
-                        </li>
-                    </ul>
-                </PaymentArea>
+                <ContentArea>
+                    <PaymentArea>
+                        <ul>
+                            <li>
+                                <p>주문상품</p>
+                                <p>{totalPrice.toLocaleString()}원</p>
+                            </li>
+                            <li>
+                                <p>할인/부가결제</p>
+                                <p>-0원</p>
+                            </li>
+                            <li>
+                                <p>배송비</p>
+                                <p>+0원</p>
+                            </li>
+                            <li>
+                                <strong>결제금액</strong>
+                                <strong>{totalPrice.toLocaleString()}원</strong>
+                            </li>
+                        </ul>
+                    </PaymentArea>
+                </ContentArea>
             </OrderArea>
             <OrderArea>
                 <div onClick={onClickArrow}>
                     <h2>적립금 혜택</h2>
                     <a ><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
-                <PaymentArea>
-                    <ul>
-                        <li>
-                            <p>상품 적립금</p>
-                            <p>{totalPrice * 0.05}원</p>
-                        </li>
-                        <li>
-                            <p>회원 적립금</p>
-                            <p>0원</p>
-                        </li>
-                        <li>
-                            <p>쿠폰 적립금</p>
-                            <p>0원</p>
-                        </li>
-                        <li>
-                            <strong>적립 예정금액</strong>
-                            <strong>{totalPrice * 0.05}원</strong>
-                        </li>
-                    </ul>
-                </PaymentArea>
+                <ContentArea>
+                    <PaymentArea>
+                        <ul>
+                            <li>
+                                <p>상품 적립금</p>
+                                <p>{totalPrice * 0.05}원</p>
+                            </li>
+                            <li>
+                                <p>회원 적립금</p>
+                                <p>0원</p>
+                            </li>
+                            <li>
+                                <p>쿠폰 적립금</p>
+                                <p>0원</p>
+                            </li>
+                            <li>
+                                <strong>적립 예정금액</strong>
+                                <strong>{totalPrice * 0.05}원</strong>
+                            </li>
+                        </ul>
+                    </PaymentArea>
+                </ContentArea>
             </OrderArea>
             <OrderArea>
                 <div onClick={() => { alert("준비중입니다.") }}>

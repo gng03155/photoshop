@@ -32,6 +32,19 @@ export const Form = styled.form`
         margin: 20px 0;
     }
 
+    ${props => props.theme.media.tablet}{
+        width : 90%;
+    }
+
+    ${props => props.theme.media.mobile}{
+        p{
+            font-size: 12px;
+        }
+        p.lead{
+            font-size: 14px;
+        }
+    }
+
 `
 
 export const Button = styled.div`

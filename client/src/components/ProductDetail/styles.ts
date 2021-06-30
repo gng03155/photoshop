@@ -3,15 +3,25 @@ import styled from "styled-components"
 export const InfoWrap = styled.div`
     width: 100%;
     display: flex;
+
+    ${props => props.theme.media.tablet}{
+        flex-direction: column;
+        align-items: center;
+    }
 `
 
 export const Img = styled.div`
     width : 50%;
-    height : 550px;
+    /* height : 550px; */
     margin-right: 50px;
     img{
         width: 100%;
         height: 100%;
+    }
+
+    ${props => props.theme.media.tablet}{
+        width : 100%;
+        margin : 0;
     }
 `
 
@@ -33,6 +43,18 @@ export const Info = styled.div`
     }
     span{
         
+    }
+
+    ${props => props.theme.media.tablet}{
+        width : 100%;
+    }
+    ${props => props.theme.media.mobile}{
+        tr{
+            height : 30px;
+        }
+        th{
+            width : 100px;
+        }
     }
 `
 export const Form = styled.form`
@@ -90,6 +112,16 @@ export const ProductAdd = styled.div`
         width: 35%;
         font-size: 20px;
         text-align: right;
+    }
+
+    ${props => props.theme.media.mobile}{
+        label{
+            font-size: 10px;
+        }
+        span{
+            width:auto;
+            font-size: 10px;
+        }
     }
 `
 
@@ -174,7 +206,20 @@ export const ProductButton = styled.div`
             height: 100%;
             text-align: center;
         }
+    }
 
+    ${props => props.theme.media.tablet}{
+        nav{
+            margin :  20px 0;
+        }
+        & > div{
+            li:nth-child(1){
+                width: 60%;
+            }
+            li:nth-child(2) , li:nth-child(3){
+                width: 20%;
+            }
+        }
     }
 `
 export const LikeBtn = styled.div`
@@ -219,6 +264,18 @@ export const CartBtn = styled.div`
 
 export const DetailWrap = styled.div`
     margin-top: 150px;
+    ${props => props.theme.media.tablet}{
+        margin-top : 100px;
+        & > div{
+            margin-bottom: 100px;
+        }
+    }
+    ${props => props.theme.media.mobile}{
+        margin-top : 50px;
+        & > div{
+            margin-bottom: 50px;
+        }
+    }
 `
 
 export const NaviBar = styled.nav`
@@ -243,6 +300,18 @@ export const NaviBar = styled.nav`
     }
     li:hover a{
         color : #333;
+    }
+
+    ${props => props.theme.media.tablet}{
+        a{
+            font-size : 14px;
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        a{
+            font-size : 10px;
+        }
     }
 `
 
@@ -270,6 +339,18 @@ export const BuyInfo = styled.div`
         p{
             font-size: 14px;
         }   
+    }
+
+    ${props => props.theme.media.mobile}{
+        div{
+            margin-bottom : 30px;
+            h3{
+                font-size: 16px;
+            }
+            p{
+                font-size: 12px;
+            }
+        }
     }
 `
 

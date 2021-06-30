@@ -1,8 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import useSWR from 'swr'
+
+
+import { Info, InfoTable, InfoWrap, MiniContent, MiniOrderWrap, MiniPrice, MiniThumb, MiniTitle, OrderTitle, OrderWrap, ProductInfo, Table, Wrap } from './styles';
+
 import { fetcherData } from '../../util/fetcher'
-import { Info, InfoTable, InfoWrap, OrderTitle, ProductInfo, Table, Wrap } from './styles';
+
 interface Props {
     userKey: string,
     orderKey: string,
@@ -14,6 +19,8 @@ export default function OrderDetail({ userKey, orderKey }: Props) {
     const [orderList, setOrderList] = useState(null);
 
     const router = useRouter();
+
+    const isTablet = useMediaQuery({ minWidth: 768 });
 
     useEffect(() => {
         if (orderInfo !== undefined) {
@@ -40,57 +47,112 @@ export default function OrderDetail({ userKey, orderKey }: Props) {
     return (
         <Wrap>
             <h2>주문 상세 내역</h2>
-            <OrderTitle>
-                <div>
-                    <span>주문번호</span>
-                    <strong>{orderInfo.order_num}</strong>
-                </div>
-                <div>
-                    <span>주문일자</span>
-                    <strong>{orderInfo.date}</strong>
-                </div>
-            </OrderTitle>
-            <Table>
-                <colgroup>
-                    <col width="25%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                    <col width="14%" />
-                    <col width="10%" />
-                    <col width="10%" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>상품정보</th>
-                        <th>적립금</th>
-                        <th>결제수수료</th>
-                        <th>주문금액(수량)</th>
-                        <th>배송정보</th>
-                        <th>주문상태</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {orderList.length !== 0 &&
-                        Object.keys(orderList).map((item, idx) => {
-                            return (
-                                <tr key={orderList[item]["key"]}>
-                                    <td>
-                                        <ProductInfo>
-                                            <div className="img"><img src={orderList[item]["product_info"]["thumb_src"]} alt="#" /></div>
-                                            <div className="desc"><p>{orderList[item]["product_info"]["name"]}</p><span>옵션 : {orderList[item]["product_info"]["option"]}</span></div>
-                                        </ProductInfo>
-                                    </td>
-                                    <td>0원</td>
-                                    <td>0원</td>
-                                    <td><p>{orderList[item]["product_info"]["price"]}원</p><p>{orderList[item]["product_info"]["num"]}개</p></td>
-                                    <td>무료배송</td>
-                                    <td>{orderList[item]["shipping"]}</td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </Table>
+            {isTablet ? <OrderWrap>
+                <OrderTitle>
+                    <div>
+                        <span>주문번호</span>
+                        <strong>{orderInfo.order_num}</strong>
+                    </div>
+                    <div>
+                        <span>주문일자</span>
+                        <strong>{orderInfo.date}</strong>
+                    </div>
+                </OrderTitle>
+                <Table>
+                    <colgroup>
+                        <col width="25%" />
+                        <col width="10%" />
+                        <col width="10%" />
+                        <col width="14%" />
+                        <col width="10%" />
+                        <col width="10%" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>상품정보</th>
+                            <th>적립금</th>
+                            <th>결제수수료</th>
+                            <th>주문금액(수량)</th>
+                            <th>배송정보</th>
+                            <th>주문상태</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orderList.length !== 0 &&
+                            Object.keys(orderList).map((item, idx) => {
+                                return (
+                                    <tr key={orderList[item]["key"]}>
+                                        <td>
+                                            <ProductInfo>
+                                                <div className="img"><img src={orderList[item]["product_info"]["thumb_src"]} alt="#" /></div>
+                                                <div className="desc"><p>{orderList[item]["product_info"]["name"]}</p><span>옵션 : {orderList[item]["product_info"]["option"]}</span></div>
+                                            </ProductInfo>
+                                        </td>
+                                        <td>0원</td>
+                                        <td>0원</td>
+                                        <td><p>{orderList[item]["product_info"]["price"]}원</p><p>{orderList[item]["product_info"]["num"]}개</p></td>
+                                        <td>무료배송</td>
+                                        <td>{orderList[item]["shipping"]}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </Table>
+            </OrderWrap>
+                :
+                <MiniOrderWrap>
+                    <ul>
+                        <li>
+                            <MiniTitle>
+                                <div>
+                                    <strong>{orderInfo.date.split(" ")[0]}</strong>
+                                    <span>주문</span>
+                                </div>
+                                <div>
+                                    <span>주문번호</span>
+                                    <span>{orderInfo.order_num}</span>
+                                </div>
+                            </MiniTitle>
+                        </li>
+                        {orderList.length !== 0 &&
+                            Object.keys(orderList).map((item, idx) => {
+                                return (
+                                    <li key={orderList[item]["key"]}>
+                                        <MiniContent>
+                                            <p>{orderList[item]["shipping"]}</p>
+                                            <MiniThumb>
+                                                <div><img src={orderList[item]["product_info"]["thumb_src"]} alt="썸네일" /></div>
+                                                <div>
+                                                    <p>{orderList[item]["product_info"]["name"]}</p>
+                                                    <span>옵션 : {orderList[item]["product_info"]["option"]}</span>
+                                                    <span>개수 : {orderList[item]["product_info"]["num"]}개</span>
+                                                </div>
+                                            </MiniThumb>
+                                            <MiniPrice>
+                                                <div>
+                                                    <span>판매가</span>
+                                                    <span>{orderList[item]["product_info"]["price"]}원</span>
+                                                </div>
+                                                <div>
+                                                    <span>상품 할인</span>
+                                                    <span>0원</span>
+                                                </div>
+                                                <div>
+                                                    <span>적립금</span>
+                                                    <span>0원</span>
+                                                </div><div>
+                                                    <span>결제금액</span>
+                                                    <span>{orderList[item]["product_info"]["price"]}원</span>
+                                                </div>
+                                            </MiniPrice>
+                                        </MiniContent>
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                </MiniOrderWrap>}
             <InfoWrap>
                 <Info>
                     <h3>배송지 정보</h3>

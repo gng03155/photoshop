@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useMediaQuery } from 'react-responsive'
 
-import { Content, Logo, BoardCategory, MainMenu, SearchWrap, SearchInput } from "./styles"
+import { Content, Logo, BoardCategory, MainMenu, SearchWrap, SearchInput, SideMenu, Inner, SubMenuWrap, MenuIcon, BG, SideClose } from "./styles"
 import fb from '../../firebase'
 import useSWR from 'swr'
 import localFetcher from '../../util/localFetcher'
@@ -21,10 +22,12 @@ export default function Header() {
     const ref = useRef(null);
     const divRef = useRef(null);
     const searchRef = useRef<HTMLDivElement>(null);
+    const toggleRef = useRef<HTMLDivElement>(null);
 
     const [keyword, setKeyword] = useState("");
     const [userKey, setUserKey] = useState("");
 
+    const isTablet = useMediaQuery({ minWidth: 768 });
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
@@ -38,11 +41,23 @@ export default function Header() {
 
     const scrollHeader = () => {
         const scrollTop = document.documentElement.scrollTop;
+        // if (scrollTop > 0) {
+        //     const tt = divRef.current.clientWidth;
+        //     divRef.current.style.position = "fixed";
+        //     divRef.current.style.width = tt + "px";
+        //     divRef.current.style.height = "80px";
+        // } else {
+        //     divRef.current.style.position = "static";
+        //     divRef.current.style.width = "100%";
+        //     divRef.current.style.height = "100px";
+
+        // }
+
         if (scrollTop > 0) {
             const tt = divRef.current.clientWidth;
             ref.current.style.position = "fixed";
-            ref.current.style.height = "80px";
             ref.current.style.width = tt + "px";
+            ref.current.style.height = "80px";
         } else {
             ref.current.style.position = "relative";
             ref.current.style.width = "100%";
@@ -112,6 +127,26 @@ export default function Header() {
         setKeyword("");
     }
 
+    const onClickToggle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(toggleRef);
+        toggleRef.current.style.visibility = "visible";
+        toggleRef.current.style.opacity = "1";
+    }
+
+    const onClickToggleClose = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLLIElement>) => {
+        e.preventDefault();
+        toggleRef.current.style.visibility = "hidden";
+        toggleRef.current.style.opacity = "0";
+    }
+
+    const onClickSub = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        const tg = e.target as HTMLAnchorElement;
+        const friend = tg.nextElementSibling;
+
+        friend.classList.toggle("active");
+    }
+
     const test = async () => {
 
         router.push("/signup?name=agree", "/signup");
@@ -153,11 +188,11 @@ export default function Header() {
             {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
             <Content ref={ref}>
                 <MainMenu>
-                    <ul className="left">
+                    {isTablet ? <ul className="left">
                         <li><Link href="/article/free?id=free&key=-McV-rHrRab1MvqYdjGL">test</Link></li>
                         <li><Link href="/category"><a>PRODUCT</a></Link></li>
                         <li className="board">
-                            <Link href="/board/free"><a>BOARD</a></Link>
+                            <a>BOARD</a>
                             <BoardCategory>
                                 <ul>
                                     <li><a onClick={onClickBoard} data-id="notice" href="#">notice</a></li>
@@ -167,7 +202,7 @@ export default function Header() {
                                 </ul>
                             </BoardCategory>
                         </li>
-                    </ul>
+                    </ul> : <MenuIcon><a className="toggle" onClick={onClickToggle}></a></MenuIcon>}
                 </MainMenu>
                 <Logo>
                     <Link href="/">
@@ -175,17 +210,17 @@ export default function Header() {
                     </Link>
                 </Logo>
                 <MainMenu>
-                    <ul className="right">
+                    {isTablet ? <ul className="right">
                         {
                             userKey === null ?
-                                <li><Link href="/login"><a>LOGIN</a></Link></li>
+                                <li><Link href="/member/login"><a>LOGIN</a></Link></li>
                                 :
                                 <li><Link href="/"><a onClick={onLogout}>LOGOUT</a></Link></li>
                         }
                         {
                             userKey === null ?
                                 <li>
-                                    <Link href="/signup?name=agree" as="signup">
+                                    <Link href="/member/signup?name=agree" as="signup">
                                         <a>JOIN US</a>
                                     </Link>
                                 </li>
@@ -196,8 +231,38 @@ export default function Header() {
                         <li className="search">
                             <a onClick={onClickSearch}>SEARCH</a>
                         </li>
-                    </ul>
+                    </ul> : <MenuIcon><a className="search" onClick={onClickSearch}></a></MenuIcon>}
                 </MainMenu>
+                <SideMenu ref={toggleRef}>
+                    <SideClose>
+                        <a onClick={onClickToggleClose}><img src="/img/big_close.png" alt="닫기" /></a>
+                    </SideClose>
+                    <Inner>
+                        <li onClick={onClickToggleClose}>
+                            {userKey === null ? <Link href="/member/login"><a>login</a></Link> : <Link href="/member/login"><a>logout</a></Link>}
+                            <span>/</span>
+                            {userKey === null && <Link href="/member/signup?name=agree" as="signup"><a>joinus</a></Link>}
+                        </li>
+                        <li className="page" onClick={onClickToggleClose}>
+                            <Link href="/mypage/main"><a>mypage</a></Link>
+                        </li>
+                        <li className="page" onClick={onClickToggleClose}>
+                            <Link href="/cart"><a>cart</a></Link>
+                        </li>
+                        <li className="page" onClick={onClickToggleClose}>
+                            <Link href="/category"><a>product</a></Link>
+                        </li>
+                        <li className="page">
+                            <a onClick={onClickSub}>board</a>
+                            <SubMenuWrap>
+                                <li onClick={onClickToggleClose}><a onClick={onClickBoard} data-id="notice">notice</a></li>
+                                <li onClick={onClickToggleClose}><a onClick={onClickBoard} data-id="free">free</a></li>
+                                <li onClick={onClickToggleClose}><a onClick={onClickBoard} data-id="review">review</a></li>
+                                <li onClick={onClickToggleClose}><a onClick={onClickBoard} data-id="qna">q&a</a></li>
+                            </SubMenuWrap>
+                        </li>
+                    </Inner>
+                </SideMenu>
                 <SearchWrap ref={searchRef}>
                     <div>
                         <span onClick={onClickCancelSearch} >X</span>
@@ -208,7 +273,10 @@ export default function Header() {
                         </SearchInput>
                     </div>
                 </SearchWrap>
+                <BG />
             </Content>
+            {/* <BG /> */}
+
         </div>
     )
 }

@@ -36,6 +36,13 @@ export const PostWrap = styled.div<{ x, y }>`
     }
 `
 
+export const ContentArea = styled.div`
+    width: 100%;
+    height : 0;
+    overflow: hidden;
+    transition: height 0.5s linear;
+`
+
 export const OrderArea = styled.div`
     & > div:first-child{
         display: flex;
@@ -53,7 +60,7 @@ export const OrderArea = styled.div`
             display: inline-block;
             width: 19px;
             height: 11px;
-            transition: all 1s linear;
+            transition: transform 0.5s linear;
         }
         img{
             width: 100%;
@@ -64,9 +71,10 @@ export const OrderArea = styled.div`
         }
     }
     & > div:last-child{
-        overflow-y: hidden;
+        /* overflow-y: hidden;
         max-height : 0px;
-        transition: max-height 0.7s linear;
+        height : 0px;
+        transition: height 0.7s linear; */
     }
 `
 
@@ -266,7 +274,7 @@ export const EmailBox = styled.tr`
 
 
 export const OrderInfo = styled.div`
-    overflow-y: auto !important;
+    &&& {overflow-y: auto;}
     ul{
         padding : 20px 20px;
     }
@@ -286,6 +294,10 @@ export const OrderInfo = styled.div`
         line-height: 24px;
         border : 1px solid #ccc;
         text-align: center;
+    }
+
+    ${props => props.theme.media.mobile}{
+        ul{padding: 20px 10px;}
     }
 `
 
@@ -314,6 +326,18 @@ export const Description = styled.div`
     strong{
         display: block;
         margin-bottom: 5px;
+    }
+
+    ${props => props.theme.media.mobile}{
+        h3{
+            font-size: 12px;
+        }   
+        strong{
+            font-size: 10px;
+        }
+        p{
+            font-size: 10px;
+        }
     }
 `
 export const PaymentArea = styled.div`
