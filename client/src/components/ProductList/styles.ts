@@ -11,7 +11,7 @@ export const Filter = styled.div`
     align-items: center;
     text-transform: uppercase;
     text-align: center;
-    margin-top: 200px;
+    margin-top: 50px;
     border-top : 1px solid #ececec;
     border-bottom : 1px solid #ececec;
     padding: 10px 0;

@@ -28,4 +28,15 @@ box-sizing: border-box;}
     outline: none;
     border : 1px solid #ececec;
   }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      
+  }
+
+  h2{
+    height : 42px;
+    margin-bottom: 40px;
+  }
+
 `;

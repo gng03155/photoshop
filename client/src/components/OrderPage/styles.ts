@@ -347,6 +347,7 @@ export const PaymentArea = styled.div`
     li{
         display: flex;
         justify-content: space-between;
+        align-items: center;
         padding : 12px;
         font-size: 17px;
     }
@@ -360,6 +361,27 @@ export const PaymentArea = styled.div`
     strong{
         font-weight: 600;
         color : #000;
+    }
+    div{
+        position: relative;
+        font-size: 12px;
+        color : #777;
+    }
+    input{
+        text-align: right;
+        width : 100px;
+        height : 40px;
+        padding: 0 25px 0 10px;
+        font-size: inherit;
+        color : inherit;
+    }
+    span{
+        position: absolute;
+        top: 0;
+        right: 10px;
+        height : 40px;
+        line-height: 40px;
+        color : inherit;
     }
 `
 export const OrderEnd = styled.div`

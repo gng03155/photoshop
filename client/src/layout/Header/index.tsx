@@ -3,17 +3,14 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import { useMediaQuery } from 'react-responsive'
 
-import { Content, Logo, BoardCategory, MainMenu, SearchWrap, SearchInput, SideMenu, Inner, SubMenuWrap, MenuIcon, BG, SideClose } from "./styles"
+import { Content, Logo, BoardCategory, MainMenu, SearchWrap, SearchInput, SideMenu, Inner, SubMenuWrap, MenuIcon, BG, SideClose, Wrap } from "./styles"
 import fb from '../../firebase'
 import useSWR from 'swr'
 import localFetcher from '../../util/localFetcher'
+import dynamic from 'next/dynamic'
 
-
-
+// const test = dynamic(() => import('react-responsive'), { ssr: false });
 export default function Header() {
-
-
-
 
     const { data: load, mutate } = useSWR("load", localFetcher);
 
@@ -27,7 +24,15 @@ export default function Header() {
     const [keyword, setKeyword] = useState("");
     const [userKey, setUserKey] = useState("");
 
-    const isTablet = useMediaQuery({ minWidth: 768 });
+    let isTablet = false;
+
+    if (typeof window !== "undefined") {
+        console.log(typeof window);
+        isTablet = useMediaQuery({ minWidth: 768 });
+    }
+
+
+
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
@@ -182,27 +187,32 @@ export default function Header() {
         // })
 
     }
-
     return (
-        <div ref={divRef} style={{ width: "100%", height: "100px" }}>
+        <Wrap ref={divRef} style={{ width: "100%", height: "100px" }}>
             {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
             <Content ref={ref}>
                 <MainMenu>
-                    {isTablet ? <ul className="left">
-                        <li><Link href="/article/free?id=free&key=-McV-rHrRab1MvqYdjGL">test</Link></li>
-                        <li><Link href="/category"><a>PRODUCT</a></Link></li>
-                        <li className="board">
-                            <a>BOARD</a>
-                            <BoardCategory>
-                                <ul>
-                                    <li><a onClick={onClickBoard} data-id="notice" href="#">notice</a></li>
-                                    <li><a onClick={onClickBoard} data-id="review" href="#">review</a></li>
-                                    <li><a onClick={onClickBoard} data-id="qna" href="#">q&a</a></li>
-                                    <li><a onClick={onClickBoard} data-id="free" href="#">free</a></li>
-                                </ul>
-                            </BoardCategory>
-                        </li>
-                    </ul> : <MenuIcon><a className="toggle" onClick={onClickToggle}></a></MenuIcon>}
+                    {isTablet ?
+                        <ul className="left">
+                            <li><Link href="/">test</Link></li>
+                            <li><Link href="/category"><a>PRODUCT</a></Link></li>
+                            <li className="board">
+                                <a>BOARD</a>
+                                <BoardCategory>
+                                    <ul>
+                                        <li><a onClick={onClickBoard} data-id="notice" href="#">notice</a></li>
+                                        <li><a onClick={onClickBoard} data-id="review" href="#">review</a></li>
+                                        <li><a onClick={onClickBoard} data-id="qna" href="#">q&a</a></li>
+                                        <li><a onClick={onClickBoard} data-id="free" href="#">free</a></li>
+                                    </ul>
+                                </BoardCategory>
+                            </li>
+                        </ul>
+                        :
+                        <MenuIcon>
+                            <a className="toggle" onClick={onClickToggle}></a>
+                        </MenuIcon>
+                    }
                 </MainMenu>
                 <Logo>
                     <Link href="/">
@@ -210,28 +220,31 @@ export default function Header() {
                     </Link>
                 </Logo>
                 <MainMenu>
-                    {isTablet ? <ul className="right">
-                        {
-                            userKey === null ?
-                                <li><Link href="/member/login"><a>LOGIN</a></Link></li>
-                                :
-                                <li><Link href="/"><a onClick={onLogout}>LOGOUT</a></Link></li>
-                        }
-                        {
-                            userKey === null ?
-                                <li>
-                                    <Link href="/member/signup?name=agree" as="signup">
-                                        <a>JOIN US</a>
-                                    </Link>
-                                </li>
-                                :
-                                <li><Link href="/mypage/main"><a>MY PAGE</a></Link></li>
-                        }
-                        <li><Link href="/cart" ><a>CART</a></Link></li>
-                        <li className="search">
-                            <a onClick={onClickSearch}>SEARCH</a>
-                        </li>
-                    </ul> : <MenuIcon><a className="search" onClick={onClickSearch}></a></MenuIcon>}
+                    {isTablet ?
+                        <ul className="right">
+                            {
+                                userKey === null ?
+                                    <li><Link href="/member/login"><a>LOGIN</a></Link></li>
+                                    :
+                                    <li><Link href="/"><a onClick={onLogout}>LOGOUT</a></Link></li>
+                            }
+                            {
+                                userKey === null ?
+                                    <li>
+                                        <Link href="/member/signup?name=agree" as="/member/signup">
+                                            <a>JOIN US</a>
+                                        </Link>
+                                    </li>
+                                    :
+                                    <li><Link href="/mypage/main"><a>MY PAGE</a></Link></li>
+                            }
+                            <li><Link href="/cart" ><a>CART</a></Link></li>
+                            <li className="search">
+                                <a onClick={onClickSearch}>SEARCH</a>
+                            </li>
+                        </ul>
+                        :
+                        <MenuIcon><a className="search" onClick={onClickSearch}></a></MenuIcon>}
                 </MainMenu>
                 <SideMenu ref={toggleRef}>
                     <SideClose>
@@ -275,8 +288,6 @@ export default function Header() {
                 </SearchWrap>
                 <BG />
             </Content>
-            {/* <BG /> */}
-
-        </div>
+        </Wrap>
     )
 }

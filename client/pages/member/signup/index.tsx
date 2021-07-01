@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from "next/router"
 
-import { Title, Progress } from "./styles"
+import { Title, Progress } from "../../../page_style/member/signup/styles"
 
 import Agreement from '../../../src/components/Signup/agreement'
 import Join from '../../../src/components/Signup/join'

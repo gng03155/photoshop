@@ -88,7 +88,7 @@ export default function OrderDetail({ userKey, orderKey }: Props) {
                                                 <div className="desc"><p>{orderList[item]["product_info"]["name"]}</p><span>옵션 : {orderList[item]["product_info"]["option"]}</span></div>
                                             </ProductInfo>
                                         </td>
-                                        <td>0원</td>
+                                        <td>{orderList[item]["product_info"]["mileage"]}원</td>
                                         <td>0원</td>
                                         <td><p>{orderList[item]["product_info"]["price"]}원</p><p>{orderList[item]["product_info"]["num"]}개</p></td>
                                         <td>무료배송</td>
@@ -195,23 +195,27 @@ export default function OrderDetail({ userKey, orderKey }: Props) {
                         <tbody>
                             <tr>
                                 <th>상품 합계</th>
-                                <td>{orderInfo.pay_info.price}</td>
+                                <td>{orderInfo.pay_info.total_price}</td>
+                            </tr>
+                            <tr>
+                                <th>누적 적립금</th>
+                                <td>{orderInfo.pay_info.get_mileage}</td>
+                            </tr>
+                            <tr>
+                                <th>적립금 할인</th>
+                                <td>{orderInfo.pay_info.use_mileage}</td>
                             </tr>
                             <tr>
                                 <th>할인 합계</th>
                                 <td>{orderInfo.pay_info.sale}</td>
                             </tr>
                             <tr>
-                                <th>결제 수수료</th>
-                                <td></td>
+                                <th>결제 수단</th>
+                                <td>{orderInfo.pay_info.type}</td>
                             </tr>
                             <tr>
                                 <th>최종 결제 금액</th>
-                                <td>{orderInfo.pay_info.price}</td>
-                            </tr>
-                            <tr>
-                                <th>결제 수단</th>
-                                <td>{orderInfo.pay_info.type}</td>
+                                <td>{orderInfo.pay_info.pay_price}</td>
                             </tr>
                         </tbody>
                     </InfoTable>

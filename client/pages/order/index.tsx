@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import OrderPage from '../../src/components/OrderPage';
 
-export default function Order() {
+export default function Order({ id }) {
 
 
     const [userKey, setUserKey] = useState("");

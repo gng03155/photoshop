@@ -24,26 +24,43 @@ export default function CartList({ userKey }: Props) {
     const [optionList, setOptionList] = useState({});
     const [isModal, setIsModal] = useState(false);
     const [isOption, setIsOption] = useState(false);
+    const [isInit, setIsInit] = useState(false);
     const [modalProps, setModalProps] = useState({ x: 0, y: 0, productId: "", cartKey: "" });
 
     const [selColor, setSelColor] = useState("");
 
+    const [ref, setRef] = useState<MutableRefObject<HTMLInputElement>[]>([null]);
+
     // const [ref, setRef] = useState<MutableRefObject<HTMLInputElement>[] | null>(null);
     // /[useRef<HTMLInputElement>(null)]
-    const ref = new Array(50).fill(0).map(() => { return useRef<HTMLInputElement>(null) })
+    // const temp = new Array(50).fill(0).map(() => { return useRef<HTMLInputElement>(null) })
+
+    const initRef = { ref: useRef<HTMLInputElement>(null) };
+
+    const aa = useRef<HTMLInputElement[]>([]);
 
     const isTablet = useMediaQuery({ minWidth: 768 });
 
     useEffect(() => {
         if (cartList !== null && cartList !== undefined) {
+            console.log(aa);
+            const copy = new Array(Object.keys(cartList).length + 1).fill(0).map(() => {
+                let temp = { ...initRef.ref };
+                return temp;
+            })
+            setRef(copy);
+
             let keys = [];
             for (let key in cartList) {
                 keys.push(cartList[key].id);
             }
+
             //중복된 id값 필터링
             const set = new Set(keys);
             const ids = Array.from(set);
             setStock(ids);
+
+
         }
     }, [cartList])
 
@@ -56,6 +73,7 @@ export default function CartList({ userKey }: Props) {
         }
 
         setOptionList(temp);
+        setIsInit(true);
 
     }
 
@@ -256,7 +274,7 @@ export default function CartList({ userKey }: Props) {
 
 
 
-    if (cartList === null || ref === null) {
+    if (cartList === null || ref === null || isInit === false) {
         return <div></div>
     }
 
@@ -353,7 +371,7 @@ export default function CartList({ userKey }: Props) {
                         </li>
                         {(cartList !== undefined && cartList !== null) && Object.keys(cartList).map((id, idx) => {
                             return (
-                                <li>
+                                <li key={id}>
                                     <MiniHead>
                                         <input ref={ref[idx + 1]} id={cartList[id].key} type="checkbox" />
                                         <label>선택</label>
@@ -466,7 +484,8 @@ export default function CartList({ userKey }: Props) {
                                             return Object.keys(optionList[modalProps.productId][option]).map((sub, idx) => {
                                                 if (idx === 0 || sub === "name") {
                                                 } else {
-                                                    return <option key={idx} value={optionList[modalProps.productId][option][sub]["name"]}>{optionList[modalProps.productId][option][sub]["name"]} 남은재고 {optionList[modalProps.productId][option][sub]["num"]}</option>
+                                                    return <option key={idx} value={optionList[modalProps.productId][option][sub]["name"]} disabled={optionList[modalProps.productId][option][sub]["num"] == "0" ? true : false}>
+                                                        {optionList[modalProps.productId][option][sub]["name"]} 남은재고 {optionList[modalProps.productId][option][sub]["num"]}</option>
                                                 }
                                             })
                                         } else {

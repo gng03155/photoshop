@@ -89,7 +89,7 @@ export default function ProductDetail({ id, userKey }: Props) {
             return;
         }
         if (userKey === null) {
-            router.push("/login");
+            router.push("/member/login");
             return;
         }
 

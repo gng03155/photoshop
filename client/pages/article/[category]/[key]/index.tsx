@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Comment from '../../../../src/components/Comment';
 import BoardTable from '../../../../src/components/BoardTable';
 import ProductItem2 from '../../../../src/components/ProductItem2';
-import { Title } from './styles';
+import { Title } from '../../../../page_style/article/styles';
 
 
 

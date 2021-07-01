@@ -11,30 +11,43 @@ export const Wrap = styled.div`
 
 export const Maileage = styled.div`
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
     border: 2px solid #555;
     border-left: 0;
     border-right: 0;
     ul{
-        width : 35%;
         padding: 30px 0;
+        flex-shrink: 0;
     }
 
     li{
+        width : 250px;
+        display: flex;
+        justify-content: space-between;
         margin-bottom: 10px ;
     }
     li:last-child{
         margin: 0;
+        justify-content: flex-end;
     }
     span{
         display: inline-block;
     }
     span:first-child{
-        width: 30%;
     }
     span:last-child{
-        width: 70%;
+        margin-left: auto;
         text-align: right;
+    }
+    a{
+        padding: 5px 8px;
+        border : 1px solid #ececec;
+    }
+    ${props => props.theme.media.tablet}{
+        ul{
+        }
+        flex-direction: column;
     }
 `
 

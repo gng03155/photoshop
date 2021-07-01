@@ -4,7 +4,7 @@ import useSWR from 'swr';
 
 import ProductList from '../../../src/components/ProductList'
 import { fetcherData } from '../../../src/util/fetcher';
-import { InputWrap, Ment, Wrap } from './styles';
+import { InputWrap, Ment, Wrap } from '../../../page_style/category/search/styles';
 
 export default function Search() {
 

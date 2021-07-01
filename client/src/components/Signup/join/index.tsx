@@ -66,12 +66,12 @@ export default function Join() {
         mutate(false, false);
 
         router.push({
-            pathname: "/signup",
+            pathname: "/memeber/signup",
             query: {
                 name: "complete",
                 data: JSON.stringify(data),
             }
-        }, "/signup");
+        }, "/member/signup");
 
     }, [])
 

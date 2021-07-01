@@ -39,6 +39,10 @@ export default function OrderPage({ userKey, cartData }: Props) {
     const [email2, setEmail2] = useState("");
     const [delMsg, setDelMsg] = useState("");
 
+    const [mileage, setMileage] = useState(0);
+    const [productSale, setProductSale] = useState(0);
+    const [delPrice, setDelPrice] = useState(0);
+
 
     const [postPos, setPostPos] = useState({ x: 0, y: 0 });
 
@@ -224,7 +228,6 @@ export default function OrderPage({ userKey, cartData }: Props) {
         const rand2 = Math.floor(Math.random() * (999 - 100)) + 100;
 
         const orderNum = rand1 + String(rand2);
-
         mutate(true, false);
         const mainRef = await fb.database().ref(`order/order_list`).push();
         const mKey = mainRef.key;
@@ -234,7 +237,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
             const proRef = await fb.database().ref(`order/p_list`).push();
             const pKey = proRef.key;
             const optionList = list.option.split("/");
-
+            const mile = ((list.price * list.num) * 0.05);
             pKeyList.push(pKey);
             const proInfo = {
                 name: list.name,
@@ -243,7 +246,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
                 num: list.num,
                 option: list.option || null,
                 thumb_src: list.thumb_src,
-                mileage: 0,
+                mileage: mile,
                 coupon: 0,
             }
 
@@ -296,6 +299,42 @@ export default function OrderPage({ userKey, cartData }: Props) {
 
         }
 
+        const totalMile = totalPrice * 0.05;
+
+        let userMile = Number(userInfo.mileage);
+
+        //마일리지 데이터 작업
+        await fb.database().ref(`users/${userKey}`).once("value").then((data) => {
+            if (data.exists) {
+                let temp = Number(data.val().mileage);
+                temp = temp + totalMile - mileage;
+                data.ref.update({ mileage: temp });
+            }
+        })
+
+        await fb.database().ref(`mileage/history/${userKey}`).push({
+            order: orderNum,
+            order_key: mKey,
+            total_mileage: userMile + totalMile,
+            use_mileage: totalMile,
+            state: "increase",
+            type: "buy",
+            date,
+        })
+
+        if (mileage !== 0) {
+            await fb.database().ref(`mileage/history/${userKey}`).push({
+                order: orderNum,
+                order_key: mKey,
+                total_mileage: userMile + totalMile - mileage,
+                use_mileage: mileage,
+                state: "decrease",
+                type: "buy",
+                date,
+            })
+        }
+
+
         const shippingInfo = {
             name,
             adrs: [adrs1, adrs2, adrs3],
@@ -305,9 +344,12 @@ export default function OrderPage({ userKey, cartData }: Props) {
         }
         const payInfo = {
             type: "normal",
-            price: totalPrice,
-            sale: 0,
-            del_pay: 0,
+            total_price: totalPrice,
+            pay_price: totalPrice - mileage - productSale + delPrice,
+            get_mileage: totalMile,
+            use_mileage: mileage,
+            sale: mileage + productSale,
+            del_pay: delPrice,
             is_pay: true,
         }
         const mainInfo = {
@@ -318,6 +360,8 @@ export default function OrderPage({ userKey, cartData }: Props) {
             date,
         }
 
+
+        //메인 오더리스트 데이터 작업
         await mainRef.set(mainInfo).then(() => { console.log(`order/order_list 데이터 성공`) })
 
         await fb.database().ref(`order/user/${userKey}`).once("value").then((data) => {
@@ -342,7 +386,31 @@ export default function OrderPage({ userKey, cartData }: Props) {
         return;
     }
 
+    const onChangeMileage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = Number(e.target.value);
+        const maxMileage = Number(userInfo.mileage);
 
+        // [^0]\w[1-9]
+        // const regex = /(?<=^0)[1-9]+/g;
+        // if (regex.test(e.target.value)) {
+        //     value = Number(e.target.value.match(regex).join());
+        // }
+
+
+        if (value > totalPrice) {
+            alert("사용 가능 적립금을 초과하였습니다.");
+            setMileage(0);
+            return;
+        }
+
+        if (value > maxMileage) {
+            alert("보유하신 적립금을 초과하였습니다.");
+            setMileage(maxMileage);
+            return;
+        } else {
+            setMileage(value);
+        }
+    }
 
     const checkMobNumber = (value) => {
         const chkStyle = /^[0-9]+$/;
@@ -513,6 +581,33 @@ export default function OrderPage({ userKey, cartData }: Props) {
             </OrderArea>
             <OrderArea>
                 <div onClick={onClickArrow}>
+                    <h2>적립금 혜택</h2>
+                    <a ><img src="/img/bg_fold.png" alt="fold" /></a>
+                </div>
+                <ContentArea>
+                    <PaymentArea>
+                        <ul>
+                            <li>
+                                <p>보유 적립금</p>
+                                <p>{userInfo.mileage}원</p>
+                            </li>
+                            <li>
+                                <p>적립 예정금액</p>
+                                <p>{totalPrice * 0.05}원</p>
+                            </li>
+                            <li>
+                                <strong>사용 적립금</strong>
+                                <div>
+                                    <input type="number" value={mileage === 0 ? "" : mileage} placeholder={"0"} onChange={onChangeMileage} />
+                                    <span>원</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </PaymentArea>
+                </ContentArea>
+            </OrderArea>
+            <OrderArea>
+                <div onClick={onClickArrow}>
                     <h2>결제 정보</h2>
                     <a ><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
@@ -524,44 +619,20 @@ export default function OrderPage({ userKey, cartData }: Props) {
                                 <p>{totalPrice.toLocaleString()}원</p>
                             </li>
                             <li>
-                                <p>할인/부가결제</p>
-                                <p>-0원</p>
+                                <p>할인</p>
+                                <p>- {productSale}원</p>
+                            </li>
+                            <li>
+                                <p>적립금 사용</p>
+                                <p>- {mileage}원</p>
                             </li>
                             <li>
                                 <p>배송비</p>
-                                <p>+0원</p>
+                                <p>+ {delPrice}원</p>
                             </li>
                             <li>
                                 <strong>결제금액</strong>
-                                <strong>{totalPrice.toLocaleString()}원</strong>
-                            </li>
-                        </ul>
-                    </PaymentArea>
-                </ContentArea>
-            </OrderArea>
-            <OrderArea>
-                <div onClick={onClickArrow}>
-                    <h2>적립금 혜택</h2>
-                    <a ><img src="/img/bg_fold.png" alt="fold" /></a>
-                </div>
-                <ContentArea>
-                    <PaymentArea>
-                        <ul>
-                            <li>
-                                <p>상품 적립금</p>
-                                <p>{totalPrice * 0.05}원</p>
-                            </li>
-                            <li>
-                                <p>회원 적립금</p>
-                                <p>0원</p>
-                            </li>
-                            <li>
-                                <p>쿠폰 적립금</p>
-                                <p>0원</p>
-                            </li>
-                            <li>
-                                <strong>적립 예정금액</strong>
-                                <strong>{totalPrice * 0.05}원</strong>
+                                <strong>{(totalPrice - mileage - productSale + delPrice).toLocaleString()}원</strong>
                             </li>
                         </ul>
                     </PaymentArea>
@@ -575,7 +646,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
                 <div></div>
             </OrderArea>
             <OrderEnd>
-                <button onClick={onClickPayment}>{totalPrice.toLocaleString()}원 결제</button>
+                <button onClick={onClickPayment}>{(totalPrice - mileage - productSale + delPrice).toLocaleString()}원 결제</button>
                 <p>무이자할부가 적용되지 않은 상품과 무이자할부가 가능한 상품을 동시에 구매할 경우 전체 주문 상품 금액에 대해 무이자할부가 적용되지 않습니다. 무이자할부를 원하시는 경우 장바구니에서 무이자할부 상품만 선택하여 주문하여 주시기 바랍니다.</p>
                 <p>최소 결제 가능 금액은 결제금액에서 배송비를 제외한 금액입니다.</p>
             </OrderEnd>

@@ -4,9 +4,8 @@ import crypto from 'crypto';
 import { SHA256 } from 'crypto-js';
 
 import { fetcherData } from '../../../src/util/fetcher'
-import { Button, Form, Wrap } from './styles'
+import { Button, Form, Wrap } from '../../../page_style/member/find/styles'
 
-import dynamic from 'next/dynamic';
 import * as emailjs from 'emailjs-com'
 import fb from '../../../src/firebase';
 import router from 'next/router';

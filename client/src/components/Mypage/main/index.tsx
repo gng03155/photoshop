@@ -1,12 +1,46 @@
 import { useRouter } from 'next/router';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import useSWR from 'swr';
+import { fetcherData } from '../../../util/fetcher';
 import { Wrap, Maileage, Delivery, Menu } from "./styles"
 
+interface Props {
+    userKey: string,
+}
+export default function Main({ userKey }: Props) {
 
-export default function Main() {
+    const { data: userInfo } = useSWR(`/users/${userKey}`, fetcherData, { revalidateOnMount: true });
+    const { data: userOrderList } = useSWR(`/order/user/${userKey}`, fetcherData, { revalidateOnMount: true });
+    const { data: allOrderList } = useSWR(`/order/p_list`, fetcherData, { revalidateOnMount: true });
 
+    const [isInit, setIsInit] = useState(false);
+    const [allOrderPrice, setAllOrderPrice] = useState(0);
 
     const router = useRouter();
+
+
+    useEffect(() => {
+
+        if (allOrderList !== undefined && userOrderList !== undefined) {
+            const userOrLi = [];
+            for (let list in allOrderList) {
+                if (userOrderList.includes(list)) {
+                    userOrLi.push(allOrderList[list]);
+                }
+            }
+
+
+            let allOrPr = userOrLi.reduce((prev, cur) => {
+                let temp = Number(cur["product_info"]["price"]) * Number(cur["product_info"]["num"]);
+                prev = prev + temp;
+                return prev;
+            }, 0)
+
+            setAllOrderPrice(allOrPr);
+            setIsInit(true);
+        }
+
+    }, [userOrderList, allOrderList])
 
     const onClickCategory = (e: React.MouseEvent<HTMLLIElement>) => {
         e.preventDefault();
@@ -18,35 +52,26 @@ export default function Main() {
 
     }
 
+    if (!isInit) {
+        return <div></div>
+    }
+
     return (
         <Wrap>
             <h2>마이페이지</h2>
-            {/* <Maileage>
-                <ul>
-                    <li>
-                        <span>가용적립금</span>
-                        <span>원</span>
-                    </li>
-                    <li>
-                        <span>사용적립금</span>
-                        <span>원</span>
-                    </li>
-                    <li>
-                        <span>쿠폰</span>
-                        <span>개</span>
-                    </li>
-                </ul>
+            <Maileage>
                 <ul>
                     <li>
                         <span>총 적립금</span>
-                        <span>원</span>
+                        <span>{userInfo.mileage}원</span>
                     </li>
                     <li>
                         <span>총 주문</span>
-                        <span>원(회)</span>
+                        <span>{allOrderPrice}원({userOrderList !== undefined ? userOrderList.length : 0}회)</span>
                     </li>
+                    <li><a>적립금 상세내역</a></li>
                 </ul>
-            </Maileage> */}
+            </Maileage>
             <h2>나의 주문처리 현황</h2>
             <Delivery>
                 <ul>

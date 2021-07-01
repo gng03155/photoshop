@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { fetcherData } from '../../../src/util/fetcher';
 import BoardList from '../../../src/components/BoardList';
-import { Title } from './styles';
+import { Title } from '../../../page_style/board/styles';
 export default function Index() {
 
     const [userKey, setUserKey] = useState("");

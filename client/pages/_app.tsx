@@ -24,9 +24,8 @@ function App({ Component, pageProps }: AppProps) {
 
     useEffect(() => {
         router.beforePopState(({ url, as }) => {
-            console.log(router);
             router.reload();
-            return false
+            return false;
         })
     }, [])
 
@@ -37,14 +36,12 @@ function App({ Component, pageProps }: AppProps) {
             </Head>
             <GlobalStyle></GlobalStyle>
             <SWRConfig value={{ revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false }}>
-                {/* <div style={{ width: "1260px", minHeight: "100vh", margin: "0 auto", display: "flex", flexDirection: "column", justifyContent: "space-between" }}> */}
                 <Wrap>
                     {localLoad && <Loading />}
                     <Header></Header>
                     <Component {...pageProps} />
                     <Footer></Footer>
                 </Wrap>
-                {/* </div> */}
             </SWRConfig>
         </ThemeProvider>
     )

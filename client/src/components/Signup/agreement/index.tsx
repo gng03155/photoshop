@@ -22,7 +22,7 @@ export default function Agreement() {
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (inputRefs[3].current.checked || (inputRefs[0].current.checked && inputRefs[1].current.checked)) {
-            Router.push("/signup/?name=join", "/signup");
+            Router.push("/member/signup/?name=join", "/member/signup");
         } else {
             alert("필수 동의 항목을 체크해주세요!");
         }

@@ -10,11 +10,15 @@ export default function Cart() {
 
     useEffect(() => {
         if (window.sessionStorage.getItem("uid") === null) {
-            router.push("/login");
+            router.push("/member/login");
             return;
         }
         setUserKey(window.sessionStorage.getItem("uid"));
     }, []);
+
+    if (userKey === "") {
+        return <div></div>
+    }
 
     return (
         <div>

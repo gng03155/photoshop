@@ -1,5 +1,14 @@
 import styled from 'styled-components';
 
+
+export const Wrap = styled.div`
+    width : 100%;
+    height : 100px;
+    h3{
+        
+    }
+`
+
 export const Content = styled.div`
     position: relative;
     z-index: 1000;
@@ -26,17 +35,13 @@ export const Content = styled.div`
     }
 
 `;
-
-export const WideMenu = styled.div`
-`
-
 export const MainMenu = styled.div`
     display: flex;
     align-items: center;
-    & > ul {        
+    ul {        
         display: flex;
         flex-wrap: wrap;
-        & > li{
+        li{
             padding : 10px 0;
             a {
                 display: block;
@@ -162,10 +167,10 @@ export const BoardCategory = styled.nav`
     box-shadow : 0px 0px 15px 0px rgb(4 0 0 / 7%);
     text-transform: uppercase;
     ul{
-        
+        width : 100%;
     }
     li{
-    
+        width : 100%;
     }
     li:hover {
         background-color : #ccc;
@@ -174,7 +179,7 @@ export const BoardCategory = styled.nav`
         color : #fff;
     }
     && a{
-        font-size: 16px;
+        font-size: 14px;
         padding: 0px 10px;
         color : #555;
     }   

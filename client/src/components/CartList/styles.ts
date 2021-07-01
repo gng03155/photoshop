@@ -305,6 +305,7 @@ export const Modal = styled.div<{ x, y }>`
         width : 80%;
         height : 100%;
         border : 1px solid #ececec;
+        font-size: 12;
     }
     div{
         display: flex;
@@ -322,6 +323,32 @@ export const Modal = styled.div<{ x, y }>`
         width : 100%;
         height: 1px;
         background-color: #ccc;
+    }
+
+    ${props => props.theme.media.tablet}{
+        width : 70%;
+        select{
+
+        }
+    }
+
+    ${props => props.theme.media.mobile}{
+        left : ${props => props.x - 50}px;
+        h3{
+            margin-bottom: 10px;
+        }
+        p{
+            margin-bottom: 5px;
+        }
+        ul{
+            margin-bottom: 10px;
+        }
+        li{
+            margin-bottom: 5px;
+        }
+        select{
+            font-size: 10px;
+        }
     }
 `
 
