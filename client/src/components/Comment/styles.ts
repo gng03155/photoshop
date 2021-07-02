@@ -5,7 +5,6 @@ export const CommentWrap = styled.div`
     h3{
         padding: 20px 0 20px 20px ;
         background-color: #f1f1f1;
-        border : 1px solid #ccc;
         border-bottom : 0;
     }
     margin : 0px 0 100px 0;
@@ -106,5 +105,11 @@ export const IsLogin = styled.div`
     border-bottom : 1px solid #3b4890;
     h3{
         background-color: #dfdfdf;
+    }
+
+    ${props => props.theme.media.mobile}{
+        h3{
+            font-size: 12px;
+        }
     }
 `

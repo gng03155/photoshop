@@ -52,7 +52,7 @@ export const Like = styled.div`
         height: 12px;
         background : url("/img/icon.png") no-repeat;
         background-position: -329px -205px;
-        margin-right: 4px;
+        margin-right: 2px;
     }
     span{
         color : red;
@@ -67,15 +67,16 @@ export const ColorWrap = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin : 10px 0;
+    padding: 2px 0;
 `
 
 export const Color = styled.div<{ color: string }>`
     display: inline-block;
-    width: 13px;
-    height:13px;
+    width: 10px;
+    height:10px;
     border-radius: 100%;
     background-color: ${(props) => props.color};
+    border : 1px solid #eee;
     margin: 0 2px;
 `
 

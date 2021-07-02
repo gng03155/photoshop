@@ -22,13 +22,12 @@ interface Props {
     userKey: string,
 }
 export default function Board({ boardKey, category, productId, userKey }: Props) {
-
     const router = useRouter();
 
 
     const { data: userInfo, error } = useSWR(`${userKey ? `/users/${userKey}` : 'null'}`, fetcherData, { revalidateOnMount: true });
 
-    const { data: productList } = useSWR(category === ("review" || "qna") ? `/products/product` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: productList } = useSWR((category === "review" || category === "qna") ? `/products/product` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
     const { data: boardInfo } = useSWR(boardKey ? `board/board_list/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
     const { data: fileInfo } = useSWR(boardKey ? `board/file/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
 
@@ -377,21 +376,21 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
                                     <input type="text" value={fileName[2]} disabled />
                                 </File>
                             </li>
-                            <li>
+                            {category === "qna" && <><li>
                                 <PassWord>
                                     <label>비밀번호</label>
                                     <input name="pswd" type="password" ref={passRef} maxLength={6} pattern="[0-9]+" title="비밀번호는 숫자로만 입력해주세요! (최대 6글자)" required disabled />
                                 </PassWord>
                             </li>
-                            <li>
-                                <PassWord>
-                                    <label>비밀글설정</label>
-                                    <input id="public" name="radio" type="radio" onChange={onChangePswd} defaultChecked />
-                                    <label className="set">공개글</label>
-                                    <input id="private" name="radio" type="radio" onChange={onChangePswd} />
-                                    <label className="set">비밀글</label>
-                                </PassWord>
-                            </li>
+                                <li>
+                                    <PassWord>
+                                        <label>비밀글설정</label>
+                                        <input id="public" name="radio" type="radio" onChange={onChangePswd} defaultChecked />
+                                        <label className="set">공개글</label>
+                                        <input id="private" name="radio" type="radio" onChange={onChangePswd} />
+                                        <label className="set">비밀글</label>
+                                    </PassWord>
+                                </li></>}
                         </ul>
                     </SubContent>
                     <Button>

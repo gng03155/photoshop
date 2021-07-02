@@ -1,8 +1,9 @@
 import React from 'react'
-import { Wrap, FooterWrap, FooterMenu, Content, CompanyInfo, CScontent, BANKcontent, Gap, CsBankInfo } from "./styles"
+import { Wrap, FooterWrap, FooterMenu, Content, CompanyInfo, CScontent, BANKcontent, Gap, CsBankInfo, FooterBg } from "./styles"
 export default function Footer() {
     return (
         <Wrap>
+            <FooterBg />
             <FooterWrap>
                 <FooterMenu>
                     <ul>

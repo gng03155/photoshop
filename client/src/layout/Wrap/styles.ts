@@ -5,9 +5,9 @@ export const MainWrap = styled.div`
     padding: 0 20px 0 20px;
     min-height: 100vh;
     margin: 0 auto;
-    /* display: flex;
+    display: flex;
     flex-direction: column;
-    justify-content: space-between; */
+    justify-content: space-between;
     @media (max-width : 1259px){
         width  : 100%;
     }

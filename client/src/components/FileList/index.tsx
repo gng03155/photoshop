@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import fb from '../../firebase';
 import { fetcherData } from '../../util/fetcher';
 
-import { FileWrap, List } from "./styles"
+import { FileWrap, List, Wrap } from "./styles"
 
 //lightGallery
 // import styles
@@ -42,20 +42,22 @@ export default function FileList({ boardKey }: Props) {
     }
 
     return (
-        <FileWrap>
+        <Wrap>
             {(fileInfo !== undefined && fileInfo !== null) ? <h3>첨부파일</h3> :
                 <h3>첨부파일 없음</h3>
             }
             {(fileInfo !== undefined && fileInfo !== null) &&
-                <LightGallery plugins={[lgZoom, lgThumbnail]}>
-                    {fileInfo.map((value, idx) => {
-                        return (
-                            <a key={idx} data-src={value.url}>
-                                <img src={value.url} />
-                            </a>
-                        )
-                    })}
-                </LightGallery>}
-        </FileWrap>
+                <FileWrap>
+                    <LightGallery plugins={[lgZoom, lgThumbnail]}>
+                        {fileInfo.map((value, idx) => {
+                            return (
+                                <a key={idx} data-src={value.url}>
+                                    <img src={value.url} />
+                                </a>
+                            )
+                        })}
+                    </LightGallery>
+                </FileWrap>}
+        </Wrap>
     )
 }

@@ -41,6 +41,7 @@ export default function Wishlist({ userKey }: Props) {
                 node.classList.remove("sel");
             }
         })
+        setSelList([]);
         setIsEdit(false);
     }
 

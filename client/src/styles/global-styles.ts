@@ -2,6 +2,13 @@ import { createGlobalStyle } from 'styled-components';
 
 
 export const GlobalStyle = createGlobalStyle`
+  /* @font-face {
+    font-family: "Noto Serif";
+    font-style: normal;
+    src : url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+    unicode-range:U+0041-005A, U+0061-007A, U+0030-0039;
+  } */
+
   html {
     
   }
@@ -10,7 +17,8 @@ export const GlobalStyle = createGlobalStyle`
     max-width : 100%;
     min-height: 100vh;
     overflow-x: hidden ;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: "Noto Serif",'Noto Sans KR', sans-serif;
+    background-color: #fff;
   }
   * { margin : 0 ; padding : 0; -webkit-box-sizing: border-box;
 -moz-box-sizing: border-box;
@@ -35,8 +43,9 @@ box-sizing: border-box;}
   }
 
   h2{
-    height : 42px;
-    margin-bottom: 40px;
+    padding : 20px 0 40px;
+    text-align: center;
+    color : #D1B6E1;
   }
 
 `;

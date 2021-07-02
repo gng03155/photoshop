@@ -17,11 +17,17 @@ export default function Index() {
 
 
     useEffect(() => {
-        router.beforePopState(() => {
-            router.reload();
-            return false;
-        });
-        setUserKey(window.sessionStorage.getItem("uid"));
+        // router.beforePopState(() => {
+        //     router.reload();
+        //     return false;
+        // });
+        const isUser = window.sessionStorage.getItem("uid");
+        if (isUser) {
+            console.log(isUser);
+            setUserKey(window.sessionStorage.getItem("uid"));
+        }
+
+
     }, [])
 
     useEffect(() => {

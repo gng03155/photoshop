@@ -4,6 +4,7 @@ import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation';
 import { useMediaQuery } from 'react-responsive'
 import { MiniMileage, Table, Wrap } from './styles';
+import { useRouter } from 'next/router';
 
 export default function MileageHistory({ userKey }) {
 
@@ -11,6 +12,8 @@ export default function MileageHistory({ userKey }) {
     const { data: mileageList } = useSWR(`/mileage/history/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
     const isTablet = useMediaQuery({ minWidth: 480 });
+
+    const router = useRouter();
 
     const [data, setData] = useState([[]]);
     const [pageNumber, setPageNumber] = useState(0);
@@ -60,7 +63,17 @@ export default function MileageHistory({ userKey }) {
         setData(copy);
     }
 
-
+    const onClickOrderNum = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        const tg = e.target as HTMLAnchorElement;
+        const orderKey = tg.dataset.key;
+        router.push({
+            pathname: "/mypage/[id]",
+            query: {
+                orderKey,
+            }
+        }, "/mypage/order_detail")
+    }
     const onSetPage = (num) => {
         setCurPage(num);
     }
@@ -95,7 +108,7 @@ export default function MileageHistory({ userKey }) {
                     {pageNumber !== 0 ? data[curPage].map((value, idx) => {
                         return (
                             <tr key={idx}>
-                                <td>{value["order"]}</td>
+                                <td><a data-key={value["order_key"]} onClick={onClickOrderNum}>{value["order"]}</a></td>
                                 <td>{value["type"] == "buy" ? "상품구매" : "몰라"}</td>
                                 <td>{value["state"] == "increase" ? "증가" : "감소"}</td>
                                 <td>{value["use_mileage"]}</td>

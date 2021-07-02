@@ -72,15 +72,18 @@ export const BG = styled.div`
 `
 
 export const SearchWrap = styled.div`
-    display: none;
+    /* display: none; */
     position: absolute;
     top: 100%;
     left: 0;
     width : 100vw;
-    height : 200px;
+    height : 0px;
     margin-left: calc(-50vw + 50%);
     background-color : rgba(255,255,255,0.4);
     flex: none;
+    overflow-y: hidden;
+    transition: all linear 0.3s;
+
     & > div{
         display: flex;
         flex-direction: column;

@@ -6,13 +6,14 @@ import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation'
 import ReviewItem from '../ReviewItem';
 
-import { NoBoard, Table, WriteButton, ReviewBoard, Lock } from "./styles"
+import { NoBoard, Table, WriteButton, ReviewBoard, Lock, Wrap } from "./styles"
 
 interface Props {
     boardKeyList: string[] | undefined,
     userKey: string,
     category: string,
 }
+
 export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
     const router = useRouter();
@@ -25,6 +26,18 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
     const [isRoute, setIsRoute] = useState(false);
 
     const { data: allList, revalidate, mutate } = useSWR(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
+
+    //board 타입 정의
+    const boardType = {
+        free: "자유",
+        review: "리뷰",
+        qna: "Q&A",
+        notice: "공지사항",
+    }
+
+
+
+
 
     useEffect(() => {
         router.events.on('routeChangeComplete', init);
@@ -106,7 +119,6 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
         if (type === "private") {
             if (userKey === user) {
                 if (category === ("review" || "qna")) {
-
                     router.push({
                         pathname: `/article/${category}/${key}`,
                         query: { product: productId },
@@ -118,6 +130,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                 }
             } else {
                 alert("비밀글로 작성자만 볼 수 있습니다.");
+                return;
             }
         } else if (type === "public") {
             if (category === ("review" || "qna")) {
@@ -159,7 +172,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
 
     return (
-        <div>
+        <Wrap>
             {category === "review" &&
                 <ReviewBoard>
                     <ul>
@@ -200,7 +213,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                             return (
                                 <tr key={idx}>
                                     <td>{(8 * curPage) + idx + 1}</td>
-                                    <td>{value.category}</td>
+                                    <td>{boardType[value.category]}</td>
                                     <td><a data-product={value.product_info ? `${value.product_info.id}` : ""} data-category={value.category} data-key={value.id} data-type={value.type} data-user={value.user_info.key} onClick={onClickBoard}>{value.title}</a></td>
                                     <td>{value.user_info.name}</td>
                                     <td>{value.date}</td>
@@ -216,10 +229,10 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                 </Table>}
             {(category !== "review" && category !== "user") && <Table>
                 <colgroup>
+                    <col style={{ width: "7%" }} />
+                    <col style={{ width: "40%" }} />
                     <col style={{ width: "10%" }} />
-                    <col style={{ width: "50%" }} />
-                    <col style={{ width: "10%" }} />
-                    <col style={{ width: "20%" }} />
+                    <col style={{ width: "25%" }} />
                     <col style={{ width: "10%" }} />
                 </colgroup>
                 <thead>
@@ -227,13 +240,12 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                         <th>번호</th>
                         <th>제목</th>
                         <th>작성자</th>
-                        <th>시간</th>
+                        <th>작성일</th>
                         <th>조회수</th>
                     </tr>
                 </thead>
                 <tbody>
                     {pageNumber !== 0 ? data[curPage].map((value, idx) => {
-                        console.log(value.type);
                         return (
                             <tr key={idx}>
                                 <td>{(8 * curPage) + idx + 1}</td>
@@ -251,11 +263,10 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
                 </tbody>
             </Table>}
-
-            <WriteButton>
+            {(userKey !== "" && category !== "notice") && <WriteButton>
                 <button onClick={onClickWrite}>글쓰기</button>
-            </WriteButton>
+            </WriteButton>}
             <PageNation onSetPage={onSetPage} pageNumber={pageNumber} curNumber={0}></PageNation>
-        </div>
+        </Wrap>
     )
 }

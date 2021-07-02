@@ -2,13 +2,11 @@ import styled from "styled-components"
 
 
 export const Wrap = styled.div`
-    position: absolute;
+    position: relative;
     width: 100%;
     max-width: 100%;
-    left: 0;
-    /* bottom: 0; */
-    /* height : auto; */
-    background-color: #444;
+    height : auto;
+    overflow-y: hiddne;
 `
 
 export const FooterWrap = styled.footer`
@@ -16,7 +14,6 @@ export const FooterWrap = styled.footer`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #444;
     width : 1260px;
     height: auto;
     margin : 0 auto;
@@ -29,15 +26,16 @@ export const FooterWrap = styled.footer`
 
 `
 
-// export const FooterBg = styled.div`
-//     position: absolute;
-//     width: 100vw;
-//     height : 300px;
-//     left: 0;
-//     top: 0;
-//     background: #333;
-//     z-index: -1;
-// `
+export const FooterBg = styled.div`
+    display: inline-block;
+    position: absolute;
+    width: 10000px;
+    height : 100%;
+    left: -1000px;
+    bottom: 0;
+    background: #999;
+    z-index: -1;
+`
 
 export const FooterMenu = styled.div`
     width: 100%;

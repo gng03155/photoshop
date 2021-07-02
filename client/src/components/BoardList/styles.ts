@@ -1,5 +1,9 @@
 import styled from "styled-components"
 
+export const Wrap = styled.div`
+    margin-bottom: 100px;
+`
+
 export const ReviewBoard = styled.div`
     width : 100%;
     ul{
@@ -47,7 +51,14 @@ export const Lock = styled.span`
     margin-left: 10px;
     width : 16px;
     height : 16px;
-    background: url("/img/icon_lock.gif");
+    background: url("/img/icon_lock.gif") no-repeat;
+    background-size : cover;
+
+    ${props => props.theme.media.mobile}{
+        width : 8px;
+        height : 8px;
+        margin-left: 5px;
+    }
 `
 
 export const PageNation = styled.div`

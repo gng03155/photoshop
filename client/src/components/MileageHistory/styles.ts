@@ -2,16 +2,13 @@ import styled from 'styled-components';
 
 export const Wrap = styled.div`
     width : 100%;
-    h2{
-        text-align: center;
-        margin-bottom: 50px;
-    }
 `
 
 export const Table = styled.table`
     width : 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    border-bottom: 1px solid #ececec;
 
     tr{
         text-align: center;
@@ -25,6 +22,10 @@ export const Table = styled.table`
     td{
         height : 30px;
         font-size: 12px;
+
+        a{
+            color : lightcoral;
+        }
     }
 
     ${props => props.theme.media.tablet}{

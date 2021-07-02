@@ -1,11 +1,7 @@
 import styled from 'styled-components';
 
 export const Wrap = styled.div`
-    margin : 100px 0;
-    h2{
-        margin-bottom : 50px;
-        text-align: center;
-    }
+
 `;
 
 export const WishWrap = styled.div`

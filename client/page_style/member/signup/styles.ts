@@ -1,12 +1,7 @@
 import styled from "styled-components"
 
 export const Title = styled.div`
-    h2{
-        text-align: center;
-        font-size: 30px;
-        margin: 40px 0;
-        font-weight: 500;
-    }
+
 `
 
 export const Progress = styled.div<{ state: string }>`

@@ -6,16 +6,12 @@ export const Wrap = styled.div`
     flex-direction: column;
     align-items: center;
     width : 100%;
-    margin: 150px 0 200px;
     text-align: center;
+    margin-bottom: 100px;
 `;
 
 export const Titlearea = styled.div`
-    h2{
-        font-size : 25px;
-        font-weight: 400;
-        margin-bottom: 50px;
-    }
+
 `;
 
 export const Form = styled.form`

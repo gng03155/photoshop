@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr';
@@ -69,7 +70,7 @@ export default function Main({ userKey }: Props) {
                         <span>총 주문</span>
                         <span>{allOrderPrice}원({userOrderList !== undefined ? userOrderList.length : 0}회)</span>
                     </li>
-                    <li><a>적립금 상세내역</a></li>
+                    <li><Link href="/mypage/mileage"><a>적립금 상세내역</a></Link></li>
                 </ul>
             </Maileage>
             <h2>나의 주문처리 현황</h2>

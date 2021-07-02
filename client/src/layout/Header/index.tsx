@@ -74,6 +74,7 @@ export default function Header() {
     const onLogout = (e: any) => {
         window.sessionStorage.removeItem("uid");
         setUserKey(null);
+        router.reload();
     }
 
     const onClickBoard = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -89,10 +90,10 @@ export default function Header() {
         console.log(isActive);
         if (!isActive) {
             searchRef.current.classList.add("active");
-            searchRef.current.style.display = "block";
+            searchRef.current.style.height = "200px";
         } else {
             searchRef.current.classList.remove("active");
-            searchRef.current.style.display = "none";
+            searchRef.current.style.height = "0px";
             setKeyword("");
         }
     }
@@ -104,7 +105,8 @@ export default function Header() {
             return;
         }
         searchRef.current.classList.remove("active");
-        searchRef.current.style.display = "none";
+        searchRef.current.style.height = "0px";
+
         const pathName = router.pathname;
         setKeyword("");
         if (pathName !== "/category/search") {
@@ -128,7 +130,7 @@ export default function Header() {
     const onClickCancelSearch = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         e.preventDefault();
         searchRef.current.classList.remove("active");
-        searchRef.current.style.display = "none";
+        searchRef.current.style.height = "0px";
         setKeyword("");
     }
 
@@ -194,7 +196,7 @@ export default function Header() {
                 <MainMenu>
                     {isTablet ?
                         <ul className="left">
-                            <li><Link href="/">test</Link></li>
+                            <li><Link href="/">BRAND</Link></li>
                             <li><Link href="/category"><a>PRODUCT</a></Link></li>
                             <li className="board">
                                 <a>BOARD</a>
@@ -252,8 +254,8 @@ export default function Header() {
                     </SideClose>
                     <Inner>
                         <li onClick={onClickToggleClose}>
-                            {userKey === null ? <Link href="/member/login"><a>login</a></Link> : <Link href="/member/login"><a>logout</a></Link>}
-                            <span>/</span>
+                            {userKey === null ? <Link href="/member/login"><a>login&nbsp;/&nbsp;</a></Link> : <a onClick={onLogout}>logout</a>}
+                            {/* <span>/</span> */}
                             {userKey === null && <Link href="/member/signup?name=agree" as="signup"><a>joinus</a></Link>}
                         </li>
                         <li className="page" onClick={onClickToggleClose}>

@@ -53,7 +53,7 @@ export const OrderArea = styled.div`
         border-top: 1px solid #ececec ;
         border-bottom: 1px solid #ececec ;
         cursor: pointer;
-        h2{
+        h3{
 
         }
         a{

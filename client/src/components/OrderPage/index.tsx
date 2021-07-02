@@ -440,7 +440,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
         <Wrap>
             <OrderArea>
                 <div onClick={onClickArrow}>
-                    <h2>배송지</h2>
+                    <h3>배송지</h3>
                     <a><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
                 <ContentArea>
@@ -552,7 +552,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
             </OrderArea>
             <OrderArea>
                 <div onClick={onClickArrow}>
-                    <h2>주문상품</h2>
+                    <h3>주문상품</h3>
                     <a ><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
                 <ContentArea>
@@ -581,7 +581,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
             </OrderArea>
             <OrderArea>
                 <div onClick={onClickArrow}>
-                    <h2>적립금 혜택</h2>
+                    <h3>적립금 혜택</h3>
                     <a ><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
                 <ContentArea>
@@ -608,7 +608,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
             </OrderArea>
             <OrderArea>
                 <div onClick={onClickArrow}>
-                    <h2>결제 정보</h2>
+                    <h3>결제 정보</h3>
                     <a ><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
                 <ContentArea>
@@ -640,7 +640,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
             </OrderArea>
             <OrderArea>
                 <div onClick={() => { alert("준비중입니다.") }}>
-                    <h2>결제수단</h2>
+                    <h3>결제수단</h3>
                     <a><img src="/img/bg_fold.png" alt="fold" /></a>
                 </div>
                 <div></div>

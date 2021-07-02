@@ -1,12 +1,15 @@
 import styled from "styled-components"
 
-export const FileWrap = styled.div`
+export const Wrap = styled.div`
     width : 100%;
-    margin-top : 10px;
-    padding-bottom: 10px;
     border-bottom:1px solid #dfdfdf;
     h3{
+        padding :  10px 0;
     }
+`
+
+export const FileWrap = styled.div`
+    padding-bottom: 10px;
     a{
         display: inline-block;
         width : 120px;
@@ -16,6 +19,13 @@ export const FileWrap = styled.div`
     img{
         width : 100%;
         height : 100%;
+    }
+
+    ${props => props.theme.media.mobile}{
+        a{
+            width : 75px;
+            height : 75px;
+        }
     }
 `
 
@@ -31,5 +41,4 @@ export const List = styled.div`
         width : 100%;
         height : 100%;
     }
-
 `
