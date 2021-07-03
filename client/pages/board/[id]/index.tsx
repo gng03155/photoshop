@@ -4,6 +4,7 @@ import useSWR from 'swr'
 import { fetcherData } from '../../../src/util/fetcher';
 import BoardList from '../../../src/components/BoardList';
 import { Title } from '../../../page_style/board/styles';
+import { localFetcher } from '../../../src/util/localFetcher';
 export default function Index() {
 
     const [userKey, setUserKey] = useState("");
@@ -12,15 +13,14 @@ export default function Index() {
 
     const router = useRouter();
 
+    const { data: user } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 0 });
+
     const { data: boardList } = useSWR(query ? `board/category/${query}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
 
 
 
     useEffect(() => {
-        // router.beforePopState(() => {
-        //     router.reload();
-        //     return false;
-        // });
+        console.log(`userKey : ${user}`);
         const isUser = window.sessionStorage.getItem("uid");
         if (isUser) {
             console.log(isUser);

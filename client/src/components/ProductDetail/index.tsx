@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useCallback, useState } from 'react'
 import useSWR from 'swr';
 import fb from '../../firebase';
+import { IProduct, IStock } from '../../types';
 
 import { fetcherData, fetcherStorage } from '../../util/fetcher';
 import Board from '../BoardList'
@@ -17,13 +18,13 @@ interface Props {
 
 export default function ProductDetail({ id, userKey }: Props) {
 
-    const { data: detailImgs } = useSWR(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
-    const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
-    const { data: productInfo, revalidate: proUpdate } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
-    const { data: reviewList } = useSWR(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
-    const { data: qnaList } = useSWR(`products/qna/${id}`, fetcherData, { revalidateOnMount: true });
-    const { data: stock } = useSWR(`products/stock/${id}`, fetcherData, { revalidateOnMount: true });
-    const { data: likeList } = useSWR(`like/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: detailImgs } = useSWR<string[] | undefined>(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
+    const { data: thumbImg } = useSWR<string[] | undefined>(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
+    const { data: productInfo, revalidate: proUpdate } = useSWR<IProduct | undefined>(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: reviewList } = useSWR<string[] | undefined>(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: qnaList } = useSWR<string[] | undefined>(`products/qna/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: stock } = useSWR<IStock | undefined>(`products/stock/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: likeList } = useSWR<string[]>(`like/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
 
     const ref = new Array(4).fill(0).map((i) => { return useRef<HTMLDivElement>(null) });
@@ -419,7 +420,7 @@ export default function ProductDetail({ id, userKey }: Props) {
                             </tr>
                             <tr>
                                 <th>국내·해외 배송</th>
-                                <td><span><span>{productInfo?.derivery === 0 ? "국내배송" : "해외배송"}</span></span></td>
+                                <td><span><span>{productInfo?.delivery === "0" ? "국내배송" : "해외배송"}</span></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -429,7 +430,7 @@ export default function ProductDetail({ id, userKey }: Props) {
                             <div ref={colorRef}>
                                 <ul>
                                     {productInfo.color.map((value, idx) => {
-                                        return <li key={idx}><Color color={value} id={value} onClick={onClickColor}></Color></li>
+                                        return <li key={idx}><Color color={value.code} id={value.name} onClick={onClickColor}></Color></li>
                                     })}
                                 </ul>
                                 <p>(필수선택)</p>

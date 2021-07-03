@@ -7,10 +7,18 @@ import { BasketWrap, Wrap, ProductInfo, Quantity, OrderPrice, OrderButton, Modal
 
 import fb from '../../../src/firebase';
 import { fetcherData } from '../../../src/util/fetcher'
+import { ICart, IStock } from '../../types';
 
 
 interface Props {
     userKey: string,
+}
+
+interface ModalProps {
+    x: number,
+    y: number,
+    productId: string,
+    cartKey: string
 }
 
 export default function CartList({ userKey }: Props) {
@@ -19,21 +27,18 @@ export default function CartList({ userKey }: Props) {
     const router = useRouter();
 
 
-    const { data: cartList, revalidate: cartUpdate } = useSWR(`cart/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => { return false } });
+    const { data: cartList, revalidate: cartUpdate } = useSWR<{ [key: string]: ICart } | undefined | null>(`cart/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => { return false } });
 
-    const [optionList, setOptionList] = useState({});
     const [isModal, setIsModal] = useState(false);
     const [isOption, setIsOption] = useState(false);
     const [isInit, setIsInit] = useState(false);
-    const [modalProps, setModalProps] = useState({ x: 0, y: 0, productId: "", cartKey: "" });
+
+    const [modalProps, setModalProps] = useState<ModalProps>({ x: 0, y: 0, productId: "", cartKey: "" });
+    const [optionList, setOptionList] = useState({});
 
     const [selColor, setSelColor] = useState("");
 
     const [ref, setRef] = useState<MutableRefObject<HTMLInputElement>[]>([null]);
-
-    // const [ref, setRef] = useState<MutableRefObject<HTMLInputElement>[] | null>(null);
-    // /[useRef<HTMLInputElement>(null)]
-    // const temp = new Array(50).fill(0).map(() => { return useRef<HTMLInputElement>(null) })
 
     const initRef = { ref: useRef<HTMLInputElement>(null) };
 
@@ -65,7 +70,7 @@ export default function CartList({ userKey }: Props) {
     }, [cartList])
 
     const setStock = async (ids) => {
-        const temp = {};
+        const temp: { [key: string]: IStock } = {};
 
         for (let id of ids) {
             const option = await fb.database().ref(`products/stock/${id}`).get().then((data) => { return data.val(); });
@@ -86,7 +91,8 @@ export default function CartList({ userKey }: Props) {
         if (num === 1) {
             return;
         }
-        copy[key].num = Number(copy[key].num) - 1;
+
+        copy[key].num = String(num - 1);
         fb.database().ref(`cart/${userKey}/${key}`).update(copy[key]);
         alert("수량이 변경되었습니다.")
         cartUpdate();
@@ -102,7 +108,7 @@ export default function CartList({ userKey }: Props) {
         if (num >= 5) {
             return;
         }
-        copy[key].num = Number(copy[key].num) + 1;
+        copy[key].num = String(num + 1);
         fb.database().ref(`cart/${userKey}/${key}`).update(copy[key]);
         alert("수량이 변경되었습니다.")
         cartUpdate();
@@ -339,7 +345,7 @@ export default function CartList({ userKey }: Props) {
                                         </Quantity></td>
                                     <td><p>100원</p></td>
                                     <td><p>무료배송</p></td>
-                                    <td><p>{cartList[id].price * cartList[id].num}원</p></td>
+                                    <td><p>{Number(cartList[id].price) * Number(cartList[id].num)}원</p></td>
                                     <td className="state"><a id={cartList[id].key} onClick={onClickDelete}>삭제하기</a></td>
                                 </tr>
                             )
@@ -402,7 +408,7 @@ export default function CartList({ userKey }: Props) {
                                         </ProductInfo>
                                         <SideContent>
                                             <p>재고 5개 이상</p>
-                                            <p>{cartList[id].price * cartList[id].num}원</p>
+                                            <p>{Number(cartList[id].price) * Number(cartList[id].num)}원</p>
                                         </SideContent>
                                     </MiniContent>
                                     <MiniSide>

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react'
 import useSWR from 'swr'
+import { IProduct } from '../../types';
 import { fetcherData, fetcherStorage } from '../../util/fetcher'
 import { Wrap } from './styles'
 
@@ -9,8 +10,8 @@ interface Props {
 }
 export default function ProductItem2({ productId }: Props) {
 
-    const { data: productInfo } = useSWR(productId ? `products/product/${productId}` : "null", fetcherData, { revalidateOnMount: true });
-    const { data: thumbImg } = useSWR(`products/${productId}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true });
+    const { data: productInfo } = useSWR<IProduct | undefined>(productId ? `products/product/${productId}` : "null", fetcherData, { revalidateOnMount: true });
+    const { data: thumbImg } = useSWR<string[] | undefined>(`products/${productId}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true });
 
     const router = useRouter();
 

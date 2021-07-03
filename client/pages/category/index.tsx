@@ -4,12 +4,13 @@ import useSWR from 'swr';
 
 import ProductList from '../../src/components/ProductList'
 import { fetcherData } from '../../src/util/fetcher';
+import { IProduct } from '../../src/types';
 
 export default function Category() {
 
-    const { data: productList } = useSWR(`/products/product`, fetcherData, { revalidateOnMount: true });
+    const { data: productList } = useSWR<{ [key: string]: IProduct } | undefined>(`/products/product`, fetcherData, { revalidateOnMount: true });
 
-    const { data: categoryList } = useSWR(`/products/category`, fetcherData, { revalidateOnMount: true });
+    const { data: categoryList } = useSWR<{ [key: string]: string[] | undefined }>(`/products/category`, fetcherData, { revalidateOnMount: true });
 
     const [proIdList, setProIdList] = useState<string[]>([]);
 

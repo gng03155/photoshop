@@ -2,6 +2,7 @@ import moment from 'moment';
 import React, { useState, useEffect, useCallback } from 'react'
 import useSWR from 'swr';
 import fb from '../../firebase';
+import { IComment, IUser } from '../../types';
 import { fetcherData } from '../../util/fetcher';
 import { CommentWrap, CommentWrite, CommentList, CommentInfo, CommentTop, CommentForm, IsLogin } from './styles'
 
@@ -12,9 +13,9 @@ interface Props {
 export default function Comment({ boardKey }: Props) {
 
     const [userKey, setUserKey] = useState("");
-    const { data: userInfo } = useSWR(`${userKey ? `/users/${userKey}` : ''}`, fetcherData, { revalidateOnMount: true });
+    const { data: userInfo } = useSWR<IUser | undefined>(`${userKey ? `/users/${userKey}` : ''}`, fetcherData, { revalidateOnMount: true });
 
-    const { data: commentInfo, revalidate: commentUpdate } = useSWR(boardKey ? `board/comment/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: commentInfo, revalidate: commentUpdate } = useSWR<{ [key: string]: IComment }>(boardKey ? `board/comment/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));

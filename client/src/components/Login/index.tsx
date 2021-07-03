@@ -8,14 +8,16 @@ import { SHA256 } from 'crypto-js';
 import { Wrap, Titlearea, Form, Label, Input, Find, Button } from "./styles"
 
 import { fetcherData } from '../../util/fetcher';
-import localFetcher from '../../util/localFetcher';
+import { localFetcher, setInit } from '../../util/localFetcher';
 import Link from 'next/link';
+import { IUser } from '../../types';
 
 
 export default function Login() {
 
-    const { data, error } = useSWR("users", fetcherData, { revalidateOnMount: true });
+    const { data: user, mutate } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 0 });
 
+    const { data, error } = useSWR<{ [key: string]: IUser } | undefined>("users", fetcherData, { revalidateOnMount: true });
     const router = useRouter();
 
     const onSubmitLogin = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,12 +44,15 @@ export default function Login() {
             if (pwHash === userInfo.pswd) {
                 console.log("비밀번호가 일치합니다!");
                 sessionStorage.setItem("uid", key);
-                console.log(window.location);
-                router.back();
-
-
+                mutate((value) => {
+                    setInit("userKey", key);
+                    return value;
+                }, false);
+                // router.back();
+                return;
             } else {
                 alert("비밀번호가 일치하지 않습니다!");
+                return;
             }
         }
     }, [data])

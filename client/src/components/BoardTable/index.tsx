@@ -5,6 +5,7 @@ import fb from '../../firebase';
 import { fetcherData } from '../../util/fetcher';
 import FileList from '../FileList';
 import { Button, Table } from './styles'
+import { IBoard } from '../../types';
 
 interface Props {
     boardKey: string,
@@ -17,7 +18,7 @@ export default function BoardTable({ boardKey, userKey }: Props) {
 
     const [isUser, setIsUser] = useState(false);
 
-    const { data: boardInfo } = useSWR(boardKey ? `board/board_list/${boardKey}` : "null", fetcherData, { revalidateOnMount: true });
+    const { data: boardInfo } = useSWR<IBoard | undefined>(boardKey ? `board/board_list/${boardKey}` : "null", fetcherData, { revalidateOnMount: true });
 
     useEffect(() => {
         if (boardInfo !== undefined) {

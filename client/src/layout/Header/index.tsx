@@ -6,13 +6,14 @@ import { useMediaQuery } from 'react-responsive'
 import { Content, Logo, BoardCategory, MainMenu, SearchWrap, SearchInput, SideMenu, Inner, SubMenuWrap, MenuIcon, BG, SideClose, Wrap } from "./styles"
 import fb from '../../firebase'
 import useSWR from 'swr'
-import localFetcher from '../../util/localFetcher'
+import { localFetcher } from '../../util/localFetcher'
 import dynamic from 'next/dynamic'
 
 // const test = dynamic(() => import('react-responsive'), { ssr: false });
 export default function Header() {
 
     const { data: load, mutate } = useSWR("load", localFetcher);
+    const { data: user, mutate: userMutate } = useSWR("userKey", localFetcher);
 
     const router = useRouter();
 
@@ -73,6 +74,7 @@ export default function Header() {
 
     const onLogout = (e: any) => {
         window.sessionStorage.removeItem("uid");
+        mutate("", false);
         setUserKey(null);
         router.reload();
     }
@@ -155,11 +157,7 @@ export default function Header() {
     }
 
     const test = async () => {
-
-        router.push("/signup?name=agree", "/signup");
-        return;
-
-        // mutate(!load, false);
+        mutate(!load, false);
         // for (let i = 1; i <= 8; i++) {
         //     let storage1 = fb.storage().ref(`products/A00${i}/imgs/detail/test`);
         //     let storage2 = fb.storage().ref(`products/A00${i}/imgs/thumb/test`);
@@ -191,7 +189,7 @@ export default function Header() {
     }
     return (
         <Wrap ref={divRef} style={{ width: "100%", height: "100px" }}>
-            {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
+            <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button>
             <Content ref={ref}>
                 <MainMenu>
                     {isTablet ?

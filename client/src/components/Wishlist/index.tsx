@@ -12,7 +12,7 @@ interface Props {
 }
 export default function Wishlist({ userKey }: Props) {
 
-    const { data: wishList, revalidate: wishUpdate } = useSWR(userKey ? `like/${userKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => { return false } });
+    const { data: wishList, revalidate: wishUpdate } = useSWR<string[] | undefined | null>(userKey ? `like/${userKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => { return false } });
 
     const [isEdit, setIsEdit] = useState(false);
     const [selList, setSelList] = useState([]);
@@ -74,8 +74,6 @@ export default function Wishlist({ userKey }: Props) {
         const tg = e.currentTarget as HTMLLIElement;
         const id = tg.dataset.id;
         const copy = [...selList];
-        console.dir(e);
-
         if (copy.includes(id)) {
             const i = copy.indexOf(id);
             copy.splice(i, 1);

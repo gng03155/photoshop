@@ -5,11 +5,12 @@ import PageNation from '../PageNation';
 import { useMediaQuery } from 'react-responsive'
 import { MiniMileage, Table, Wrap } from './styles';
 import { useRouter } from 'next/router';
+import { IMileage } from '../../types';
 
 export default function MileageHistory({ userKey }) {
 
 
-    const { data: mileageList } = useSWR(`/mileage/history/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: mileageList } = useSWR<{ [key: string]: IMileage } | undefined>(`/mileage/history/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
     const isTablet = useMediaQuery({ minWidth: 480 });
 
@@ -32,7 +33,7 @@ export default function MileageHistory({ userKey }) {
 
     }, [mileageList])
 
-    const setPage = (idList) => {
+    const setPage = (idList: string[]) => {
         const num = idList.length;
         if (num === 0) {
             setCurPage(0)
@@ -44,7 +45,7 @@ export default function MileageHistory({ userKey }) {
         let totalIdx = Math.floor(num / 8);
         const copy = [[]];
         for (let i = 0; i <= totalIdx; i++) {
-            let list: string[] = [];
+            let list: IMileage[] = [];
             for (let j = i * 8; j < (i * 8) + 8; j++) {
                 if (j >= idList.length) {
                     break;

@@ -15,7 +15,7 @@ export default function UserBoardManager({ userKey }: Props) {
 
     const router = useRouter();
 
-    const { data: userBoardList } = useSWR(`board/user/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: userBoardList } = useSWR<string[] | undefined>(`board/user/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
 
     if (userBoardList === null) {

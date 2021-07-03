@@ -9,7 +9,8 @@ import { Wrap, BoardWrap, Title, SubContent, File, PassWord, Button, ItemWrap } 
 import fb from '../../firebase';
 import { fetcherData } from '../../util/fetcher';
 import ProductItem2 from '../ProductItem2';
-import localFetcher from '../../util/localFetcher';
+import { localFetcher } from '../../util/localFetcher';
+import { IBoard, IFile, IProduct, IUser } from '../../types';
 // import dynamic from 'next/dynamic'
 // const Editor = dynamic(() => import('../../src/components/test'), {
 //   ssr: false
@@ -25,11 +26,11 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
     const router = useRouter();
 
 
-    const { data: userInfo, error } = useSWR(`${userKey ? `/users/${userKey}` : 'null'}`, fetcherData, { revalidateOnMount: true });
+    const { data: userInfo, error } = useSWR<IUser | undefined>(`${userKey ? `/users/${userKey}` : 'null'}`, fetcherData, { revalidateOnMount: true });
 
-    const { data: productList } = useSWR((category === "review" || category === "qna") ? `/products/product` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
-    const { data: boardInfo } = useSWR(boardKey ? `board/board_list/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
-    const { data: fileInfo } = useSWR(boardKey ? `board/file/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: productList } = useSWR<{ [key: string]: IProduct } | undefined>((category === "review" || category === "qna") ? `/products/product` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: boardInfo } = useSWR<IBoard | undefined>(boardKey ? `board/board_list/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: fileInfo } = useSWR<IFile[] | undefined>(boardKey ? `board/file/${boardKey}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
 
     const { data: load, mutate } = useSWR("load", localFetcher);
 

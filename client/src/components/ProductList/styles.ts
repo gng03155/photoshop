@@ -195,7 +195,7 @@ export const List = styled.div`
     li{
         width: 22%;
         margin: 10px 0;
-        margin-right: 3%;
+        margin-right: 3.99999%;
     }
     li:nth-child(4n){
         margin-right: 0;

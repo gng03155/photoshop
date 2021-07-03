@@ -7,7 +7,8 @@ import SHA256 from 'crypto-js/sha256';
 import useSWR from 'swr';
 import { fetcherData } from '../../util/fetcher';
 import { Button } from './styles';
-import localFetcher from '../../util/localFetcher';
+import { localFetcher } from '../../util/localFetcher';
+import { IUser } from '../../types';
 interface Props {
     userKey: string,
 }
@@ -15,7 +16,7 @@ export default function Member({ userKey }: Props) {
 
     const router = useRouter();
 
-    const { data: userInfo } = useSWR(`users/${userKey}`, fetcherData, { revalidateOnMount: true })
+    const { data: userInfo } = useSWR<IUser | undefined>(`users/${userKey}`, fetcherData, { revalidateOnMount: true })
 
     const { data: load, mutate } = useSWR("load", localFetcher);
 

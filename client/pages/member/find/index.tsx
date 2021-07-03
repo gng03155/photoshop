@@ -9,10 +9,11 @@ import { Button, Form, Wrap } from '../../../page_style/member/find/styles'
 import * as emailjs from 'emailjs-com'
 import fb from '../../../src/firebase';
 import router from 'next/router';
+import { IUser } from '../../../src/types';
 
 export default function MemberFind() {
 
-    const { data: userList } = useSWR("users", fetcherData, { revalidateOnMount: true });
+    const { data: userList } = useSWR<{ [key: string]: IUser } | undefined>("users", fetcherData, { revalidateOnMount: true });
 
     const [email, setEamil] = useState("");
 

@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useCallback } from 'react'
 import useSWR from 'swr';
+import { IBoard } from '../../types';
 
 import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation'
@@ -18,14 +19,14 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
     const router = useRouter();
 
-    const [data, setData] = useState([[]]);
+    const [data, setData] = useState<[IBoard[] | undefined]>([[]]);
     const [pageNumber, setPageNumber] = useState(0);
     const [curPage, setCurPage] = useState(0);
 
 
     const [isRoute, setIsRoute] = useState(false);
 
-    const { data: allList, revalidate, mutate } = useSWR(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
+    const { data: allList, revalidate, mutate } = useSWR<{ [key: string]: IBoard }>(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
 
     //board 타입 정의
     const boardType = {
@@ -86,7 +87,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
             totalIdx = 1;
         }
 
-        const copy = [[]];
+        const copy: [IBoard[] | undefined] = [[]];
         for (let i = 0; i < totalIdx; i++) {
             let list = [];
             for (let j = i * 8; j < (i * 8) + 8; j++) {

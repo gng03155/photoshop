@@ -10,21 +10,22 @@ import fb from '../../../src/firebase';
 import moment from 'moment';
 import localFetcher from '../../util/localFetcher';
 import { NewItem } from '../Home/Section/styles';
+import { ICart, IUser } from '../../types';
 
 
 interface Props {
     userKey: string,
-    cartData: any,
+    cartData: ICart[],
 }
 export default function OrderPage({ userKey, cartData }: Props) {
 
 
     const { data: load, mutate } = useSWR("load", localFetcher);
-    const { data: userInfo, error } = useSWR(`${userKey ? `/users/${userKey}` : ''}`, fetcherData, { revalidateOnMount: true });
+    const { data: userInfo, error } = useSWR<IUser | undefined>(`${userKey ? `/users/${userKey}` : ''}`, fetcherData, { revalidateOnMount: true });
 
     const router = useRouter();
 
-    const [cartList, setCartList] = useState<any>(cartData);
+    const [cartList, setCartList] = useState<ICart[]>(cartData);
 
     const [isStandard, setIsStandard] = useState(true);
 
@@ -51,6 +52,9 @@ export default function OrderPage({ userKey, cartData }: Props) {
 
     const [isAdress, setIsAdress] = useState(false);
 
+    useEffect(() => {
+        // console.log(cartData);
+    }, [])
 
     useEffect(() => {
         if (userInfo !== undefined) {
@@ -237,8 +241,9 @@ export default function OrderPage({ userKey, cartData }: Props) {
             const proRef = await fb.database().ref(`order/p_list`).push();
             const pKey = proRef.key;
             const optionList = list.option.split("/");
-            const mile = ((list.price * list.num) * 0.05);
+            const mile = ((Number(list.price) * Number(list.num)) * 0.05);
             pKeyList.push(pKey);
+
             const proInfo = {
                 name: list.name,
                 id: list.id,
@@ -568,7 +573,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
                                             <h3>{info.name}</h3>
                                             <strong>옵션 : {info.option}</strong>
                                             <p>수량 : {info.num}</p>
-                                            <p>상품 구매 금액 : {info.price * info.num}</p>
+                                            <p>상품 구매 금액 : {Number(info.price) * Number(info.num)}</p>
                                             <p>배송 : 무료배송</p>
                                         </Description>
                                         <a id={`${idx}`} onClick={onClickDeleteList}>X</a>

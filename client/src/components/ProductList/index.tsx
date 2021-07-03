@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr';
+import { IProduct } from '../../types';
 import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation';
 import ProductItem from '../ProductItem';
@@ -15,11 +16,11 @@ interface Props {
 
 export default function ProductList({ proIdList, isSearch }: Props) {
 
-    const { data: productList } = useSWR(`/products/product`, fetcherData, { revalidateOnMount: true });
+    const { data: productList } = useSWR<{ [key: string]: IProduct } | undefined>(`/products/product`, fetcherData, { revalidateOnMount: true });
 
-    const { data: categoryList } = useSWR(`/products/category`, fetcherData, { revalidateOnMount: true });
+    const { data: categoryList } = useSWR<{ [key: string]: string[] | undefined }>(`/products/category`, fetcherData, { revalidateOnMount: true });
 
-    const { data: reviewList } = useSWR(`/products/review`, fetcherData, { revalidateOnMount: true });
+    const { data: reviewList } = useSWR<{ [key: string]: string[] } | undefined>(`/products/review`, fetcherData, { revalidateOnMount: true });
 
     const [data, setData] = useState<string[][]>([[null]]);
 
@@ -158,7 +159,8 @@ export default function ProductList({ proIdList, isSearch }: Props) {
                 if (cateList.includes(name)) {
                     //컬러체크
                     for (let color of selectColor) {
-                        if (productList[name]["color"].includes(color)) {
+                        const isColor = productList[name]["color"].some((value) => value.name === color);
+                        if (isColor) {
                             idList.push(name);
                             break;
                         }
@@ -287,7 +289,7 @@ export default function ProductList({ proIdList, isSearch }: Props) {
                 <Option>
                     <p>카테고리</p>
                     <CategoryWrap>
-                        <a className="all" onClick={onClickAllCategory}>전체</a>
+                        <a className="all" onClick={onClickAllCategory}>ALL</a>
                         <label htmlFor="wall">wall</label>
                         <input id="wall" type="checkbox" onChange={onChangeCategory} />
                         <label htmlFor="pixel">pixel</label>
@@ -301,7 +303,7 @@ export default function ProductList({ proIdList, isSearch }: Props) {
                 <Option>
                     <p>컬러</p>
                     <ColorWrap>
-                        <Color className="all" onClick={onClickAllColor}>전체</Color>
+                        <Color className="all" onClick={onClickAllColor}>ALL</Color>
                         <Color data-color="red" color="red" onClick={onClickColor}></Color>
                         <Color data-color="orange" color="orange" onClick={onClickColor}></Color>
                         <Color data-color="yellow" color="yellow" onClick={onClickColor}></Color>

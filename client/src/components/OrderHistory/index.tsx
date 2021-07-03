@@ -7,21 +7,22 @@ import { MiniContent, MiniOrderWrap, MiniThumb, MiniTitle, ProductInfo, Table, W
 
 import { fetcherData } from '../../util/fetcher'
 import PageNation from '../PageNation';
+import { IOrder } from '../../types';
 
 interface Props {
     userKey: string,
 }
 export default function OrderHistory({ userKey }: Props) {
 
-    const { data: orderKey } = useSWR(`order/user/${userKey}`, fetcherData, { revalidateOnMount: true });
+    const { data: orderKey } = useSWR<string[] | undefined>(`order/user/${userKey}`, fetcherData, { revalidateOnMount: true });
 
-    const { data: allList } = useSWR(`order/p_list`, fetcherData, { revalidateOnMount: true });
+    const { data: allList } = useSWR<{ [key: string]: IOrder } | undefined>(`order/p_list`, fetcherData, { revalidateOnMount: true });
 
     const router = useRouter();
 
     const [orderList, setOrderList] = useState([]);
 
-    const [data, setData] = useState<string[][]>([[null]]);
+    const [data, setData] = useState<[IOrder[]]>([[null]]);
     const [pageNumber, setPageNumber] = useState(0);
     const [curPage, setCurPage] = useState(0);
 
@@ -42,12 +43,12 @@ export default function OrderHistory({ userKey }: Props) {
         }
     }, [orderKey, allList])
 
-    const setPage = (idList) => {
+    const setPage = (idList: IOrder[]) => {
         let totalIdx = parseInt(`${idList.length / 8}`);
         // totalIdx = totalIdx !== 0 ? totalIdx : 1;
-        const copy = [[]];
+        const copy: [IOrder[]] = [[]];
         for (let i = 0; i <= totalIdx; i++) {
-            let list: string[] = [];
+            let list: IOrder[] | [undefined] = [];
             for (let j = i * 8; j < (i * 8) + 8; j++) {
                 if (j >= idList.length) {
                     break;

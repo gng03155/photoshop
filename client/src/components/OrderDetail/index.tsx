@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import { Info, InfoTable, InfoWrap, MiniContent, MiniOrderWrap, MiniPrice, MiniThumb, MiniTitle, OrderTitle, OrderWrap, ProductInfo, Table, Wrap } from './styles';
 
 import { fetcherData } from '../../util/fetcher'
+import { IDetailOrder, IOrder } from '../../types';
 
 interface Props {
     userKey: string,
@@ -14,9 +15,9 @@ interface Props {
 }
 export default function OrderDetail({ userKey, orderKey }: Props) {
 
-    const { data: orderInfo } = useSWR(`order/order_list/${orderKey}`, fetcherData, { revalidateOnMount: true })
-    const { data: allList } = useSWR(`order/p_list`, fetcherData, { revalidateOnMount: true });
-    const [orderList, setOrderList] = useState(null);
+    const { data: orderInfo } = useSWR<IDetailOrder | undefined>(`order/order_list/${orderKey}`, fetcherData, { revalidateOnMount: true })
+    const { data: allList } = useSWR<{ [key: string]: IOrder } | undefined>(`order/p_list`, fetcherData, { revalidateOnMount: true });
+    const [orderList, setOrderList] = useState<IOrder[] | null>(null);
 
     const router = useRouter();
 
@@ -24,9 +25,9 @@ export default function OrderDetail({ userKey, orderKey }: Props) {
 
     useEffect(() => {
         if (orderInfo !== undefined) {
-            if (orderInfo.user_key !== userKey) {
-                // router.back();
-            }
+            // if (orderInfo.user_key !== userKey) {
+            //     // router.back();
+            // }
             if (orderInfo !== undefined && allList !== undefined) {
                 const temp = Object.keys(allList).reduce((prev, cur) => {
                     if (orderInfo.product_list.includes(cur)) {

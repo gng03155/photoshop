@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr';
+import { IOrder, IUser } from '../../../types';
 import { fetcherData } from '../../../util/fetcher';
 import { Wrap, Maileage, Delivery, Menu } from "./styles"
 
@@ -10,9 +11,9 @@ interface Props {
 }
 export default function Main({ userKey }: Props) {
 
-    const { data: userInfo } = useSWR(`/users/${userKey}`, fetcherData, { revalidateOnMount: true });
-    const { data: userOrderList } = useSWR(`/order/user/${userKey}`, fetcherData, { revalidateOnMount: true });
-    const { data: allOrderList } = useSWR(`/order/p_list`, fetcherData, { revalidateOnMount: true });
+    const { data: userInfo } = useSWR<IUser | undefined>(`/users/${userKey}`, fetcherData, { revalidateOnMount: true });
+    const { data: userOrderList } = useSWR<string[] | undefined>(`/order/user/${userKey}`, fetcherData, { revalidateOnMount: true });
+    const { data: allOrderList } = useSWR<{ [key: string]: IOrder } | undefined>(`/order/p_list`, fetcherData, { revalidateOnMount: true });
 
     const [isInit, setIsInit] = useState(false);
     const [allOrderPrice, setAllOrderPrice] = useState(0);

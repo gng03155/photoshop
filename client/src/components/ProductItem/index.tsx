@@ -42,7 +42,7 @@ export default function ProductItem({ id }: Props) {
                 <ColorWrap>
                     {productInfo.color !== undefined &&
                         productInfo.color.map((color, idx) => {
-                            return <Color key={idx} color={color}></Color>
+                            return <Color key={idx} color={color.code}></Color>
                         })}
                 </ColorWrap>
                 <Desc>
@@ -51,10 +51,10 @@ export default function ProductItem({ id }: Props) {
                     <p>리뷰수 : {reviewNum}</p>
                 </Desc>
                 {/* <IconWrap> */}
-                <Like>
+                {/* <Like>
                     <a></a>
                     <span>{productInfo.like}</span>
-                </Like>
+                </Like> */}
                 <Promotion>
                     {productInfo.category.includes("new") && <img src="/img/new_icon.png" alt="new" />}
                     {productInfo.category.includes("best") && <img src="/img/best_icon.png" alt="best" />}
