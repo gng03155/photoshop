@@ -12,11 +12,10 @@ export const InfoWrap = styled.div`
 
 export const Img = styled.div`
     width : 50%;
-    /* height : 550px; */
     margin-right: 50px;
     img{
         width: 100%;
-        height: 100%;
+        max-height: 600px;
     }
 
     ${props => props.theme.media.tablet}{
@@ -205,6 +204,7 @@ export const ProductButton = styled.div`
             width: 100%;
             height: 100%;
             text-align: center;
+            border : 0;
         }
     }
 

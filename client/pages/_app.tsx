@@ -3,12 +3,11 @@ import { GlobalStyle } from "../src/styles/global-styles"
 import { ThemeProvider } from 'styled-components';
 import { theme } from '../src/styles/theme';
 
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import useSWR, { SWRConfig } from "swr";
 import { useRouter } from 'next/router';
 
 import Head from 'next/head'
-
 import Header from "../src/layout/Header"
 import Footer from '../src/layout/Footer';
 import { localFetcher, init, setInit } from '../src/util/localFetcher';
@@ -25,14 +24,11 @@ function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
 
     useEffect(() => {
-        console.log(init);
-        setInit("userKey", "변경");
-        router.beforePopState(({ url, as }) => {
-            // revalidate()
-            router.reload();
-
-            return true;
-        })
+        // setInit("userKey", "변경");
+        // router.beforePopState(({ url, as }) => {
+        //     router.reload();
+        //     return true;
+        // })
     }, [])
 
     // useEffect(() => {

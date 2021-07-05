@@ -7,7 +7,7 @@ import SHA256 from 'crypto-js/sha256';
 import { Button } from './styles';
 import moment from 'moment';
 import useSWR from 'swr';
-import localFetcher from '../../../util/localFetcher';
+import { localFetcher } from '../../../util/localFetcher';
 
 export default function Join() {
 

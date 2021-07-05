@@ -1,0 +1,40 @@
+diff a/client/pages/_app.tsx b/client/pages/_app.tsx	(rejected hunks)
+@@ -11,24 +11,35 @@
+ 
+ import Header from "../src/layout/Header"
+ import Footer from '../src/layout/Footer';
+-import localFetcher from '../src/util/localFetcher';
++import { localFetcher, init, setInit } from '../src/util/localFetcher';
+ import Loading from '../src/components/Loading';
+ 
+ import Wrap from "../src/layout/Wrap"
+ 
+ function App({ Component, pageProps }: AppProps) {
+ 
+-    const { data: localLoad } = useSWR("load", localFetcher);
++    const { data: localLoad } = useSWR("load", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 1000 });
++    const { data: user, revalidate } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 1000 });
++
+ 
+     const router = useRouter();
+ 
+     useEffect(() => {
++        console.log(init);
++        setInit("userKey", "변경");
+         router.beforePopState(({ url, as }) => {
++            // revalidate()
+             router.reload();
+-            return false;
++
++            return true;
+         })
+     }, [])
+ 
++    // useEffect(() => {
++    //     console.log(`user : ${user}`);
++    //     console.log(`load : ${localLoad}`);
++    // }, [user, localLoad])
++
+     return (
+         <ThemeProvider theme={theme}>
+             <Head>

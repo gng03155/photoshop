@@ -16,6 +16,21 @@ interface Props {
     userKey: string,
 }
 
+const COLOR_CODE = {
+    white: "#fafafa",
+    black: "#666666",
+    red: "#e06060",
+    blue: "#6FC2D9",
+    yellow: "#FFE678",
+    pink: "#ed83b2",
+    green: "#A0DEA1",
+    brown: "#edc183",
+    ivory: "#F7EDB7",
+    silver: "#DFE0ED",
+    gold: "#D4AF37",
+    gray: "#949494"
+}
+
 export default function ProductDetail({ id, userKey }: Props) {
 
     const { data: detailImgs } = useSWR<string[] | undefined>(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
@@ -314,7 +329,7 @@ export default function ProductDetail({ id, userKey }: Props) {
         }
         if (userKey === null) {
             alert("로그인창으로 이동합니다.")
-            router.push("/login");
+            router.push("/member/login");
             return;
         }
 
@@ -337,7 +352,7 @@ export default function ProductDetail({ id, userKey }: Props) {
         }
         if (userKey === null) {
             alert("로그인창으로 이동합니다.")
-            router.push("/login");
+            router.push("/member/login");
             return;
         }
 
@@ -412,11 +427,11 @@ export default function ProductDetail({ id, userKey }: Props) {
                             </tr>
                             <tr>
                                 <th>소비자가</th>
-                                <td><span>{productInfo?.price}원</span></td>
+                                <td><span>{productInfo?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span></td>
                             </tr>
                             <tr>
                                 <th>판매가</th>
-                                <td><span><span>{productInfo?.price}원</span></span></td>
+                                <td><span><span>{productInfo?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span></span></td>
                             </tr>
                             <tr>
                                 <th>국내·해외 배송</th>
@@ -430,7 +445,7 @@ export default function ProductDetail({ id, userKey }: Props) {
                             <div ref={colorRef}>
                                 <ul>
                                     {productInfo.color.map((value, idx) => {
-                                        return <li key={idx}><Color color={value.code} id={value.name} onClick={onClickColor}></Color></li>
+                                        return <li key={idx}><Color color={COLOR_CODE[value]} id={value} onClick={onClickColor}></Color></li>
                                     })}
                                 </ul>
                                 <p>(필수선택)</p>
@@ -460,11 +475,11 @@ export default function ProductDetail({ id, userKey }: Props) {
                                     <li><a id={`${idx}`} onClick={onClickPlus}></a></li>
                                     <li><a id={`${idx}`} onClick={onClickDelete}></a></li>
                                 </ul>
-                                <span>{item.buy_price}원</span>
+                                <span>{item.buy_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
                             </ProductAdd>
                         })}
                         <ProductButton>
-                            <nav><strong>{totalPrice}원</strong><span>({totalNum}개)</span></nav>
+                            <nav><strong>{totalPrice.toLocaleString()}원</strong><span>({totalNum}개)</span></nav>
                             <div>
                                 <ul>
                                     <li><button onClick={onClickBuy}>구매하기</button></li>

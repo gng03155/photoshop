@@ -2,8 +2,10 @@ import styled from 'styled-components';
 
 
 export const Wrap = styled.div`
+    position: relative;
     width : 100%;
     height : 100px;
+    margin: 0 auto;
     h3{
         
     }
@@ -11,14 +13,13 @@ export const Wrap = styled.div`
 
 export const Content = styled.div`
     position: relative;
-    z-index: 1000;
     display : flex;
     width: 100%;
     height: 100%;
-    margin: 0 auto;
     justify-content: center;
     align-items : center;
     text-align: center;
+    z-index: 1000;
 
     & > div:first-child {
         position: absolute;
@@ -62,22 +63,28 @@ export const MainMenu = styled.div`
 
 export const BG = styled.div`
     position: absolute;
-    top: 0;
-    left: 0;
+    /* top: 0;
+    left: 0; */
     width : 100vw;
     height : 100%;
     margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
     background-color : rgba(255,255,255,0.9);
     z-index: -1;
+
+    /* @media (max-width : 1259px){
+        left : -20px;
+        width  : calc(100% + 40px);
+        margin : 0;
+    } */
 `
 
 export const SearchWrap = styled.div`
-    /* display: none; */
     position: absolute;
     top: 100%;
-    left: 0;
     width : 100vw;
     height : 0px;
+    margin-right: calc(-50vw + 50%);
     margin-left: calc(-50vw + 50%);
     background-color : rgba(255,255,255,0.4);
     flex: none;

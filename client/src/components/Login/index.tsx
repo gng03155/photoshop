@@ -48,7 +48,7 @@ export default function Login() {
                     setInit("userKey", key);
                     return value;
                 }, false);
-                // router.back();
+                router.back();
                 return;
             } else {
                 alert("비밀번호가 일치하지 않습니다!");

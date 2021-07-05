@@ -25,7 +25,7 @@ export default function UserBoardManager({ userKey }: Props) {
     return (
         <Wrap>
             <h2>게시물관리</h2>
-            <BoardList userKey={userKey} boardKeyList={Object.keys(userBoardList)} category="user" />
+            <BoardList userKey={userKey} boardKeyList={userBoardList !== undefined ? Object.keys(userBoardList) : []} category="user" />
         </Wrap>
     )
 }

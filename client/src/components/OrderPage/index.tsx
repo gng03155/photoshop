@@ -8,7 +8,7 @@ import { fetcherData } from '../../../src/util/fetcher';
 import { OrderArea, ShippingInfo, AddressBox, PhoneBox, EmailBox, OrderInfo, ThumbNail, Description, PaymentArea, OrderEnd, Wrap, PostWrap, ContentArea } from './styles';
 import fb from '../../../src/firebase';
 import moment from 'moment';
-import localFetcher from '../../util/localFetcher';
+import { localFetcher } from '../../util/localFetcher';
 import { NewItem } from '../Home/Section/styles';
 import { ICart, IUser } from '../../types';
 

@@ -70,7 +70,8 @@ export default function Section() {
                 </NewItem>
                 <InteractiveWrap>
                     <InteraciveImg ref={divRef}>
-                        <img src="/img/ch2.jpg" alt="#" />
+                        <a></a>
+                        {/* <img src="/img/123.jpg" alt="#" /> */}
                     </InteraciveImg>
                 </InteractiveWrap>
                 <BestItem>

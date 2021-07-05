@@ -23,6 +23,7 @@ export default function index() {
             return;
         }
         setUserKey(window.sessionStorage.getItem("uid"));
+
     }, [])
 
     useEffect(() => {

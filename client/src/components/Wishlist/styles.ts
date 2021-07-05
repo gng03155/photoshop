@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
 export const Wrap = styled.div`
-
+    margin-bottom: 100px;
 `;
 
 export const WishWrap = styled.div`
     ul{
         display: flex;
+        justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         border : 2px solid #ececec;
@@ -16,7 +17,12 @@ export const WishWrap = styled.div`
         width : 23.333333%;
         margin-top : 5px;
         background-color: #fff;
-        flex-shrink: 0;
+        & > div{
+            align-items: flex-start;
+        }
+        nav{
+            width : calc(100% - 115px);
+        }
     }
     li.sel{
         background-color: rgba(0, 0, 0, 0.5);
@@ -40,7 +46,10 @@ export const WishWrap = styled.div`
                         margin : 0 auto;
                     }
                     nav{
+                        width : 100%;
+                        text-align: center;
                         display: flex;
+                        flex-wrap: wrap;
                         flex-direction: column;
                         align-items: center;
                         button{
@@ -52,6 +61,7 @@ export const WishWrap = styled.div`
             }
         }
     }
+    
     ${props => props.theme.media.mobile}{
         ul{
             padding-left: 0;

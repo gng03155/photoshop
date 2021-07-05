@@ -14,8 +14,10 @@ export const Wrap = styled.div`
         }
     }
     nav{
-        flex-shrink: 0;
+        /* flex-shrink: 0; */
+        /* width : calc(100% - 101px); */
         p{
+            width : 100%;
             font-size: 14px;
             font-weight: bold;
         }
@@ -49,13 +51,21 @@ export const Wrap = styled.div`
         }
     }
 
+    ${props => props.theme.media.tablet}{
+        nav {
+            /* width : 100%; */
+            /* text-align: center; */
+        }
+    }
+
     ${props => props.theme.media.mobile}{
-        & > div{
+        div{
             width : 80px;
             height : 80px;
         }
 
         nav {
+            /* width : 100%; */
             p{
                 font-size: 12px;
             }

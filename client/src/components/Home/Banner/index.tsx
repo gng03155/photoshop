@@ -45,9 +45,9 @@ export default function Banner() {
     return (
         <div>
             <ImgSlide>
-                <img className={"active"} src="img/ch1.jpg" alt="#" />
-                <img className={isActive[1] ? "active" : ""} src="img/ch2.jpg" alt="#" />
-                <img className={isActive[2] ? "active" : ""} src="img/ch3.jpg" alt="#" />
+                <img className={"active"} src="img/1.jpg" alt="#" />
+                <img className={isActive[1] ? "active" : ""} src="img/2.jpg" alt="#" />
+                <img className={isActive[2] ? "active" : ""} src="img/3.jpg" alt="#" />
             </ImgSlide>
             <div style={{ height: "calc(100vh - 100px)" }}></div>
         </div>

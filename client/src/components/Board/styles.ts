@@ -29,6 +29,9 @@ export const ItemWrap = styled.div`
     ${props => props.theme.media.mobile}{
         flex-direction: column;
         align-items: center;
+        select{
+            margin-top : 10px;
+        }
     }
 `
 

@@ -53,7 +53,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
     useEffect(() => {
         setIsRoute(true);
-        if (allList !== (undefined || null) && boardKeyList !== undefined) {
+        if (allList !== undefined && allList !== null && boardKeyList !== undefined) {
             setBoardList();
         }
     }, [allList])
@@ -223,7 +223,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                             )
                         }) :
                             <tr>
-                                <td colSpan={5}><NoBoard><h3>등록된 게시글이 없습니다.</h3></NoBoard></td>
+                                <td colSpan={6}><NoBoard><h3>등록된 게시글이 없습니다.</h3></NoBoard></td>
                             </tr>
                         }
                     </tbody>

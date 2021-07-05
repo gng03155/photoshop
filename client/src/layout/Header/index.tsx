@@ -38,30 +38,31 @@ export default function Header() {
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
         addEventListener("scroll", scrollHeader);
-        return () => { removeEventListener("scroll", scrollHeader) }
+        addEventListener("resize", onResize);
+        return () => {
+            removeEventListener("scroll", scrollHeader),
+                removeEventListener("resize", onResize)
+        }
+
+
     }, []);
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
     }, [router]);
 
+    const onResize = (e) => {
+        const tt = divRef.current.clientWidth;
+        ref.current.style.width = tt + "px";
+    }
+
     const scrollHeader = () => {
         const scrollTop = document.documentElement.scrollTop;
-        // if (scrollTop > 0) {
-        //     const tt = divRef.current.clientWidth;
-        //     divRef.current.style.position = "fixed";
-        //     divRef.current.style.width = tt + "px";
-        //     divRef.current.style.height = "80px";
-        // } else {
-        //     divRef.current.style.position = "static";
-        //     divRef.current.style.width = "100%";
-        //     divRef.current.style.height = "100px";
-
-        // }
 
         if (scrollTop > 0) {
             const tt = divRef.current.clientWidth;
             ref.current.style.position = "fixed";
+            ref.current.style.top = "0px";
             ref.current.style.width = tt + "px";
             ref.current.style.height = "80px";
         } else {
@@ -157,33 +158,49 @@ export default function Header() {
     }
 
     const test = async () => {
-        mutate(!load, false);
-        // for (let i = 1; i <= 8; i++) {
-        //     let storage1 = fb.storage().ref(`products/A00${i}/imgs/detail/test`);
-        //     let storage2 = fb.storage().ref(`products/A00${i}/imgs/thumb/test`);
+        // mutate(!load, false);
+
+        //폴더추가
+        // for (let i = 1; i <= 32; i++) {
+        //     let storage1 = fb.storage().ref(`products/A0${i}/imgs/detail/test`);
+        //     let storage2 = fb.storage().ref(`products/A0${i}/imgs/thumb/test`);
         //     await storage1.put(null);
         //     await storage2.put(null);
+        //     await fb.storage().ref(`products/A0${i}/imgs/detail/test`).delete().catch(() => { console.log("text파일 없음") });
+        //     await fb.storage().ref(`products/A0${i}/imgs/thumb/test`).delete().catch(() => { console.log("text파일 없음") });
         // }
         // console.log("폴더생성완료!")
 
-        // let stoRef = fb.database().ref(`cart/user_id3`);
-        // let val = await stoRef.get().then((value) => {
-        //     return value.val();
-        // })
-        // const aa = stoRef.push("test").toString();
-        // console.log(aa.split("user_id3/")[1]);
-        // .set({
-        //     name: "name",
-        //     test: "test",
-        //     hoho: "hoho",
-        // });
+        // 재고 추가
+        // await fb.database().ref("/products/product").once("value").then(async (data) => {
+        //     let temp = data.val();
+        //     for (let key in temp) {
+        //         let aa = {}
 
-        // console.log(Object.keys(val).length);
-        // let dataRef = fb.database().ref(`cart/user_id2/02`);
-        // dataRef.set({
-        //     name: "name",
-        //     test: "test",
-        //     num: "num",
+        //         //컬러 이름 생성
+        //         temp[key]["color"].forEach((item, idx) => {
+        //             aa[`option${idx + 1}`] = {
+        //                 name: item
+        //             }
+        //         })
+        //         let bb = {}
+        //         //컬러 사이즈 생성
+        //         temp[key]["size"].forEach((item, idx) => {
+        //             bb[`sub_option${idx + 1}`] = {
+        //                 name: item,
+        //                 num: "10",
+        //             }
+        //         })
+
+        //         for (let k in aa) {
+        //             aa[k] = Object.assign(aa[k], bb);
+        //         }
+
+        //         await data.ref.parent.child(`/stock/${key}`).set(aa).then(() => {
+        //             console.log(`/stock/${key} 데이터 생성 성공`)
+        //         });
+
+        //     }
         // })
 
     }
@@ -216,7 +233,7 @@ export default function Header() {
                 </MainMenu>
                 <Logo>
                     <Link href="/">
-                        <a><img src="/img/Logo.png" alt="logo" /></a>
+                        <a><img src="/img/Logo2.png" alt="logo" /></a>
                     </Link>
                 </Logo>
                 <MainMenu>

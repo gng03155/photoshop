@@ -5,7 +5,7 @@ import Banner from '../src/components/Home/Banner';
 import Section from '../src/components/Home/Section';
 
 import { fetcherData } from '../src/util/fetcher';
-import localFetcher from '../src/util/localFetcher';
+import { localFetcher } from '../src/util/localFetcher';
 
 export default function Home() {
 

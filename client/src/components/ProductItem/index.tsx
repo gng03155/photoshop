@@ -10,6 +10,21 @@ interface Props {
 }
 export default function ProductItem({ id }: Props) {
 
+    const COLOR_CODE = {
+        white: "#fafafa",
+        black: "#666666",
+        red: "#e06060",
+        blue: "#6FC2D9",
+        yellow: "#FFE678",
+        pink: "#ed83b2",
+        green: "#A0DEA1",
+        brown: "#edc183",
+        ivory: "#F7EDB7",
+        silver: "#DFE0ED",
+        gold: "#D4AF37",
+        gray: "#949494"
+    }
+
     const { data: productInfo } = useSWR(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: thumbImg } = useSWR(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true });
     const { data: reviewList } = useSWR(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
@@ -42,12 +57,12 @@ export default function ProductItem({ id }: Props) {
                 <ColorWrap>
                     {productInfo.color !== undefined &&
                         productInfo.color.map((color, idx) => {
-                            return <Color key={idx} color={color.code}></Color>
+                            return <Color key={idx} color={COLOR_CODE[color]}></Color>
                         })}
                 </ColorWrap>
                 <Desc>
                     <span>{productInfo.name}</span>
-                    <strong>{productInfo.price}원</strong>
+                    <strong>{productInfo.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</strong>
                     <p>리뷰수 : {reviewNum}</p>
                 </Desc>
                 {/* <IconWrap> */}

@@ -16,7 +16,7 @@ export const Filter = styled.div`
     border-bottom : 1px solid #ececec;
     padding: 10px 0;
     h3{
-       margin-bottom: 10px;
+        font-size: 16px;
     }
     
 `
@@ -24,20 +24,30 @@ export const Filter = styled.div`
 export const Option = styled.div`
     p{
         margin: 20px 0;
+        font-weight: 400;
+        font-size: 14px;
     }
     a.all{
         display: inline-block;
-        width: auto;
-        height: auto;
         padding: 5px 10px;
-        margin-right: 20px;
-        border : 1px solid #999;
+        font-weight: bold;
+    }
+    ul{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }   
+    li{
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        margin-bottom: 10px;
     }
 
     ${props => props.theme.media.mobile}{
         a.all{
             padding: 2px 0;
-            margin-right: 10px;
             font-size: 10px;
         }
     }
@@ -45,20 +55,16 @@ export const Option = styled.div`
 
 export const CategoryWrap = styled.div`
     display: flex;
-    height : 60px;
     justify-content: center;
     align-items: center;
     label{
-        margin-right: 5px;
+        margin-right: 3px;
     }
     input{
-        margin-right: 20px;
     }
     input:last-child{
-        margin-right: 0;
     }
     a{
-        margin-right: 20px;
     }
     ${props => props.theme.media.mobile}{
         input{
@@ -70,17 +76,19 @@ export const CategoryWrap = styled.div`
         label{
             font-size: 10px;
         }
-        a{
-            margin-right: 10px;
-        }
     }
 `
 
 export const ColorWrap = styled.div`
-    display: flex;
+    ul{
+
+    }
+    li{
+        display: flex;
     justify-content: center;
     align-items: center;
-    height : 60px;
+    flex-wrap: wrap;
+    }
 `
 
 export const Color = styled.a<{ color?}>`

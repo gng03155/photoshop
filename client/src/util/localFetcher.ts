@@ -22,8 +22,6 @@ export const localFetcher = (key: string) => {
 
     init[key] = state[key];
 
-    console.log(init);
-
     return state[key];
 
 }

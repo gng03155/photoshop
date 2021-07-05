@@ -12,8 +12,8 @@ interface Props {
 export default function Main({ userKey }: Props) {
 
     const { data: userInfo } = useSWR<IUser | undefined>(`/users/${userKey}`, fetcherData, { revalidateOnMount: true });
-    const { data: userOrderList } = useSWR<string[] | undefined>(`/order/user/${userKey}`, fetcherData, { revalidateOnMount: true });
-    const { data: allOrderList } = useSWR<{ [key: string]: IOrder } | undefined>(`/order/p_list`, fetcherData, { revalidateOnMount: true });
+    const { data: userOrderList } = useSWR<string[] | undefined | null>(`/order/user/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: allOrderList } = useSWR<{ [key: string]: IOrder } | undefined | null>(`/order/p_list`, fetcherData, { revalidateOnMount: true, initialData: null });
 
     const [isInit, setIsInit] = useState(false);
     const [allOrderPrice, setAllOrderPrice] = useState(0);
@@ -23,26 +23,32 @@ export default function Main({ userKey }: Props) {
 
     useEffect(() => {
 
-        if (allOrderList !== undefined && userOrderList !== undefined) {
-            const userOrLi = [];
-            for (let list in allOrderList) {
-                if (userOrderList.includes(list)) {
-                    userOrLi.push(allOrderList[list]);
-                }
+        if (allOrderList !== null && userOrderList !== null && userInfo !== undefined) {
+
+            if (allOrderList === undefined || userOrderList === undefined) {
+                setAllOrderPrice(0);
             }
+            else {
+                const userOrLi = [];
+                for (let list in allOrderList) {
+                    if (userOrderList.includes(list)) {
+                        userOrLi.push(allOrderList[list]);
+                    }
+                }
 
 
-            let allOrPr = userOrLi.reduce((prev, cur) => {
-                let temp = Number(cur["product_info"]["price"]) * Number(cur["product_info"]["num"]);
-                prev = prev + temp;
-                return prev;
-            }, 0)
+                let allOrPr = userOrLi.reduce((prev, cur) => {
+                    let temp = Number(cur["product_info"]["price"]) * Number(cur["product_info"]["num"]);
+                    prev = prev + temp;
+                    return prev;
+                }, 0)
 
-            setAllOrderPrice(allOrPr);
+                setAllOrderPrice(allOrPr);
+            }
             setIsInit(true);
         }
 
-    }, [userOrderList, allOrderList])
+    }, [userOrderList, allOrderList, userInfo])
 
     const onClickCategory = (e: React.MouseEvent<HTMLLIElement>) => {
         e.preventDefault();

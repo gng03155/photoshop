@@ -20,7 +20,7 @@ interface PColor {
 
 export interface IProduct {
     category: string[],
-    color: PColor[],
+    color: string[],
     delivery: string,
     id: string,
     like: string,

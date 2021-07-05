@@ -9,7 +9,7 @@ export const Table = styled.table`
     table-layout: fixed;
     border-collapse: collapse;
     border-bottom: 1px solid #ececec;
-
+    margin-bottom: 100px;
     tr{
         text-align: center;
     }
@@ -72,4 +72,9 @@ export const MiniMileage = styled.div`
         text-align: center;
     }
 
+`
+export const NoneHistory = styled.h4`
+    border-bottom: 1px solid #ececec;
+    text-align: center;
+    padding: 20px 0;
 `

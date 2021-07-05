@@ -3,10 +3,7 @@ import styled from 'styled-components';
 export const Wrap = styled.div`
     width : 100%;
     margin-bottom: 200px;
-    h2{
-        margin : 100px 0;
-        text-align: center;
-    }
+
 `
 
 export const Table = styled.table`
@@ -125,4 +122,10 @@ export const MiniThumb = styled.div`
         margin-right: 5px;
     }
     
+`
+
+export const NoneHistory = styled.h3`
+    border-bottom: 1px solid #ececec;
+    text-align: center;
+    padding-bottom: 20px;
 `

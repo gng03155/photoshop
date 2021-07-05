@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import useSWR from 'swr';
 import { IProduct } from '../../types';
 import { fetcherData } from '../../util/fetcher';
@@ -21,6 +21,10 @@ export default function ProductList({ proIdList, isSearch }: Props) {
     const { data: categoryList } = useSWR<{ [key: string]: string[] | undefined }>(`/products/category`, fetcherData, { revalidateOnMount: true });
 
     const { data: reviewList } = useSWR<{ [key: string]: string[] } | undefined>(`/products/review`, fetcherData, { revalidateOnMount: true });
+
+
+    const cateRef = new Array(6).fill(0).map(() => useRef<HTMLInputElement>());
+    const colorRef = new Array(13).fill(0).map(() => useRef<HTMLAnchorElement>());
 
     const [data, setData] = useState<string[][]>([[null]]);
 
@@ -159,7 +163,7 @@ export default function ProductList({ proIdList, isSearch }: Props) {
                 if (cateList.includes(name)) {
                     //컬러체크
                     for (let color of selectColor) {
-                        const isColor = productList[name]["color"].some((value) => value.name === color);
+                        const isColor = productList[name]["color"].some((value) => value === color);
                         if (isColor) {
                             idList.push(name);
                             break;
@@ -178,11 +182,8 @@ export default function ProductList({ proIdList, isSearch }: Props) {
 
         const tg = e.target as HTMLAnchorElement;
         const children = Array.from(tg.parentElement.children);
-        children.forEach((node) => {
-            if (node.tagName === "INPUT") {
-                const elem = node as HTMLInputElement;
-                elem.checked = false;
-            }
+        cateRef.forEach((node) => {
+            node.current.checked = false;
         })
         setCurIdList(Object.keys(productList));
         setSelectCategory([]);
@@ -192,11 +193,8 @@ export default function ProductList({ proIdList, isSearch }: Props) {
     const onClickAllColor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         const tg = e.target as HTMLAnchorElement;
         const children = Array.from(tg.parentElement.children);
-        children.forEach((node) => {
-            if (node.tagName === "A") {
-                const elem = node as HTMLAnchorElement;
-                elem.classList.remove("active");
-            }
+        colorRef.forEach((node) => {
+            node.current.classList.remove("active");
         })
         setSelectColor([]);
         setColor([], true);
@@ -260,6 +258,10 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         const tg = e.target as HTMLAnchorElement;
 
         let rList = [];
+        if (reviewList === undefined) {
+            setCurPage(0);
+            return;
+        }
         for (let name of curIdList) {
             const temp = {
                 id: name,
@@ -289,28 +291,42 @@ export default function ProductList({ proIdList, isSearch }: Props) {
                 <Option>
                     <p>카테고리</p>
                     <CategoryWrap>
-                        <a className="all" onClick={onClickAllCategory}>ALL</a>
-                        <label htmlFor="wall">wall</label>
-                        <input id="wall" type="checkbox" onChange={onChangeCategory} />
-                        <label htmlFor="pixel">pixel</label>
-                        <input id="pixel" type="checkbox" onChange={onChangeCategory} />
-                        <label htmlFor="animal">animal</label>
-                        <input id="animal" type="checkbox" onChange={onChangeCategory} />
-                        <label htmlFor="natural">natural</label>
-                        <input id="natural" type="checkbox" onChange={onChangeCategory} />
+                        <ul>
+                            <li><a className="all" onClick={onClickAllCategory}>ALL</a></li>
+                            <li><label htmlFor="michelangelo">michelangelo</label>
+                                <input ref={cateRef[0]} id="michelangelo" type="checkbox" onChange={onChangeCategory} /></li>
+                            <li><label htmlFor="vangoah">vangoah</label>
+                                <input ref={cateRef[1]} id="vangoah" type="checkbox" onChange={onChangeCategory} /></li>
+                            <li><label htmlFor="picasso">picasso</label>
+                                <input ref={cateRef[2]} id="picasso" type="checkbox" onChange={onChangeCategory} /></li>
+                            <li><label htmlFor="magritte">magritte</label>
+                                <input ref={cateRef[3]} id="magritte" type="checkbox" onChange={onChangeCategory} /></li>
+                            <li><label htmlFor="rembrandt">rembrandt</label>
+                                <input ref={cateRef[4]} id="rembrandt" type="checkbox" onChange={onChangeCategory} /></li>
+                            <li><label htmlFor="markrothko">markrothko</label>
+                                <input ref={cateRef[5]} id="markrothko" type="checkbox" onChange={onChangeCategory} /></li>
+                        </ul>
                     </CategoryWrap>
                 </Option>
                 <Option>
                     <p>컬러</p>
                     <ColorWrap>
-                        <Color className="all" onClick={onClickAllColor}>ALL</Color>
-                        <Color data-color="red" color="red" onClick={onClickColor}></Color>
-                        <Color data-color="orange" color="orange" onClick={onClickColor}></Color>
-                        <Color data-color="yellow" color="yellow" onClick={onClickColor}></Color>
-                        <Color data-color="blue" color="blue" onClick={onClickColor}></Color>
-                        <Color data-color="navy" color="navy" onClick={onClickColor}></Color>
-                        <Color data-color="purple" color="purple" onClick={onClickColor}></Color>
-                        <Color data-color="green" color="green" onClick={onClickColor}></Color>
+                        <ul>
+                            <li><a ref={colorRef[0]} className="all" onClick={onClickAllColor}>ALL</a></li>
+                            <li><Color ref={colorRef[1]} data-color="white" color="#fafafa" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[2]} data-color="black" color="#666666" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[3]} data-color="gray" color="#949494" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[4]} data-color="red" color="#e06060" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[5]} data-color="blue" color="#6FC2D9" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[6]} data-color="yellow" color="#FFE678" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[7]} data-color="pink" color="#ed83b2" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[8]} data-color="green" color="#A0DEA1" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[9]} data-color="brown" color="#edc183" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[10]} data-color="ivory" color="#F7EDB7" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[11]} data-color="silver" color="#DFE0ED" onClick={onClickColor}></Color></li>
+                            <li><Color ref={colorRef[12]} data-color="gold" color="#D4AF37" onClick={onClickColor}></Color></li>
+                        </ul>
+
                     </ColorWrap>
                 </Option>
                 {/* <FilterButton>

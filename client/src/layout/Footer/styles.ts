@@ -27,13 +27,12 @@ export const FooterWrap = styled.footer`
 `
 
 export const FooterBg = styled.div`
-    display: inline-block;
     position: absolute;
-    width: 10000px;
+    width : 100vw;
     height : 100%;
-    left: -1000px;
-    bottom: 0;
-    background: #999;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    background-color : #444;
     z-index: -1;
 `
 

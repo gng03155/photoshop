@@ -3,14 +3,14 @@ import useSWR from 'swr';
 import { fetcherData } from '../../util/fetcher';
 import PageNation from '../PageNation';
 import { useMediaQuery } from 'react-responsive'
-import { MiniMileage, Table, Wrap } from './styles';
+import { MiniMileage, NoneHistory, Table, Wrap } from './styles';
 import { useRouter } from 'next/router';
 import { IMileage } from '../../types';
 
 export default function MileageHistory({ userKey }) {
 
 
-    const { data: mileageList } = useSWR<{ [key: string]: IMileage } | undefined>(`/mileage/history/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: mileageList } = useSWR<{ [key: string]: IMileage } | undefined | null>(`/mileage/history/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
     const isTablet = useMediaQuery({ minWidth: 480 });
 
@@ -24,13 +24,12 @@ export default function MileageHistory({ userKey }) {
     const [isInit, setIsinit] = useState(false);
 
     useEffect(() => {
-        if (mileageList != null) {
+        if (mileageList !== null) {
             if (mileageList !== undefined) {
                 setPage(Object.keys(mileageList).reverse());
             }
             setIsinit(true);
         }
-
     }, [mileageList])
 
     const setPage = (idList: string[]) => {
@@ -80,13 +79,15 @@ export default function MileageHistory({ userKey }) {
     }
 
     if (!isInit) {
+        console.log("여기니?")
         return <div></div>
     }
 
     return (
         <Wrap>
+            {console.log("들어옴>")}
             <h2>마일리지 내역</h2>
-            {isTablet ? <div><Table>
+            {isTablet ? <><Table>
                 <colgroup>
                     <col style={{ width: "15%" }} />
                     <col style={{ width: "8%" }} />
@@ -119,12 +120,12 @@ export default function MileageHistory({ userKey }) {
                         )
                     }) :
                         <tr>
-                            <td colSpan={6}><h3></h3></td>
+                            <td colSpan={6}><NoneHistory>내역이 없습니다.</NoneHistory></td>
                         </tr>}
                 </tbody>
             </Table>
                 <PageNation onSetPage={onSetPage} pageNumber={pageNumber} curNumber={0}></PageNation>
-            </div> :
+            </> :
                 <MiniMileage>
                     <ul>
                         {pageNumber !== 0 ? data[curPage].map((value, idx) => {

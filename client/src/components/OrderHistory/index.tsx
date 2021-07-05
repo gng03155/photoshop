@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useMediaQuery } from 'react-responsive'
 import useSWR from 'swr'
 
-import { MiniContent, MiniOrderWrap, MiniThumb, MiniTitle, ProductInfo, Table, Wrap } from './styles';
+import { MiniContent, MiniOrderWrap, MiniThumb, MiniTitle, NoneHistory, ProductInfo, Table, Wrap } from './styles';
 
 import { fetcherData } from '../../util/fetcher'
 import PageNation from '../PageNation';
@@ -108,7 +108,7 @@ export default function OrderHistory({ userKey }: Props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {pageNumber !== 0 &&
+                        {pageNumber !== 0 ?
                             data[curPage].map((item, idx) => {
                                 return (
                                     <tr key={item["key"]}>
@@ -125,37 +125,43 @@ export default function OrderHistory({ userKey }: Props) {
                                         <td></td>
                                     </tr>
                                 )
-                            })
+                            }) :
+                            <tr>
+                                <td colSpan={6}>주문내역이 없습니다.</td>
+                            </tr>
                         }
                     </tbody>
                 </Table>
                 :
                 <MiniOrderWrap>
-                    {pageNumber !== 0 &&
-                        data[curPage].map((item, idx) => {
-                            return (
-                                <li key={item["key"]}>
-                                    <MiniTitle>
-                                        <strong>{item["date"].split(" ")[0]}</strong>
-                                        <a data-key={item["main_key"]} onClick={onClickDetail}>상세보기</a>
-                                    </MiniTitle>
-                                    <MiniContent>
-                                        <p>{item["shipping"]}결제완료</p>
-                                        <MiniThumb>
-                                            <div><img src={item["product_info"]["thumb_src"]} alt="썸네일" /></div>
-                                            <div>
-                                                <p>{item["product_info"]["name"]}</p>
-                                                <p>옵션 : {item["product_info"]["option"]}</p>
-                                                <span><b>{item["product_info"]["price"]}</b>원</span>
-                                                <span>/</span>
-                                                <span>{item["product_info"]["num"]}개</span>
-                                            </div>
-                                        </MiniThumb>
-                                    </MiniContent>
-                                </li>
-                            )
-                        })
-                    }
+                    <ul>
+                        {pageNumber !== 0 ?
+                            data[curPage].map((item, idx) => {
+                                return (
+                                    <li key={item["key"]}>
+                                        <MiniTitle>
+                                            <strong>{item["date"].split(" ")[0]}</strong>
+                                            <a data-key={item["main_key"]} onClick={onClickDetail}>상세보기</a>
+                                        </MiniTitle>
+                                        <MiniContent>
+                                            <p>{item["shipping"]}결제완료</p>
+                                            <MiniThumb>
+                                                <div><img src={item["product_info"]["thumb_src"]} alt="썸네일" /></div>
+                                                <div>
+                                                    <p>{item["product_info"]["name"]}</p>
+                                                    <p>옵션 : {item["product_info"]["option"]}</p>
+                                                    <span><b>{item["product_info"]["price"]}</b>원</span>
+                                                    <span>/</span>
+                                                    <span>{item["product_info"]["num"]}개</span>
+                                                </div>
+                                            </MiniThumb>
+                                        </MiniContent>
+                                    </li>
+                                )
+                            }) :
+                            <li><NoneHistory>주문내역이 없습니다.</NoneHistory></li>
+                        }
+                    </ul>
                 </MiniOrderWrap>}
             <PageNation onSetPage={onSetPage} pageNumber={pageNumber} curNumber={curPage} />
         </Wrap >
