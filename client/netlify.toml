@@ -1,2 +1,2 @@
 [build]
-command = “CI= npm run netlify-deploy”
+command = "CI= npm run netlify-deploy"
