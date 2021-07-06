@@ -67,8 +67,6 @@ export const InteractiveWrap = styled.div`
 `
 
 export const InteraciveImg = styled.div`
-    /* position: absolute; */
-    /* left:0; */
     position : fixed;
     visibility: hidden;
 
@@ -93,7 +91,7 @@ export const InteraciveImg = styled.div`
      ${props => props.theme.media.mobile}{
         height : 240px;
        a{
-         height : 800px;
+         height : 900px;
          background: url("/img/999.jpg") no-repeat;
          background-size: 100% 100%;
 
