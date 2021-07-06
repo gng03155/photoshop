@@ -59,11 +59,17 @@ export default function Header() {
     const scrollHeader = () => {
         const scrollTop = document.documentElement.scrollTop;
 
+        const bb = document.body.offsetWidth;
+        let tt = divRef.current.clientWidth + "px";
+
+        if (bb <= 1260) {
+            tt = (bb - 40) + "px";
+        }
+
         if (scrollTop > 0) {
-            const tt = divRef.current.clientWidth;
             ref.current.style.position = "fixed";
             ref.current.style.top = "0px";
-            ref.current.style.width = tt + "px";
+            ref.current.style.width = tt;
             ref.current.style.height = "80px";
         } else {
             ref.current.style.position = "relative";

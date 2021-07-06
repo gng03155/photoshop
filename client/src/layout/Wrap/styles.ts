@@ -13,5 +13,8 @@ export const MainWrap = styled.div`
         max-width: 100%;
         margin : 0;
     }
+    /* ${props => props.theme.media.mobile}{
+        padding-right: 10px;
+    } */
 
 `

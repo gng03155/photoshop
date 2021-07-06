@@ -42,13 +42,14 @@ export default function CartList({ userKey }: Props) {
 
     const initRef = { ref: useRef<HTMLInputElement>(null) };
 
-    const aa = useRef<HTMLInputElement[]>([]);
-
     const isTablet = useMediaQuery({ minWidth: 768 });
 
     useEffect(() => {
-        if (cartList !== null && cartList !== undefined) {
-            console.log(aa);
+        if (cartList !== null) {
+            if (cartList === undefined) {
+                setIsInit(true);
+                return;
+            }
             const copy = new Array(Object.keys(cartList).length + 1).fill(0).map(() => {
                 let temp = { ...initRef.ref };
                 return temp;
@@ -64,8 +65,6 @@ export default function CartList({ userKey }: Props) {
             const set = new Set(keys);
             const ids = Array.from(set);
             setStock(ids);
-
-
         }
     }, [cartList])
 

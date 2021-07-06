@@ -85,16 +85,26 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
         const tg = e.target as HTMLFormElement;
         const radios = tg["radio"] as HTMLInputElement[];
         let type = "";
-        radios.forEach((elem) => {
-            if (elem.checked) {
-                type = elem.id;
-            }
-        })
+        if (radios === undefined) {
+            type = "public";
+        } else {
+            radios.forEach((elem) => {
+                if (elem.checked) {
+                    type = elem.id;
+                }
+            })
+        }
+
+
+        let pswd = "";
+        if (tg["pswd"] !== undefined) {
+            pswd = tg["pswd"].value;
+        }
 
         const info = {
             title: (tg["Title"] as HTMLInputElement).value,
             content: data,
-            pswd: (tg["pswd"] as HTMLInputElement).value,
+            pswd,
             type,
         }
         if (boardKey) {
