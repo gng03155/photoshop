@@ -8,7 +8,7 @@ import Join from '../../../src/components/Signup/join'
 import Complete from '../../../src/components/Signup/complete'
 
 
-export default function signup({ props }) {
+export default function signup() {
 
     const router = useRouter();
     const [query, setQuery] = useState("");
@@ -59,13 +59,4 @@ export default function signup({ props }) {
             {query === "complete" && <Complete userData={userData} />}
         </div>
     )
-}
-
-export const getServerSideProps = (ctx) => {
-    console.log(ctx.query);
-    return {
-        props: {
-            hello: "hello",
-        }
-    }
 }
