@@ -62,41 +62,37 @@ export const InteractiveWrap = styled.div`
    width : 100%;
    height : 480px;
    ${props => props.theme.media.mobile}{
-      /* height : 240px; */
+      height : 240px;
    }
 `
 
 export const InteraciveImg = styled.div`
-    position: absolute;
-    left:0;
+    /* position: absolute; */
+    /* left:0; */
+    position : fixed;
+    visibility: hidden;
+
+    top : 0;
+    left: 0;
     width:100%;
     max-width: 100%;
     height : 480px;
-    /* margin-left: calc(-50vw + 50%); */
     overflow: hidden;
-     img{
-         position: absolute;
-         left: 0;
-         top: -1000px;
-         width: 100%;
-         height : 1000px;
-     }
+
      a{
          position: absolute;
-         left: 0px;
-         top: -722px;
-         width: 100%;
-         height : 722px;
+         left: 0;
+         top: 0;
+         width : 100%;
+         height: 1000px;
          background: url("/img/123.jpg") no-repeat;
          background-size: 100% 100%;
-         cursor: default;
      }
 
      ${props => props.theme.media.mobile}{
-      /* height : 480px; */
+        height : 240px;
        a{
-         height : 1000px;
-         top: -1000px;
+         height : 800px;
          background: url("/img/999.jpg") no-repeat;
          background-size: 100% 100%;
 

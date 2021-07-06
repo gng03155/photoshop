@@ -14,86 +14,46 @@ export default function Section() {
 
     const divRef = useRef<HTMLImageElement>(null);
 
-    let prev = 0;
-    let cur = 0;
-
-
-    let prevPos = 0;
-
-    const tt = useRef(null);
+    const imgRef = useRef(null);
+    const wrapRef = useRef(null);
 
     useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", e => handleScroll(e));
         return () => {
-            window.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("scroll", e => handleScroll(e));
         }
     }, [])
 
     useEffect(() => {
     }, [bestList, newList])
 
-    const handleScroll = () => {
+    const handleScroll = (e: Event) => {
+        e.preventDefault();
         if (divRef.current === null) {
             return;
         }
         const screenHeight = window.innerHeight;
         const scrollTop = document.documentElement.scrollTop;
         const scrollBt = scrollTop + screenHeight;
-        const clientTop: number | undefined = divRef.current ? divRef.current?.offsetTop : undefined;
+        const clientTop: number | undefined = wrapRef.current ? wrapRef.current?.offsetTop : undefined;
         const clientHeight = divRef.current.clientHeight;
-        cur = scrollTop;
-        // const mm = Math.abs(cur - prev);
-        const mm = cur - prev;
-        const elem = divRef.current.firstElementChild as HTMLElement;
-
-        const elemPos = window.getComputedStyle(elem).top.replace("px", "");
-        // console.log(cur, prev);
-        console.log(`거리 : ${mm}`);
-        // console.log(`position : ${Number(elemPos) + Number(mm)}`);
-        console.log(`ct : ${clientTop}`);
-        console.log(`sb : ${scrollBt}`);
-        console.log(`sh : ${screenHeight}`);
 
 
-        if (scrollBt >= clientTop) {
-
-        } else if (scrollTop <= clientTop + clientHeight) {
-
-        }
-
-
-        if (clientTop && scrollBt >= clientTop && scrollTop <= clientTop + clientHeight) {
+        if (scrollBt >= clientTop && scrollTop <= clientTop + clientHeight) {
             const move = (scrollBt - clientTop);
-
+            divRef.current.style.visibility = "visible";
             const element = divRef.current.firstElementChild as HTMLAnchorElement;
-            const elemHeight = elem.clientHeight;
+            const elemHeight = imgRef.current.clientHeight;
 
-            // console.log(`ep : ${(-elemHeight + move).toFixed(2)}`);
-            // element.style.top = Math.ceil(-elemHeight + move) + "px";
-            element.style.transform = `translateY(${Math.ceil(move) + "px"})`;
+            divRef.current.style.transform = `translate3d(0,${Math.ceil(screenHeight - move) + "px"},0)`;
+            element.style.transform = `translate3d(0,${Math.ceil(-elemHeight + move - 10) + "px"},0)`;
+            console.log(move);
 
-            // element.style.bottom = scrollBt - elemHeight + "px";
-
-
-            // elem.style.top = Math.ceil(Number(elemPos) + Number(mm)) + "px";
-
-            // console.log("들");
         }
-
-        prevPos = scrollTop;
-
-        prev = cur;
+        else {
+            divRef.current.style.visibility = "hidden";
+        }
     }
-
-    const test = (e) => {
-        setInterval(() => {
-            // const elem = divRef.current.firstElementChild as HTMLAnchorElement;
-            const elemHeight = window.getComputedStyle(tt.current).top.replace("px", "");
-            tt.current.style.top = (Number(elemHeight) + 10) + "px";
-            console.log(tt.current);
-        }, 1000, [tt])
-    }
-
 
     return (
         <div>
@@ -115,10 +75,9 @@ export default function Section() {
                         </li>
                     </ul>
                 </NewItem>
-                <button onClick={test}>test</button>
-                <InteractiveWrap>
+                <InteractiveWrap ref={wrapRef}>
                     <InteraciveImg ref={divRef}>
-                        <a ref={tt}></a>
+                        <a ref={imgRef}></a>
                         {/* <img src="/img/123.jpg" alt="#" /> */}
                     </InteraciveImg>
                 </InteractiveWrap>
