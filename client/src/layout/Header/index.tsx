@@ -206,7 +206,7 @@ export default function Header() {
     }
     return (
         <Wrap ref={divRef} style={{ width: "100%", height: "100px" }}>
-            <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button>
+            {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
             <Content ref={ref}>
                 <MainMenu>
                     {isTablet ?
