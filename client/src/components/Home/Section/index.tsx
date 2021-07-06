@@ -19,8 +19,10 @@ export default function Section() {
 
     useEffect(() => {
         window.addEventListener("scroll", e => handleScroll(e));
+        window.addEventListener("touchmove", e => handleScroll(e));
         return () => {
             window.removeEventListener("scroll", e => handleScroll(e));
+            window.removeEventListener("touchmove", e => handleScroll(e));
         }
     }, [])
 
@@ -28,7 +30,6 @@ export default function Section() {
     }, [bestList, newList])
 
     const handleScroll = (e: Event) => {
-        e.preventDefault();
         if (divRef.current === null) {
             return;
         }

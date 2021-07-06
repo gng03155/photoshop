@@ -14,6 +14,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     max-width: 100%;
     min-height: 100vh;
+    -webkit-overflow-scrolling: touch;
     overflow-x: hidden ;
     font-family: "Noto Serif",'Noto Sans KR', sans-serif;
     background-color: #fff;
