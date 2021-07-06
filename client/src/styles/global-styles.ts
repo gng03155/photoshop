@@ -12,16 +12,16 @@ export const GlobalStyle = createGlobalStyle`
   html {
   }
   body {
+    -webkit-overflow-scrolling: touch;
     max-width: 100%;
     min-height: 100vh;
-    -webkit-overflow-scrolling: touch;
     overflow-x: hidden ;
     font-family: "Noto Serif",'Noto Sans KR', sans-serif;
     background-color: #fff;
   }
   * { margin : 0 ; padding : 0; -webkit-box-sizing: border-box; 
 -moz-box-sizing: border-box; 
-box-sizing: border-box; flex-shrink: 1 !important;}
+box-sizing: border-box;}
   a { text-decoration : none; color : #333; cursor : pointer;}
   ul,li{list-style : none;}
   button {

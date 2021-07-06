@@ -21,9 +21,9 @@ function App({ Component, pageProps }: AppProps) {
     const { data: user, revalidate } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 1000 });
 
     useEffect(() => {
-        window.addEventListener('load', function () {
-            setTimeout(scrollTo, 0, 0, 1);
-        }, false);
+        // window.addEventListener('load', function () {
+        //     setTimeout(scrollTo, 0, 0, 1);
+        // });
     }, [])
 
     return (

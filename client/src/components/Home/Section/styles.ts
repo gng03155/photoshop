@@ -69,7 +69,7 @@ export const InteractiveWrap = styled.div`
 export const InteraciveImg = styled.div`
     position : fixed;
     visibility: hidden;
-
+    -webkit-transform: translateZ(0);
     top : 0;
     left: 0;
     width:100%;

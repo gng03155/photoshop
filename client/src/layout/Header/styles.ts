@@ -17,6 +17,7 @@ export const Content = styled.div`
     align-items : center;
     text-align: center;
     z-index: 1000;
+    -webkit-transform: translateZ(0);
 
     & > div:first-child {
         position: absolute;
