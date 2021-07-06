@@ -60,6 +60,7 @@ export const MainMenu = styled.div`
 
 export const BG = styled.div`
     position: absolute;
+    left : 0;
     width : 100vw;
     height : 100%;
     margin-left: calc(-50vw + 50%);

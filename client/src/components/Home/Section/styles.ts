@@ -83,10 +83,10 @@ export const InteraciveImg = styled.div`
      }
      a{
          position: absolute;
-         left: 0;
-         top: -1000px;
+         left: 0px;
+         top: -722px;
          width: 100%;
-         height : 1000px;
+         height : 722px;
          background: url("/img/123.jpg") no-repeat;
          background-size: 100% 100%;
          cursor: default;
@@ -99,6 +99,7 @@ export const InteraciveImg = styled.div`
          top: -1000px;
          background: url("/img/999.jpg") no-repeat;
          background-size: 100% 100%;
+
       } 
    }
 `
