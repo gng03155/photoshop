@@ -4,8 +4,8 @@ import styled from 'styled-components';
 export const Wrap = styled.div`
     position: relative;
     width : 100%;
+    max-width: 100%;
     height : 100px;
-    margin: 0 auto;
 `
 
 export const Content = styled.div`
