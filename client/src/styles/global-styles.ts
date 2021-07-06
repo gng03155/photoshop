@@ -10,12 +10,17 @@ export const GlobalStyle = createGlobalStyle`
   } */
 
   html {
+    width : 100%;
+    height : 99.99%;
+    overflow : hidden;
   }
   body {
     -webkit-overflow-scrolling: touch;
     max-width: 100%;
+    height : 100%;
     min-height: 100vh;
     overflow-x: hidden ;
+    overflow-y: auto;
     font-family: "Noto Serif",'Noto Sans KR', sans-serif;
     background-color: #fff;
   }
