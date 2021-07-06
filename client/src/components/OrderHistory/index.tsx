@@ -120,7 +120,7 @@ export default function OrderHistory({ userKey }: Props) {
                                             </ProductInfo>
                                         </td>
                                         <td>{item["date"]}</td>
-                                        <td><p>{item["product_info"]["price"]}원</p><p>{item["product_info"]["num"]}개</p></td>
+                                        <td><p>{item["product_info"]["price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</p><p>{item["product_info"]["num"]}개</p></td>
                                         <td>{item["shipping"]}</td>
                                         <td></td>
                                     </tr>
@@ -150,7 +150,7 @@ export default function OrderHistory({ userKey }: Props) {
                                                 <div>
                                                     <p>{item["product_info"]["name"]}</p>
                                                     <p>옵션 : {item["product_info"]["option"]}</p>
-                                                    <span><b>{item["product_info"]["price"]}</b>원</span>
+                                                    <span><b>{item["product_info"]["price"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</b>원</span>
                                                     <span>/</span>
                                                     <span>{item["product_info"]["num"]}개</span>
                                                 </div>

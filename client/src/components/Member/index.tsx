@@ -38,7 +38,6 @@ export default function Member({ userKey }: Props) {
             salt: "",
         }
 
-        console.log(values);
 
         // 공백 및 비밀번호 체크
         const isEmpty = checkEmpty(values, target);
@@ -150,7 +149,6 @@ export default function Member({ userKey }: Props) {
             checkpswd: target["checkpswd"]["value"] || null,
         }
 
-        console.log(values);
 
         // 공백 및 비밀번호 체크
         const isEmpty = checkEmpty(values, target);
@@ -168,7 +166,6 @@ export default function Member({ userKey }: Props) {
         })
 
         if (pwHash === userInfo.pswd) {
-            console.log("비밀번호가 일치합니다!");
         } else {
             alert("비밀번호가 일치하지 않습니다!");
         }

@@ -21,8 +21,7 @@ export default function Banner() {
     }, [isActive, count])
 
     const setFadeImg = () => {
-        // console.log(isActive);
-        // console.log(count);
+
         SetIsActive((value) => {
             value[count] = false;
             if (count < value.length - 1) {

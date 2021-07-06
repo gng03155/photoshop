@@ -15,18 +15,6 @@ export default function Category() {
     const [proIdList, setProIdList] = useState<string[]>([]);
 
     const router = useRouter();
-    useEffect(() => {
-
-        console.log("들어옴");
-
-    }, [])
-    useEffect(() => {
-
-        if (router.query.id) {
-            console.log(router);
-        }
-
-    }, [router])
 
     useEffect(() => {
 
@@ -36,9 +24,6 @@ export default function Category() {
         }
     }, [productList])
 
-    useEffect(() => {
-        console.log(proIdList);
-    }, [proIdList])
 
     if (proIdList.length === 0) {
         return <div></div>

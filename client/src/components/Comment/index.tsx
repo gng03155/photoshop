@@ -25,7 +25,6 @@ export default function Comment({ boardKey }: Props) {
         e.preventDefault();
         const tg = e.target as HTMLFormElement;
         const val = tg["comment"].value;
-        console.log(val);
         if (val === "") {
             alert("댓글을 입력해주세요.");
             return;

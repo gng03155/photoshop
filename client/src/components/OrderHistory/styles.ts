@@ -17,6 +17,11 @@ export const Table = styled.table`
         tr{
             border-bottom : 1px solid #ececec;
         }
+        td:first-child{
+            a{
+                color : lightcoral;
+            }
+        }
     }
     tr{
         text-align: center;

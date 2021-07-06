@@ -87,6 +87,7 @@ export const InteraciveImg = styled.div`
          height: 1000px;
          background: url("/img/123.jpg") no-repeat;
          background-size: 100% 100%;
+         cursor: default;
      }
 
      ${props => props.theme.media.mobile}{

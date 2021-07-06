@@ -20,10 +20,8 @@ export default function Index() {
 
 
     useEffect(() => {
-        console.log(`userKey : ${user}`);
         const isUser = window.sessionStorage.getItem("uid");
         if (isUser) {
-            console.log(isUser);
             setUserKey(window.sessionStorage.getItem("uid"));
         }
 

@@ -32,6 +32,7 @@ export default function Section() {
         if (divRef.current === null) {
             return;
         }
+
         const screenHeight = window.innerHeight;
         const scrollTop = document.documentElement.scrollTop;
         const scrollBt = scrollTop + screenHeight;
@@ -47,7 +48,6 @@ export default function Section() {
 
             divRef.current.style.transform = `translate3d(0,${Math.ceil(screenHeight - move) + "px"},0)`;
             element.style.transform = `translate3d(0,${Math.ceil(-elemHeight + move - 10) + "px"},0)`;
-            console.log(move);
 
         }
         else {

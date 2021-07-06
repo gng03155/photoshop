@@ -17,15 +17,6 @@ export default function MemberFind() {
 
     const [email, setEamil] = useState("");
 
-    useEffect(() => {
-    }, []);
-
-    useEffect(() => {
-        if (userList !== undefined) {
-            console.log(userList);
-        }
-    }, [userList])
-
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -47,8 +38,6 @@ export default function MemberFind() {
 
         const { hashPw, salt } = await pswdHashing(temp);
 
-
-        console.log(hashPw, salt);
 
         const user_id = userList[userKey]["id"].split("");
         user_id.splice(-1, 1, "*");

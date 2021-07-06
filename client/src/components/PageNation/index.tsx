@@ -46,7 +46,6 @@ export default function PageNation({ onSetPage, pageNumber, curNumber }: Props) 
 
     const onClickNext = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
-        console.log(curPage);
         if (curPage === pageNumber - 1) {
             return;
         }

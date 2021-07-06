@@ -240,7 +240,6 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
             await fb.database().ref(`products/${category}/${product}`).once("value").then(async (snapshot) => {
                 if (snapshot.exists()) {
                     const copy = snapshot.val();
-                    console.log(copy);
                     copy.push(info.key);
                     await snapshot.ref.set(copy).then(() => { console.log(`products/${category}/${product} 데이터 저장 완료`) });
                 } else {
@@ -288,7 +287,6 @@ export default function Board({ boardKey, category, productId, userKey }: Props)
         const tg = e.target as HTMLInputElement;
         const idx = tg.dataset.idx;
         const name = tg.files[0].name;
-        console.log(tg);
         const copy = [...fileName];
         copy[idx] = name;
         setFileName(copy)

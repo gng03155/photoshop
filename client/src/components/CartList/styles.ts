@@ -164,12 +164,12 @@ export const MiniBasket = styled.div`
     width : 100%;
     margin-bottom: 100px;
     & > ul{
-        border-top : 10px solid 	#DCDCDC;
-        border-bottom : 10px solid 	#DCDCDC;
+        border-top : 1px solid #DCDCDC;
+        border-bottom : 1px solid 	#DCDCDC;
 
         & > li{
             margin: 0;
-            border-bottom : 10px solid 	#DCDCDC;
+            border-bottom : 1px solid 	#DCDCDC;
         }
 
         & > li:last-child{

@@ -28,7 +28,6 @@ export default function Header() {
     let isTablet = false;
 
     if (typeof window !== "undefined") {
-        console.log(typeof window);
         isTablet = useMediaQuery({ minWidth: 768 });
     }
 
@@ -96,7 +95,6 @@ export default function Header() {
     const onClickSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const isActive = searchRef.current.classList.contains("active");
-        console.log(isActive);
         if (!isActive) {
             searchRef.current.classList.add("active");
             searchRef.current.style.height = "200px";
@@ -126,7 +124,6 @@ export default function Header() {
                 },
             });
         } else {
-            console.log("같은페이지");
             router.push({
                 pathname: "/category/search",
                 query: {
@@ -145,7 +142,6 @@ export default function Header() {
 
     const onClickToggle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(toggleRef);
         toggleRef.current.style.visibility = "visible";
         toggleRef.current.style.opacity = "1";
     }

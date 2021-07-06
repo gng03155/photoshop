@@ -332,7 +332,7 @@ export default function CartList({ userKey }: Props) {
                                             </ul>
                                         </ProductInfo>
                                     </td>
-                                    <td><p>{cartList[id].price}</p></td>
+                                    <td><p>{cartList[id].price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</p></td>
                                     <td>
                                         <Quantity>
                                             <ul>
@@ -342,9 +342,9 @@ export default function CartList({ userKey }: Props) {
                                                 <li><a id={cartList[id].key} onClick={onClickPlus}></a></li>
                                             </ul>
                                         </Quantity></td>
-                                    <td><p>100원</p></td>
+                                    <td><p>{(Number(cartList[id].price) * Number(cartList[id].num) * 0.05).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</p></td>
                                     <td><p>무료배송</p></td>
-                                    <td><p>{Number(cartList[id].price) * Number(cartList[id].num)}원</p></td>
+                                    <td><p>{(Number(cartList[id].price) * Number(cartList[id].num)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</p></td>
                                     <td className="state"><a id={cartList[id].key} onClick={onClickDelete}>삭제하기</a></td>
                                 </tr>
                             )
@@ -407,7 +407,7 @@ export default function CartList({ userKey }: Props) {
                                         </ProductInfo>
                                         <SideContent>
                                             <p>재고 5개 이상</p>
-                                            <p>{Number(cartList[id].price) * Number(cartList[id].num)}원</p>
+                                            <p>{(Number(cartList[id].price) * Number(cartList[id].num)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</p>
                                         </SideContent>
                                     </MiniContent>
                                     <MiniSide>
@@ -417,7 +417,7 @@ export default function CartList({ userKey }: Props) {
                                         </div>
                                         <div>
                                             <span>적립금</span>
-                                            <span>100원</span>
+                                            <span>{(Number(cartList[id].price) * Number(cartList[id].num) * 0.05).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</span>
                                         </div>
                                     </MiniSide>
                                 </li>
@@ -447,14 +447,14 @@ export default function CartList({ userKey }: Props) {
                                 (acc, cur) => {
                                     return acc + Number(cartList[cur].price) * Number(cartList[cur].num)
                                 }, 0
-                            )}원</td>
+                            ).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</td>
                             <td>0원</td>
                             <td>0원</td>
                             <td>{(cartList !== undefined && cartList !== null) && Object.keys(cartList).reduce(
                                 (acc, cur) => {
                                     return acc + Number(cartList[cur].price) * Number(cartList[cur].num)
                                 }, 0
-                            )}원</td>
+                            ).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</td>
                         </tr>
                     </tbody>
                 </table>

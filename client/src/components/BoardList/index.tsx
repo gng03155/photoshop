@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useCallback } from 'react'
 import useSWR from 'swr';
+import fb from '../../firebase';
 import { IBoard } from '../../types';
 
 import { fetcherData } from '../../util/fetcher';
@@ -109,7 +110,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
         setCurPage(num);
     }
 
-    const onClickBoard = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickBoard = useCallback(async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         const tg = e.currentTarget as HTMLAnchorElement;
         e.preventDefault();
         const type = tg.dataset.type;
@@ -119,6 +120,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
         const productId = tg.dataset.product;
         if (type === "private") {
             if (userKey === user) {
+                await onUpdateHits(key);
                 if (category === ("review" || "qna")) {
                     router.push({
                         pathname: `/article/${category}/${key}`,
@@ -134,6 +136,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                 return;
             }
         } else if (type === "public") {
+            await onUpdateHits(key);
             if (category === ("review" || "qna")) {
 
                 router.push({
@@ -150,6 +153,18 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
 
     }, [userKey])
+
+    const onUpdateHits = async (key) => {
+        await fb.database().ref(`board/board_list/${key}`).once("value").then((data) => {
+            if (data.exists) {
+                let temp = data.val().hits;
+                temp = Number(temp) + 1;
+                data.ref.update({
+                    hits: temp,
+                })
+            }
+        })
+    }
 
     const onClickWrite = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();

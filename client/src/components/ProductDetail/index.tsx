@@ -69,7 +69,6 @@ export default function ProductDetail({ id, userKey }: Props) {
     useEffect(() => {
 
         if (likeList !== undefined && likeList !== null) {
-            console.log(likeList);
             if (likeList.includes(id)) {
                 setIsLike(true);
                 return;
@@ -322,7 +321,6 @@ export default function ProductDetail({ id, userKey }: Props) {
         if (isFb) {
             return;
         }
-        console.log("cart!");
         if (buyProductInfo.length === 0) {
             alert("상품을 선택해주세요!");
             return;
@@ -346,7 +344,6 @@ export default function ProductDetail({ id, userKey }: Props) {
     }
 
     const onClickLike = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        console.log("like!");
         if (isFb) {
             return;
         }

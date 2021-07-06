@@ -27,11 +27,10 @@ export default function Login() {
         const pswd = target["pswd"]["value"];
 
         const idHash = SHA256(id).toString();
-        console.log(data);
         const key = Object.keys(data).find(key => key === idHash);
         const userInfo = data[key];
         if (!userInfo) {
-            console.log("해당 아이디는 존재하지 않습니다.")
+            alert("해당 아이디는 존재하지 않습니다.")
             return;
         } else {
 
@@ -42,12 +41,7 @@ export default function Login() {
             })
 
             if (pwHash === userInfo.pswd) {
-                console.log("비밀번호가 일치합니다!");
                 sessionStorage.setItem("uid", key);
-                mutate((value) => {
-                    setInit("userKey", key);
-                    return value;
-                }, false);
                 router.back();
                 return;
             } else {

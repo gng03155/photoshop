@@ -20,22 +20,6 @@ function App({ Component, pageProps }: AppProps) {
     const { data: localLoad } = useSWR("load", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 1000 });
     const { data: user, revalidate } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 1000 });
 
-
-    const router = useRouter();
-
-    useEffect(() => {
-        // setInit("userKey", "변경");
-        // router.beforePopState(({ url, as }) => {
-        //     router.reload();
-        //     return true;
-        // })
-    }, [])
-
-    // useEffect(() => {
-    //     console.log(`user : ${user}`);
-    //     console.log(`load : ${localLoad}`);
-    // }, [user, localLoad])
-
     return (
         <ThemeProvider theme={theme}>
             <Head>

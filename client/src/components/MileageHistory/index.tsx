@@ -79,13 +79,11 @@ export default function MileageHistory({ userKey }) {
     }
 
     if (!isInit) {
-        console.log("여기니?")
         return <div></div>
     }
 
     return (
         <Wrap>
-            {console.log("들어옴>")}
             <h2>마일리지 내역</h2>
             {isTablet ? <><Table>
                 <colgroup>
