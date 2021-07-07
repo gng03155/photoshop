@@ -10,19 +10,26 @@ export const GlobalStyle = createGlobalStyle`
   } */
 
   html {
-    width : 100%;
-    height : 99.99%;
-    overflow : hidden;
+    /* width:100%;
+    height:99.9%;
+    overflow:hidden; */
   }
   body {
-    -webkit-overflow-scrolling: touch;
+
+    /* width:100%;
+    height:100%;
+    overflow:hidden; */
+    
+    /* & > div {
+      width : 100%;
+      overflow-x: visible;
+    } */
+
     max-width: 100%;
-    height : 100%;
     min-height: 100vh;
-    overflow-x: hidden ;
-    overflow-y: auto;
+    overflow-x: hidden;
     font-family: "Noto Serif",'Noto Sans KR', sans-serif;
-    background-color: #fff;
+    
   }
   * { margin : 0 ; padding : 0; -webkit-box-sizing: border-box; 
 -moz-box-sizing: border-box; 

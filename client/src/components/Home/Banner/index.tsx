@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { clearInterval } from 'timers';
-import { ImgSlide } from "./styles"
+import { ImgSlide, Wrap } from "./styles"
 export default function Banner() {
 
     const [isActive, SetIsActive] = useState<boolean[]>([]);
@@ -42,13 +42,13 @@ export default function Banner() {
 
 
     return (
-        <div>
+        <Wrap>
             <ImgSlide>
                 <img className={"active"} src="img/1.jpg" alt="#" />
                 <img className={isActive[1] ? "active" : ""} src="img/2.jpg" alt="#" />
                 <img className={isActive[2] ? "active" : ""} src="img/3.jpg" alt="#" />
             </ImgSlide>
             <div style={{ height: "calc(100vh - 100px)" }}></div>
-        </div>
+        </Wrap>
     )
 }

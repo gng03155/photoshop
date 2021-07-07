@@ -61,10 +61,14 @@ export const BestItem = styled.div`
 export const InteractiveWrap = styled.div`
    width : 100%;
    height : 480px;
+   overflow: hidden;
    ${props => props.theme.media.mobile}{
       height : 240px;
    }
+
+
 `
+
 
 export const InteraciveImg = styled.div`
     position : fixed;
@@ -76,7 +80,7 @@ export const InteraciveImg = styled.div`
     max-width: 100%;
     height : 480px;
     overflow: hidden;
-
+    z-index: -1;
      a{
          position: absolute;
          left: 0;

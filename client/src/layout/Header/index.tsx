@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useMediaQuery } from 'react-responsive'
@@ -27,6 +27,8 @@ export default function Header() {
 
     let isTablet = false;
 
+    const isMobile = useMediaQuery({ maxWidth: 480 });
+
     if (typeof window !== "undefined") {
         isTablet = useMediaQuery({ minWidth: 768 });
     }
@@ -36,39 +38,67 @@ export default function Header() {
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
-        addEventListener("scroll", scrollHeader);
+        // addEventListener("scroll", scrollHeader);
+        // addEventListener("mousewheel", scrollHeader);
         addEventListener("resize", onResize);
         return () => {
-            removeEventListener("scroll", scrollHeader),
-                removeEventListener("resize", onResize)
+            removeEventListener("scroll", scrollHeader);
+            removeEventListener("resize", onResize);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (divRef.current === null) {
+            return;
         }
 
+        const cc = document.querySelector("#MainWrap");
+        if (isMobile) {
+            cc.addEventListener("scroll", scrollHeader);
+            window.removeEventListener("scroll", scrollHeader);
+        } else {
+            cc.removeEventListener("scroll", scrollHeader);
+            window.addEventListener("scroll", scrollHeader);
+        }
+    }, [isMobile])
 
-    }, []);
+    const tttt = (e) => {
+        console.log(e.target);
+    }
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
     }, [router]);
 
     const onResize = (e) => {
-        const tt = divRef.current.clientWidth;
-        ref.current.style.width = tt + "px";
+        const width = divRef.current.clientWidth;
+        ref.current.style.width = width + "px";
     }
 
-    const scrollHeader = () => {
-        const scrollTop = document.documentElement.scrollTop;
+    const scrollHeader = useCallback(() => {
 
-        const bb = document.body.offsetWidth;
-        let tt = divRef.current.clientWidth + "px";
 
-        if (bb <= 1260) {
-            tt = (bb - 40) + "px";
+        const ofWidth = document.body.offsetWidth;
+        let cWidth = divRef.current.clientWidth + "px";
+
+        const wrap = divRef.current as HTMLDivElement;
+
+        let scrollTop = 0;
+        if (isMobile) {
+            scrollTop = wrap.parentElement.scrollTop;
+        } else {
+            scrollTop = document.documentElement.scrollTop;
+        }
+
+
+        if (ofWidth <= 1260) {
+            cWidth = (ofWidth - 40) + "px";
         }
 
         if (scrollTop > 0) {
             ref.current.style.position = "fixed";
             ref.current.style.top = "0px";
-            ref.current.style.width = tt;
+            ref.current.style.width = cWidth;
             ref.current.style.height = "80px";
         } else {
             ref.current.style.position = "relative";
@@ -76,7 +106,7 @@ export default function Header() {
             ref.current.style.height = "100px";
 
         }
-    }
+    }, [])
 
     const onLogout = (e: any) => {
         window.sessionStorage.removeItem("uid");
@@ -207,7 +237,7 @@ export default function Header() {
 
     }
     return (
-        <Wrap ref={divRef} style={{ width: "100%", height: "100px" }}>
+        <Wrap ref={divRef}>
             {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
             <Content ref={ref}>
                 <MainMenu>

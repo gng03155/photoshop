@@ -201,7 +201,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
                                 </li>
                             )
                         }) :
-                            <h3>등록된 게시글이 없습니다.</h3>}
+                            <NoBoard><h3>등록된 게시글이 없습니다.</h3></NoBoard>}
                     </ul>
                 </ReviewBoard>}
             {category === "user" &&

@@ -7,7 +7,7 @@ interface Props {
 
 export default function Wrap({ children }: Props) {
     return (
-        <MainWrap>
+        <MainWrap id="MainWrap">
             {children}
         </MainWrap>
     )

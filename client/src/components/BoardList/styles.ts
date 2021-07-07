@@ -42,7 +42,7 @@ export const Table = styled.table`
     }
 
     ${props => props.theme.media.mobile}{
-        font-size: 1.2vw;
+        font-size: 2vw;
     }
 `
 

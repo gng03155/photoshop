@@ -54,7 +54,7 @@ export const FooterMenu = styled.div`
             li{
 
                 a{
-                    font-size: 1.2vw;
+                    font-size: 2vw;
                     padding: 0;
                 }
             }
@@ -96,6 +96,12 @@ export const CsBankInfo = styled.div`
 
     ${props => props.theme.media.mobile}{
         flex-direction: column;
+        div:first-child{
+            align-self: flex-start;
+        }
+        div:last-child{
+            align-self: flex-end;
+        }
     }  
 `
 
@@ -122,24 +128,35 @@ export const CompanyInfo = styled.div`
     display: flex;
     justify-content: space-between;
     div{
-        margin-right: 20px;
         p {
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 10px;
-            span{
-                font-size: 14px;
+            color : #777;
+        }
+        span{
+                font-size: 12px;
                 margin-top: 5px;
-            }
+                color : #666;
         }
     }
     div:last-child{
         margin : 0;
     }
 
+    div:nth-child(1){
+        width : 40%;
+    }
+    div:nth-child(2){
+        width : 19.999%;
+    }
+    div:nth-child(3){
+        width : 40%;
+    }
+
     ${props => props.theme.media.tablet}{
         width : 100%;
         & > div > p{
-            font-size : 1.5vw;
+            font-size : 2vw;
         }
     }      
 `;

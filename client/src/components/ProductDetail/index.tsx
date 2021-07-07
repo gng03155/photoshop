@@ -408,7 +408,7 @@ export default function ProductDetail({ id, userKey }: Props) {
     }
 
     return (
-        <div style={{ marginTop: "100px" }}>
+        <div>
             <InfoWrap>
                 <Img><img src={thumbImg.length > 0 ? thumbImg[0] : ""} alt="#" /></Img>
                 <Info>
