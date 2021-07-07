@@ -32,10 +32,9 @@ export default function Section() {
         screenHeight = window.innerHeight;
         clientHeight = divRef.current.clientHeight;
         elemHeight = imgRef.current.clientHeight;
-        console.log(elemHeight, clientHeight, screenHeight);
-        window.addEventListener("scroll", e => handleScroll(e));
+        addEventListener("scroll", handleScroll);
         return () => {
-            window.removeEventListener("scroll", e => handleScroll(e));
+            removeEventListener("scroll", handleScroll);
         }
 
     }, [])
@@ -77,10 +76,10 @@ export default function Section() {
         if (prev === cur) {
             return;
         }
-
         // const screenHeight = window.innerHeight;
         const scrollBt = scrollTop + screenHeight;
         const clientTop = wrapRef.current.offsetTop;
+
         // const clientHeight = divRef.current.clientHeight;
 
         if (scrollBt >= clientTop && scrollTop <= clientTop + clientHeight) {

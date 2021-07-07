@@ -38,8 +38,7 @@ export default function Header() {
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
-        // addEventListener("scroll", scrollHeader);
-        // addEventListener("mousewheel", scrollHeader);
+        addEventListener("scroll", scrollHeader);
         addEventListener("resize", onResize);
         return () => {
             removeEventListener("scroll", scrollHeader);
@@ -53,18 +52,14 @@ export default function Header() {
         }
 
         const cc = document.querySelector("#MainWrap");
-        if (isMobile) {
-            cc.addEventListener("scroll", scrollHeader);
-            window.removeEventListener("scroll", scrollHeader);
-        } else {
-            cc.removeEventListener("scroll", scrollHeader);
-            window.addEventListener("scroll", scrollHeader);
-        }
+        // if (isMobile) {
+        //     cc.addEventListener("scroll", scrollHeader);
+        //     window.removeEventListener("scroll", scrollHeader);
+        // } else {
+        //     cc.removeEventListener("scroll", scrollHeader);
+        //     window.addEventListener("scroll", scrollHeader);
+        // }
     }, [isMobile])
-
-    const tttt = (e) => {
-        console.log(e.target);
-    }
 
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
