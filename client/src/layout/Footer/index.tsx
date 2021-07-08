@@ -23,10 +23,12 @@ export default function Footer() {
                             <span>신고준비중</span>
                         </div>
                         <div>
-                            <p>Company</p>
-                            <span>포토샵</span>
-                            <p>CEO</p>
-                            <span>WJS</span>
+                            <div className="center_box">
+                                <p>Company</p>
+                                <span>포토샵</span>
+                                <p>CEO</p>
+                                <span>WJS</span>
+                            </div>
                         </div>
                         <div>
                             <p>Tel</p>

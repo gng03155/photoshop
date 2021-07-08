@@ -4,9 +4,10 @@ export const Wrap = styled.div`
     margin : 100px 0;
     text-align: center;
 
-    & > h2{
-        margin-bottom: 50px;
+    h3{
+        margin-bottom : 20px;
     }
+
     & > p{
         margin-bottom: 50px;
         font-size: 18px;
@@ -21,6 +22,7 @@ export const InputWrap = styled.div`
     input{
         width : 80%;
         height : 30px;
+        padding : 0 10px;
     }
     a{
         display: inline-block;

@@ -65,7 +65,7 @@ export default function Login() {
                         <ul>
                             <li><Link href="/member/find"><a href="#">계정찾기</a></Link></li>
                             <li><span>/</span></li>
-                            <li><a href="#">회원가입</a></li>
+                            <li><Link href="/member/signup?name=agree" as="/member/signup"><a href="#">회원가입</a></Link></li>
                         </ul>
                     </Find>
                     <Button type="submit">로그인</Button>

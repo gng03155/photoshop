@@ -6,11 +6,8 @@ export const Wrap = styled.div`
     justify-content: center;
     align-items: center;
     width : 100%;
-    margin : 150px 0 200px;
+    margin-bottom: 100px;
     text-align: center;
-    h2{
-        margin-bottom: 50px;
-    }
 `
 
 export const Form = styled.form`

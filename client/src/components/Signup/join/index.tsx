@@ -32,6 +32,7 @@ export default function Join() {
             salt: "",
             date: moment().format("YYYY-MM-DD HH:mm:ss"),
             level: 1,
+            mileage: 3000,
         }
 
         // 공백 및 비밀번호 체크

@@ -8,7 +8,6 @@ export const WishWrap = styled.div`
     ul{
         display: flex;
         justify-content: space-between;
-        align-items: center;
         flex-wrap: wrap;
         border : 2px solid #ececec;
         padding: 5px 10px 10px;
@@ -29,6 +28,8 @@ export const WishWrap = styled.div`
     }
     ${props => props.theme.media.desktop}{
         ul{
+            justify-content: flex-start;
+
             li{
                 width : 32%;
             }
@@ -39,6 +40,8 @@ export const WishWrap = styled.div`
     }
     ${props => props.theme.media.tablet}{
         ul{
+            justify-content: flex-start;
+
             li{
                 & > div{
                     flex-direction: column;

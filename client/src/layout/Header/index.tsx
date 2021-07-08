@@ -71,19 +71,13 @@ export default function Header() {
     }
 
     const scrollHeader = useCallback(() => {
-
-
         const ofWidth = document.body.offsetWidth;
         let cWidth = divRef.current.clientWidth + "px";
 
         const wrap = divRef.current as HTMLDivElement;
 
         let scrollTop = 0;
-        if (isMobile) {
-            scrollTop = wrap.parentElement.scrollTop;
-        } else {
-            scrollTop = document.documentElement.scrollTop;
-        }
+        scrollTop = document.documentElement.scrollTop;
 
 
         if (ofWidth <= 1260) {
@@ -298,7 +292,7 @@ export default function Header() {
                         <li onClick={onClickToggleClose}>
                             {userKey === null ? <Link href="/member/login"><a>login&nbsp;/&nbsp;</a></Link> : <a onClick={onLogout}>logout</a>}
                             {/* <span>/</span> */}
-                            {userKey === null && <Link href="/member/signup?name=agree" as="signup"><a>joinus</a></Link>}
+                            {userKey === null && <Link href="/member/signup?name=agree" as="/member/signup"><a>join us</a></Link>}
                         </li>
                         <li className="page" onClick={onClickToggleClose}>
                             <Link href="/mypage/main"><a>mypage</a></Link>

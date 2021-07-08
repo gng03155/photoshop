@@ -5,10 +5,13 @@ import useSWR from 'swr';
 import ProductList from '../../../src/components/ProductList'
 import { fetcherData } from '../../../src/util/fetcher';
 import { InputWrap, Ment, Wrap } from '../../../page_style/category/search/styles';
+import { localFetcher } from '../../../src/util/localFetcher';
 
 export default function Search() {
 
     const { data: productList } = useSWR(`/products/product`, fetcherData, { revalidateOnMount: true });
+
+    const { data: load, mutate } = useSWR("load", localFetcher);
 
     const [proIdList, setProIdList] = useState<string[]>([null]);
 
@@ -44,23 +47,6 @@ export default function Search() {
         }
     }, [productList, keyword])
 
-    const setIdList = (word) => {
-        let idList = [];
-        for (let item in productList) {
-            const name: string = productList[item]["name"];
-            const contained = name.indexOf(word);
-            if (contained !== -1) {
-                idList.push(item);
-            }
-        }
-        setProIdList(idList);
-        // setProIdList(value => {
-        //     let copy = value;
-        //     copy = idList;
-        //     return copy;
-        // });
-    }
-
     const onClickSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const value = inputRef.current.value;
@@ -68,8 +54,37 @@ export default function Search() {
             alert("검색어를 입력해주세요.");
             return;
         }
+
+        if (spaceCheck(value)) {
+            alert("공백을 지우고 다시 입력해주세요!");
+            return;
+        }
+        console.log("??");
+        mutate(true, false);
         setKeyword(value);
         setIdList(value);
+        mutate(false, false);
+    }
+
+    const spaceCheck = (value) => {
+        const pattern = /^\s/g;
+        return pattern.test(value);
+    }
+
+    const setIdList = (word) => {
+        let idList = [];
+
+        word = word.toLowerCase();
+
+        for (let item in productList) {
+            const name: string = productList[item]["name"];
+            const contained = name.toLowerCase().indexOf(word);
+            if (contained !== -1) {
+                idList.push(item);
+            }
+        }
+
+        setProIdList(idList);
     }
 
     if (proIdList[0] === null) {
@@ -83,6 +98,7 @@ export default function Search() {
                 <input ref={inputRef} type="text" />
                 <a onClick={onClickSearch}>검색</a>
             </InputWrap>
+            <h3>"{keyword}" 에 대한 검색결과 입니다.</h3>
             <p>총 ({proIdList.length})개 상품이 검색되었습니다.</p>
             {proIdList.length !== 0 ? <ProductList proIdList={proIdList} isSearch={true} /> : <Ment><p>정확한 검색어 인지 확인하시고 다시 검색해 주세요.</p></Ment>}
         </Wrap>

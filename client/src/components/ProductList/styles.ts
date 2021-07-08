@@ -210,7 +210,7 @@ export const List = styled.div`
     }
 
     ${props => props.theme.media.tablet}{
-        li{
+        && li{
             width : 32%;
             margin-right: 2%;
         }

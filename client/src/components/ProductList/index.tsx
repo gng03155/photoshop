@@ -329,10 +329,6 @@ export default function ProductList({ proIdList, isSearch }: Props) {
 
                     </ColorWrap>
                 </Option>
-                {/* <FilterButton>
-                    <button>선택 초기화</button>
-                    <button>적용</button>
-                </FilterButton> */}
             </Filter>}
             <ListMenu>
                 {!isSearch ? <p>총<span>{curIdList.length}</span>개의 상품이 있습니다.</p> : <p></p>}

@@ -18,8 +18,7 @@ import { useMediaQuery } from 'react-responsive';
 
 function App({ Component, pageProps }: AppProps) {
 
-    const { data: localLoad } = useSWR("load", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 1000 });
-    const { data: user, revalidate } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 1000 });
+    const { data: localLoad } = useSWR("load", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false });
 
     const isMobile = useMediaQuery({ maxWidth: 480 });
 

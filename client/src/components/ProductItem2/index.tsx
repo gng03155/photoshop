@@ -33,7 +33,7 @@ export default function ProductItem2({ productId }: Props) {
             </div>
             <nav>
                 <p>{productInfo.name}</p>
-                <strong>{productInfo.price.toLocaleString()}원</strong>
+                <strong>{productInfo.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</strong>
                 <article>
                     <a className="like"></a>
                     <span>{productInfo.like}</span>

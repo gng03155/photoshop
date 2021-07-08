@@ -15,6 +15,10 @@ export default function signup() {
     const [userData, setUserData] = useState<any>({});
 
     useEffect(() => {
+        if (window.sessionStorage.getItem("uid") !== null) {
+            router.push("/");
+            return;
+        }
     }, [])
 
     useEffect(() => {
