@@ -174,7 +174,6 @@ export default function Header() {
     const onClickSub = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         const tg = e.target as HTMLAnchorElement;
         const friend = tg.nextElementSibling;
-
         friend.classList.toggle("active");
     }
 

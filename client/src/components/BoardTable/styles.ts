@@ -4,6 +4,7 @@ export const Table = styled.table`
     width : 100%;
     border-collapse: collapse;
     border-top : 1px solid #dfdfdf;
+    margin-top : 10px;
 
     tr{
         height : 45px;

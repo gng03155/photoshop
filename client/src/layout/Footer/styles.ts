@@ -18,7 +18,7 @@ export const FooterWrap = styled.footer`
     height: auto;
     margin : 0 auto;
     padding: 30px 0px;
-    color : #111;
+    color : #999;
     
     @media (max-width : 1259px){
         width  : 100%;
@@ -45,17 +45,18 @@ export const FooterMenu = styled.div`
                 display: block;
                 padding: 10px 15px;
                 font-size: 16px;
-                color : #111;
+                color : inherit;
             }
         }
         li:after{
             position: absolute;
             content:"";
             width : 1px;
-            height : 15px;
-            background-color: #333;
+            height : 20px;
+            background-color: #555;
             right: 0;
-            top: 15px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         li:last-child:after{
@@ -70,6 +71,9 @@ export const FooterMenu = styled.div`
                     font-size: 2vw;
                 }
             }
+            li:after{
+                height : 12px;
+            }
         }
 
         ${props => props.theme.media.mobile}{
@@ -81,8 +85,7 @@ export const FooterMenu = styled.div`
                 }
             }
             li:after{
-                height : 15px;
-                top: 12px;
+                height : 10px;
             }
         }
 
@@ -113,12 +116,12 @@ export const CompanyInfo = styled.div`
     p {
         font-size: 14px;
         margin-top: 10px;
-        color : #777;
+        color : inherit;
     }
     span{
         font-size: 12px;
         margin-top: 5px;
-        color : #666;
+        color : inherit;
     }
 
     & > div:nth-child(1){

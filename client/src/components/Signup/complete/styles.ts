@@ -48,4 +48,5 @@ export const Button = styled.button`
     background : black;
     text-align : center;
     color : #fff;
+    margin-bottom: 40px;
 `

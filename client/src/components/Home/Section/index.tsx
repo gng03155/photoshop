@@ -32,9 +32,9 @@ export default function Section() {
         screenHeight = window.innerHeight;
         clientHeight = divRef.current.clientHeight;
         elemHeight = imgRef.current.clientHeight;
-        addEventListener("scroll", handleScroll);
+        addEventListener("scroll", e => handleScroll(e));
         return () => {
-            removeEventListener("scroll", handleScroll);
+            removeEventListener("scroll", e => handleScroll(e));
         }
 
     }, [])

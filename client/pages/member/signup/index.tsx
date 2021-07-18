@@ -22,7 +22,6 @@ export default function signup() {
     }, [])
 
     useEffect(() => {
-
         const name = router.query.name;
         if (name === undefined) {
             router.push("/member/signup?name=agree", "/signup");
