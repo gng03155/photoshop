@@ -10,21 +10,8 @@ export const GlobalStyle = createGlobalStyle`
   } */
 
   html {
-    /* width:100%;
-    height:99.9%;
-    overflow:hidden; */
   }
   body {
-
-    /* width:100%;
-    height:100%;
-    overflow:hidden; */
-    
-    /* & > div {
-      width : 100%;
-      overflow-x: visible;
-    } */
-
     max-width: 100%;
     min-height: 100vh;
     overflow-x: hidden;

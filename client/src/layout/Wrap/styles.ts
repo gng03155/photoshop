@@ -5,10 +5,10 @@ export const MainWrap = styled.div`
     max-width: 1260px;
     padding: 0 20px 0 20px;
     height : 100%;
+    min-height: 100vh;
 
 
     /* height : 100%; */
-    /* min-height: 100vh; */
     /* height: calc(var(--vh, 1vh) * 100);
     /* overflow-y: auto; */
 

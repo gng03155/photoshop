@@ -170,6 +170,12 @@ export const ListMenu = styled.div`
         display: inline-block;
         padding: 5px 15px;
     }
+    a.active{
+        font-weight: 500;
+    }
+    a:hover{
+        font-weight: 500;
+    }
 
     ${props => props.theme.media.tablet}{
         justify-content: flex-start;

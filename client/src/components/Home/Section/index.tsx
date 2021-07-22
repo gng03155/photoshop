@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 
 import { SectionWrap, NewItem, InteraciveImg, BestItem, InteractiveWrap } from "./styles"
 
@@ -32,89 +32,45 @@ export default function Section() {
         screenHeight = window.innerHeight;
         clientHeight = divRef.current.clientHeight;
         elemHeight = imgRef.current.clientHeight;
-        addEventListener("scroll", e => handleScroll(e));
+        addEventListener("scroll", handleScroll);
         return () => {
-            removeEventListener("scroll", e => handleScroll(e));
+            removeEventListener("scroll", handleScroll);
         }
-
     }, [])
 
-    useEffect(() => {
-        if (divRef.current === null) {
+    const handleScroll = useCallback((e: Event) => {
+        if (wrapRef.current === null) {
             return;
         }
 
-        const mainWrap = document.querySelector("#MainWrap");
-        // if (isMobile) {
-        //     // mainWrap.addEventListener("scroll", handleScroll);
-        //     mainWrap.addEventListener("touchmove", handleScroll);
-        //     window.removeEventListener("scroll", handleScroll);
-        // } else {
-        //     mainWrap.removeEventListener("touchmove", handleScroll);
-        //     mainWrap.removeEventListener("scroll", handleScroll);
-        //     window.addEventListener("scroll", handleScroll);
-        // }
-    }, [isMobile])
-
-    useEffect(() => {
-    }, [bestList, newList])
-
-    const handleScroll = (e: Event) => {
-
         let scrollTop = 0;
-        // if (isMobile) {
-        //     const mainWrap = document.querySelector("#MainWrap");
-        //     scrollTop = mainWrap.scrollTop;
-        // } else {
-        //     scrollTop = document.documentElement.scrollTop;
-        // }
 
         scrollTop = document.documentElement.scrollTop;
 
         cur = scrollTop;
-
         if (prev === cur) {
             return;
         }
-        // const screenHeight = window.innerHeight;
         const scrollBt = scrollTop + screenHeight;
-        const clientTop = wrapRef.current.offsetTop;
+        const clientTop = wrapRef.current?.offsetTop;
 
-        // const clientHeight = divRef.current.clientHeight;
 
         if (scrollBt >= clientTop && scrollTop <= clientTop + clientHeight) {
-            // element.style.visibility = "visible";
-            // element.style.bottom = "0px";
-            // const element = imgRef.current as HTMLAnchorElement;
-            // const elemHeight = element.clientHeight;
             divRef.current.style.visibility = "visible";
 
             let move = 0;
             move = (scrollBt - clientTop);
-            // if (!isScroll) {
-            //     move = (scrollBt - clientTop);
-            // } else {
-            //     move = Math.round(prev - cur);
-            // }
-
             divRef.current.style.transform = `translate3d(0,${Math.round(screenHeight - move) + "px"},0)`;
             imgRef.current.style.transform = `translate3d(0,${Math.round(-elemHeight + move) + "px"},0)`;
-
-            // element.style.transform = `translate3d(0,10px,0)`;
-            // isScroll = true;
 
 
         }
         else {
             isScroll = false;
             divRef.current.style.visibility = "hidden";
-            // imgRef.current.style.visibility = "hidden";
         }
-
-
-
         prev = cur;
-    }
+    }, [])
 
     return (
         <div>

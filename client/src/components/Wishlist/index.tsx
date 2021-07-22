@@ -52,6 +52,12 @@ export default function Wishlist({ userKey }: Props) {
         if (!isDelete) {
             return;
         } else {
+
+            if (selList.length === 0) {
+                alert("선택된 항목이 없습니다.");
+                return;
+            }
+
             await fb.database().ref(`like/${userKey}`).once("value").then(async (data) => {
                 let temp = data.val();
                 selList.map((val) => {

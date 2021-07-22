@@ -205,6 +205,15 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         e.preventDefault();
 
         const tg = e.target as HTMLAnchorElement;
+        const collection = tg.parentElement.parentElement.children;
+
+        Array.from(collection).forEach((elem) => {
+            if (elem.tagName === "LI") {
+                elem.firstElementChild.classList.remove("active");
+            }
+        })
+
+        tg.classList.add("active");
 
         const type = tg.dataset.type;
 
@@ -234,6 +243,15 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         e.preventDefault();
 
         const tg = e.target as HTMLAnchorElement;
+        const collection = tg.parentElement.parentElement.children;
+
+        Array.from(collection).forEach((elem) => {
+            if (elem.tagName === "LI") {
+                elem.firstElementChild.classList.remove("active");
+            }
+        })
+
+        tg.classList.add("active");
 
         let nameList = [];
         for (let name of curIdList) {
@@ -256,6 +274,15 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         e.preventDefault();
 
         const tg = e.target as HTMLAnchorElement;
+        const collection = tg.parentElement.parentElement.children;
+
+        Array.from(collection).forEach((elem) => {
+            if (elem.tagName === "LI") {
+                elem.firstElementChild.classList.remove("active");
+            }
+        })
+
+        tg.classList.add("active");
 
         let rList = [];
         if (reviewList === undefined) {

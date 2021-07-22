@@ -3,7 +3,7 @@ import styled from "styled-components"
 export const InfoWrap = styled.div`
     width: 100%;
     display: flex;
-
+    margin : 100px 0;
     ${props => props.theme.media.tablet}{
         flex-direction: column;
         align-items: center;
@@ -195,7 +195,10 @@ export const ProductButton = styled.div`
             cursor: pointer;
         }
         li:nth-child(1){
-            width: 70%;
+            width: 68%;
+        }
+        li:nth-child(2){
+            margin: 0 1%;
         }
         li:nth-child(2) , li:nth-child(3){
             width: 15%;
@@ -263,7 +266,6 @@ export const CartBtn = styled.div`
 
 
 export const DetailWrap = styled.div`
-    margin-top: 150px;
     ${props => props.theme.media.tablet}{
         margin-top : 100px;
         & > div{

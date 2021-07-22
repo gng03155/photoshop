@@ -80,7 +80,7 @@ export default function Main({ userKey }: Props) {
                     <li><Link href="/mypage/mileage"><a>적립금 상세내역</a></Link></li>
                 </ul>
             </Maileage>
-            <h2>나의 주문처리 현황</h2>
+            <h3>나의 주문처리 현황</h3>
             <Delivery>
                 <ul>
                     <li className="item">

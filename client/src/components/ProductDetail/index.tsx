@@ -182,8 +182,7 @@ export default function ProductDetail({ id, userKey }: Props) {
         const copy = [...buyProductInfo];
         const copyOpt = [...option];
 
-        const opIdx = copyOpt.indexOf(`${copy[idx].size}`);
-
+        const opIdx = copyOpt.indexOf(`${copy[idx].option}`);
         copyOpt.splice(opIdx, 1);
         copy.splice(idx, 1);
 

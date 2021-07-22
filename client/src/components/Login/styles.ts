@@ -48,6 +48,9 @@ export const Find = styled.div`
                 font-size: 16px;
                 padding: 5px 20px;
             }
+            a:hover{
+                opacity: 0.8;
+            }
             span{
                 margin: 0 5px;
                 font-size: 14px;
@@ -63,9 +66,15 @@ export const Button = styled.button`
     color : #fff;
     background : #333;
     font-size : 20px;
+    transition: all .3s;
     ${props => props.theme.media.mobile}{
         height : 40px;
         font-size: 16px;
+    }
+    &:hover{
+        background-color: #fff;
+        color : #333;
+        border-color: #333;
     }
 `
 

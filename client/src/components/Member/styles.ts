@@ -7,11 +7,15 @@ export const Button = styled.div`
     margin : 40px 0;
     button{
         text-align: center;
-        background : black;
+        background-color : black;
         color : #fff;
-        border : 1px solid #ececec;
         width : 30%;
         height : 45px;
+    }
+    button:hover{
+        color : #333;
+        background-color: #fff;
+        border-color: #000;
     }
 
     ${props => props.theme.media.mobile}{

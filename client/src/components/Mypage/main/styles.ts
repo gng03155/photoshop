@@ -3,6 +3,10 @@ import styled from "styled-components"
 
 export const Wrap = styled.div`
     width: 100%;
+    h3{
+        text-align: center;
+        padding: 20px 0;
+    }
 `
 
 export const Maileage = styled.div`
@@ -39,6 +43,9 @@ export const Maileage = styled.div`
     a{
         padding: 5px 8px;
         border : 1px solid #ececec;
+    }
+    a:hover{
+        border-color: #000;
     }
     ${props => props.theme.media.tablet}{
         ul{
@@ -125,6 +132,9 @@ export const Menu = styled.div`
             margin-right: 1.33333%;
             border: 1px solid #ececec;
             cursor: pointer;
+        }
+        li:hover{
+            border-color: #000;
         }
         li:nth-child(4n){
             margin-right: 0;
