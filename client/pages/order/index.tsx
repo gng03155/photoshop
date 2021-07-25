@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import OrderPage from '../../src/components/OrderPage';
+import OrderPage from '../../src/components/OrderComponenets/OrderPage';
 
 export default function Order({ id }) {
 

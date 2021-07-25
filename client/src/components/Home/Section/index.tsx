@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react'
 
 import { SectionWrap, NewItem, InteraciveImg, BestItem, InteractiveWrap } from "./styles"
 
-import ProductItem from '../../ProductItem'
+import ProductItem from '../../ProductComponents/ProductItem'
 import useSWR from 'swr';
 import { fetcherData } from '../../../util/fetcher';
 import { useMediaQuery } from 'react-responsive';

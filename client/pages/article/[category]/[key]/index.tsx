@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Comment from '../../../../src/components/Comment';
-import BoardTable from '../../../../src/components/BoardTable';
-import ProductItem2 from '../../../../src/components/ProductItem2';
+import Comment from '../../../../src/components/BoardComponents/Comment';
+import BoardTable from '../../../../src/components/BoardComponents/BoardRead';
+import ProductItem2 from '../../../../src/components/ProductComponents/ProductItem2';
 import { Title } from '../../../../page_style/article/styles';
 
 

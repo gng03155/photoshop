@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
-import ProductList from '../../src/components/ProductList'
+import ProductList from '../../src/components/ProductComponents/ProductList'
 import { fetcherData } from '../../src/util/fetcher';
 import { IProduct } from '../../src/types';
 

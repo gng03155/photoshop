@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { fetcherData } from '../../../src/util/fetcher';
-import BoardList from '../../../src/components/BoardList';
+import BoardList from '../../../src/components/BoardComponents/BoardList';
 import { Title } from '../../../page_style/board/styles';
 import { localFetcher } from '../../../src/util/localFetcher';
 export default function Index() {

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useRef, useState } from 'react'
-import Board from '../../../../src/components/Board'
+import Board from '../../../../src/components/BoardComponents/BoardWrite'
 
 
 export default function Write() {

@@ -2,13 +2,6 @@ import { createGlobalStyle } from 'styled-components';
 
 
 export const GlobalStyle = createGlobalStyle`
-  /* @font-face {
-    font-family: "Noto Serif";
-    font-style: normal;
-    src : url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-    unicode-range:U+0041-005A, U+0061-007A, U+0030-0039;
-  } */
-
   html {
   }
   body {
@@ -45,5 +38,4 @@ box-sizing: border-box;}
     text-align: center;
     color : #D1B6E1;
   }
-
 `;

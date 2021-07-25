@@ -4,7 +4,7 @@ import useSWR from "swr";
 
 import { useRouter } from "next/router";
 
-import ProductDetail from '../../src/components/ProductDetail';
+import ProductDetail from '../../src/components/ProductComponents/ProductDetail';
 
 export default function Product() {
 

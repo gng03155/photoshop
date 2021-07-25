@@ -63,7 +63,7 @@ export const InteractiveWrap = styled.div`
    height : 480px;
    overflow: hidden;
    ${props => props.theme.media.mobile}{
-      height : 240px;
+      height : 360px;
    }
 
 
@@ -87,16 +87,16 @@ export const InteraciveImg = styled.div`
          top: 0;
          width : 100%;
          height: 1000px;
-         background: url("/img/123.jpg") no-repeat;
+         background: url("/img/louvre_desk.jpg") no-repeat;
          background-size: 100% 100%;
          cursor: default;
      }
 
      ${props => props.theme.media.mobile}{
-        height : 240px;
+        height : 360px;
        a{
          height : 900px;
-         background: url("/img/999.jpg") no-repeat;
+         background: url("/img/louvre_mob.jpg") no-repeat;
          background-size: 100% 100%;
 
       } 

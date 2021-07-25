@@ -34,8 +34,6 @@ export default function Header() {
     }
 
 
-
-
     useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
         addEventListener("scroll", scrollHeader);

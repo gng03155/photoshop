@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Board from '../../../../src/components/Board'
+import Board from '../../../../src/components/BoardComponents/BoardWrite'
 
 export default function Index() {
     const router = useRouter();

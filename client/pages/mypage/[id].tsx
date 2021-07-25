@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import Member from '../../src/components/Member';
-import MileageHistory from '../../src/components/MileageHistory';
-import Main from '../../src/components/Mypage/main'
-import OrderDetail from '../../src/components/OrderDetail';
-import OrderHistory from '../../src/components/OrderHistory';
-import UserBoardManager from '../../src/components/UserBoardManager';
-import Wishlist from '../../src/components/Wishlist';
+import Member from '../../src/components/MemberComponents/Member';
+import MileageHistory from '../../src/components/MypageComponents/MileageHistory';
+import Main from '../../src/components/MypageComponents/main'
+import OrderDetail from '../../src/components/OrderComponenets/OrderDetail';
+import OrderHistory from '../../src/components/OrderComponenets/OrderHistory';
+import UserBoardManager from '../../src/components/MypageComponents/UserBoardManager';
+import Wishlist from '../../src/components/MypageComponents/Wishlist';
 
 export default function index() {
     const router = useRouter();

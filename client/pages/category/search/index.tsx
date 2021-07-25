@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
-import ProductList from '../../../src/components/ProductList'
+import ProductList from '../../../src/components/ProductComponents/ProductList'
 import { fetcherData } from '../../../src/util/fetcher';
 import { InputWrap, Ment, Wrap } from '../../../page_style/category/search/styles';
 import { localFetcher } from '../../../src/util/localFetcher';

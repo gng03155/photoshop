@@ -45,7 +45,7 @@ export const MainMenu = styled.div`
             padding : 10px 0;
             a {
                 display: block;
-                font-size : 13px;
+                font-size : 15px;
                 padding: 0 10px;
             }
         }
