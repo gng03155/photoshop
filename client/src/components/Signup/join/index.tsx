@@ -12,11 +12,18 @@ import { localFetcher } from '../../../util/localFetcher';
 export default function Join() {
 
     const { data: load, mutate } = useSWR("load", localFetcher);
-
+    const [isOverWrap, setIsOverWrap] = useState(false);
     const router = useRouter();
 
     const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        //중복체크
+        if (!isOverWrap) {
+            alert("입력하신 ID와 Email을 확인해주세요.");
+            return;
+        }
+
         const target = e.target as HTMLTextAreaElement;
 
         const values = {
@@ -74,7 +81,7 @@ export default function Join() {
             }
         }, "/member/signup");
 
-    }, [])
+    }, [isOverWrap])
 
     const checkPassword = useCallback(
         (pswd, chpswd) => {
@@ -149,7 +156,7 @@ export default function Join() {
     return (
         <div>
             <form onSubmit={onSubmit}>
-                <MemberForm />
+                <MemberForm setOverWrap={setIsOverWrap} />
                 <Button>가입하기</Button>
             </form>
         </div>

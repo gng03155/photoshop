@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, Dispatch } from 'react'
 import Router from "next/router";
 import DaumPostcode from "react-daum-postcode";
 import crypto from "crypto";
@@ -8,11 +8,15 @@ import SHA256 from 'crypto-js/sha256';
 import { TitleArea, Form, Table, IdBox, TextBox, AddressBox, PhoneBox, EmailBox, BirthBox, Button, PostWrap } from "./styles"
 
 import fb from '../../../firebase';
+import useSWR from 'swr';
+import { fetcherData } from '../../../util/fetcher';
+import { IUser } from '../../../types';
 
 interface Props {
-    userInfo?: any,
+    userInfo?: IUser,
+    setOverWrap?: Dispatch<boolean>,
 }
-export default function MemberForm({ userInfo }: Props) {
+export default function MemberForm({ userInfo, setOverWrap }: Props) {
 
     const [isAdress, setIsAdress] = useState(false);
 
@@ -20,6 +24,8 @@ export default function MemberForm({ userInfo }: Props) {
 
     const [zoneCode, setZoneCode] = useState<string>(userInfo !== undefined ? userInfo.adrs[0] : "");
     const [address, setAddress] = useState<string>(userInfo !== undefined ? userInfo.adrs[1] : "");
+
+    const { data: userList } = useSWR<{ [key: string]: IUser } | undefined>(`/users`, fetcherData, { revalidateOnMount: true });
 
     const [postPos, setPostPos] = useState({ x: 0, y: 0 });
 
@@ -119,13 +125,58 @@ export default function MemberForm({ userInfo }: Props) {
 
 
 
-    const equalPw = (e: any) => {
-        if (e.target.value !== password) {
-            e.target.nextSibling.classList.add("active")
+    const equalPw = (e: React.FocusEvent<HTMLInputElement>) => {
+        const tg = e.target as HTMLInputElement;
+        console.dir(tg);
+        if (tg.value !== password) {
+            tg.nextElementSibling.classList.add("active")
         } else {
-            e.target.nextSibling.classList.remove("active")
+            tg.nextElementSibling.classList.remove("active")
         }
+    }
 
+    const overlapCheckId = (e: React.FocusEvent<HTMLInputElement>) => {
+        const tg = e.target as HTMLInputElement;
+        const sibling = tg.nextElementSibling as HTMLSpanElement;
+        const value = tg.value;
+        let isOverlap = false;
+        for (let key in userList) {
+            if (userList[key].id === value) {
+                isOverlap = true;
+                break;
+            }
+        }
+        if (isOverlap) {
+            sibling.classList.add("active")
+            sibling.innerText = "중복된 아이디 입니다.";
+            setOverWrap(false);
+        } else {
+            sibling.classList.add("active")
+            sibling.innerText = "사용 가능한 아이디 입니다.";
+            setOverWrap(true);
+        }
+    }
+
+    const overlapCheckEmail = (e: React.FocusEvent<HTMLInputElement>) => {
+        const tg = e.target as HTMLInputElement;
+        const sibling = tg.nextElementSibling as HTMLSpanElement;
+        const value = tg.value;
+        let isOverlap = false;
+        for (let key in userList) {
+            if (userList[key].email === value) {
+                isOverlap = true;
+                break;
+            }
+        }
+        if (isOverlap) {
+            sibling.classList.add("active")
+            sibling.innerText = "중복된 이메일 입니다.";
+            setOverWrap(false);
+        } else {
+            sibling.classList.add("active")
+            sibling.innerText = "사용 가능한 이메일 입니다.";
+            setOverWrap(true);
+        }
     }
 
     return (
@@ -138,23 +189,23 @@ export default function MemberForm({ userInfo }: Props) {
                 </colgroup>
                 <tbody>
                     <IdBox>
-                        <th>아이디</th>
-                        <td><input type="text" id="id" maxLength={12} pattern="^[a-zA-Z0-9]+$" title="아이디는 영문자,숫자로만 입력해주세요!" defaultValue={userInfo !== undefined ? userInfo.id : ""} disabled={userInfo !== undefined ? true : false} /></td>
+                        <th className="req">아이디</th>
+                        <td><input type="text" id="id" maxLength={12} pattern="^[a-zA-Z0-9]+$" title="아이디는 영문자,숫자로만 입력해주세요!" defaultValue={userInfo !== undefined ? userInfo.id : ""} disabled={userInfo !== undefined ? true : false} onBlur={overlapCheckId} /><span className="msg"></span></td>
                     </IdBox>
                     <TextBox>
-                        <th>비밀번호</th>
+                        <th className="req">비밀번호</th>
                         <td><input type="password" id="pswd" maxLength={16} pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$" title="영문자/숫자/특수문자를 각 1개이상 포함해서 8~16자 내로 입력해주세요!" onBlur={e => { setPassWord(e.target.value) }} /></td>
                     </TextBox>
                     <TextBox>
-                        <th>비밀번호 확인</th>
-                        <td><input type="password" id="checkpswd" maxLength={16} onBlur={equalPw} /><span className="error">비밀번호가 일치 하지 않음!</span></td>
+                        <th className="req">비밀번호 확인</th>
+                        <td><input type="password" id="checkpswd" maxLength={16} onBlur={equalPw} /><span className="msg">비밀번호가 일치 하지 않음!</span></td>
                     </TextBox>
                     <TextBox>
-                        <th>이름</th>
+                        <th className="req">이름</th>
                         <td><input type="text" id="name" defaultValue={userInfo !== undefined ? userInfo.name : ""} disabled={userInfo !== undefined ? true : false} /></td>
                     </TextBox>
                     <AddressBox>
-                        <th>주소</th>
+                        <th className="req">주소</th>
                         <td>
                             <ul>
                                 <li>
@@ -223,7 +274,7 @@ export default function MemberForm({ userInfo }: Props) {
                         </td>
                     </PhoneBox>
                     <PhoneBox>
-                        <th>휴대전화</th>
+                        <th className="req">휴대전화</th>
                         <td>
                             <select id="mobile1" defaultValue={userInfo !== undefined ? userInfo.mobile[0] : "010"}>
                                 <option value="010">010</option>
@@ -240,8 +291,8 @@ export default function MemberForm({ userInfo }: Props) {
                         </td>
                     </PhoneBox>
                     <EmailBox>
-                        <th>이메일</th>
-                        <td><input type="email" id="email" defaultValue={userInfo !== undefined ? userInfo.email : ""} /></td>
+                        <th className="req">이메일</th>
+                        <td><input type="email" id="email" defaultValue={userInfo !== undefined ? userInfo.email : ""} disabled={userInfo !== undefined ? true : false} onBlur={overlapCheckEmail} /> <span className="msg"></span></td>
                     </EmailBox>
                 </tbody>
             </Table>

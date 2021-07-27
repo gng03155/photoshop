@@ -22,6 +22,8 @@ export default function Member({ userKey }: Props) {
 
     const formRef = useRef<HTMLFormElement>(null)
 
+    const [isOverWrap, setIsOverWrap] = useState(false);
+
     const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const target = e.target as HTMLTextAreaElement;
@@ -111,11 +113,6 @@ export default function Member({ userKey }: Props) {
             target["checkpswd"].focus();
             alert("비밀번호를 입력해주세요!");
             return true;
-        }
-        if (values.email === null) {
-            alert("이메일을 입력해주세요!");
-            target["email"].focus();
-            return true;
         } if (values.mobile[1] === null) {
             target["mobile2"].focus();
             alert("휴대전화를 입력해주세요!");
@@ -185,6 +182,7 @@ export default function Member({ userKey }: Props) {
             <form ref={formRef} onSubmit={onSubmit}>
                 <MemberForm
                     userInfo={userInfo}
+                    setOverWrap={setIsOverWrap}
                 />
                 <Button>
                     <button type="button" onClick={onClickCancel}>취소</button>

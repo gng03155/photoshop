@@ -15,9 +15,6 @@ export default function Index() {
 
     const { data: user } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 0 });
 
-    const { data: boardList } = useSWR(query ? `board/category/${query}` : "null", fetcherData, { revalidateOnMount: true, initialData: null });
-
-
 
     useEffect(() => {
         const isUser = window.sessionStorage.getItem("uid");
@@ -29,15 +26,12 @@ export default function Index() {
     }, [])
 
     useEffect(() => {
-    }, [boardList])
-
-    useEffect(() => {
         if (typeof router.query.id === "string") {
             setQuery(router.query.id);
         }
     }, [router])
 
-    if (boardList === null || query === null) {
+    if (query === null) {
         return <div></div>;
     }
 
@@ -49,7 +43,7 @@ export default function Index() {
                 {query === "review" && <h2>상품후기</h2>}
                 {query === "qna" && <h2>Q&A</h2>}
             </Title>
-            {<BoardList boardKeyList={boardList} userKey={userKey} category={query}></BoardList>}
+            {<BoardList userKey={userKey} category={query}></BoardList>}
         </div>
     )
 }

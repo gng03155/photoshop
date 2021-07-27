@@ -70,9 +70,9 @@ export default function ProductList({ proIdList, isSearch }: Props) {
             }
             copy.push(list);
         }
-        if (num % 8 === 0) {
-            copy.splice(-1, 1);
-        }
+        // if (num % 8 === 0) {
+        //     copy.splice(-1, 1);
+        // }
         copy.splice(0, 1);
         setPageNumber(copy.length);
         setCurIdList(idList);

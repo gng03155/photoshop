@@ -26,7 +26,7 @@ export default function Write() {
     if (category === "") {
         return <div></div>
     } else {
-        if (category !== "free" && category !== "qna" && category !== "review" && userKey !== "") {
+        if (category !== "free" && category !== "qna" && category !== "review" && category !== "notice" && userKey !== "") {
             return <div></div>
         }
     }

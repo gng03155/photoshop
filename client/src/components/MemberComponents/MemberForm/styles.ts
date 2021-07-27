@@ -28,7 +28,11 @@ export const Table = styled.table`
     th{
         padding: 0px 0 0 10px;
         text-align: left;
-        
+    }
+    th.req:after{
+        padding-left: 5px;
+        content: "*";
+        color : blue;
     }
     td{
     }
@@ -45,6 +49,19 @@ export const IdBox = styled.tr`
         width : 120px;
         height :35px;
     }
+    span.msg{
+        color : lightcoral;
+        display: none;
+    }
+    span.msg.active{
+        display: inline-block;
+        margin-left : 10px;
+    }
+    ${props => props.theme.media.mobile}{
+        span.msg.active{
+            margin-left : 0px;
+        }
+     }
 `
 
 export const TextBox = styled.tr`
@@ -53,11 +70,11 @@ export const TextBox = styled.tr`
         width : 100%;
         height : 35px;
     }
-    span.error{
+    span.msg{
         color : lightcoral;
         display: none;
     }
-    span.error.active{
+    span.msg.active{
         display: inline;
     }
 `
@@ -151,6 +168,20 @@ export const EmailBox = styled.tr`
         width : 300px;
         height : 35px;
     }
+
+    span.msg{
+        color : lightcoral;
+        display: none;
+    }
+    span.msg.active{
+        display: inline-block;
+        margin-left : 10px;
+    }
+    ${props => props.theme.media.mobile}{
+        span.msg.active{
+            margin-left : 0px;
+        }
+     }
 `
 export const BirthBox = styled.tr`
     th{

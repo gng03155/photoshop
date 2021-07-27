@@ -11,12 +11,12 @@ import ReviewItem from '../../ReviewItem';
 import { NoBoard, Table, WriteButton, ReviewBoard, Lock, Wrap } from "./styles"
 
 interface Props {
-    boardKeyList: string[] | undefined,
+    boardKeyList?: string[] | undefined,
     userKey: string,
     category: string,
 }
 
-export default function BoardList({ boardKeyList, userKey, category }: Props) {
+export default function BoardList({ userKey, category }: Props) {
 
     const router = useRouter();
 
@@ -28,6 +28,7 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
     const [isRoute, setIsRoute] = useState(false);
 
     const { data: allList, revalidate, mutate } = useSWR<{ [key: string]: IBoard }>(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
+    const { data: boardKeyList, revalidate: bKeyRvdate } = useSWR(`board/category/${category}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
     //board 타입 정의
     const boardType = {
@@ -36,11 +37,6 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
         qna: "Q&A",
         notice: "공지사항",
     }
-
-
-
-
-
     useEffect(() => {
         router.events.on('routeChangeComplete', init);
         return () => {
@@ -50,25 +46,25 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
     useEffect(() => {
         revalidate();
+        bKeyRvdate();
     }, [router])
 
     useEffect(() => {
-        setIsRoute(true);
-        if (allList !== undefined && allList !== null && boardKeyList !== undefined) {
+        if (allList !== undefined && allList !== null && boardKeyList !== null) {
             setBoardList();
         }
-    }, [allList])
+        setIsRoute(true);
+    }, [allList, boardKeyList])
 
     const init = (url) => {
         setIsRoute(false);
     }
 
 
-    const setBoardList = async () => {
+    const setBoardList = () => {
 
         let listKeys = Object.keys(allList)
         let temp = [];
-
         for (let key of boardKeyList) {
             const num = listKeys.indexOf(key);
             if (num === -1) {
@@ -83,13 +79,11 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
         }
 
         temp.reverse();
-        let totalIdx = parseInt(`${temp.length / 8}`);
-        if (totalIdx === 0) {
-            totalIdx = 1;
-        }
+
+        let totalIdx = Math.floor(temp.length / 8);
 
         const copy: [IBoard[] | undefined] = [[]];
-        for (let i = 0; i < totalIdx; i++) {
+        for (let i = 0; i <= totalIdx; i++) {
             let list = [];
             for (let j = i * 8; j < (i * 8) + 8; j++) {
                 if (j >= boardKeyList.length) {
@@ -103,7 +97,6 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
         copy.splice(0, 1);
         setPageNumber(copy.length);
         setData(copy);
-
     }
 
     const onSetPage = (num) => {
@@ -279,9 +272,12 @@ export default function BoardList({ boardKeyList, userKey, category }: Props) {
 
                 </tbody>
             </Table>}
-            {(userKey !== "" && category !== "notice") && <WriteButton>
+            {/* {(userKey !== "" && category !== "notice") && <WriteButton>
                 <button onClick={onClickWrite}>글쓰기</button>
-            </WriteButton>}
+            </WriteButton>} */}
+            <WriteButton>
+                <button onClick={onClickWrite}>글쓰기</button>
+            </WriteButton>
             <PageNation onSetPage={onSetPage} pageNumber={pageNumber} curNumber={0}></PageNation>
         </Wrap>
     )

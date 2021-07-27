@@ -86,7 +86,7 @@ export const InteraciveImg = styled.div`
          left: 0;
          top: 0;
          width : 100%;
-         height: 1000px;
+         height: 100vh;
          background: url("/img/louvre_desk.jpg") no-repeat;
          background-size: 100% 100%;
          cursor: default;
@@ -95,7 +95,7 @@ export const InteraciveImg = styled.div`
      ${props => props.theme.media.mobile}{
         height : 360px;
        a{
-         height : 900px;
+         height : 100vh;
          background: url("/img/louvre_mob.jpg") no-repeat;
          background-size: 100% 100%;
 
