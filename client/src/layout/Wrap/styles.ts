@@ -7,11 +7,6 @@ export const MainWrap = styled.div`
     height : 100%;
     min-height: 100vh;
 
-
-    /* height : 100%; */
-    /* height: calc(var(--vh, 1vh) * 100);
-    /* overflow-y: auto; */
-
     margin: 0 auto;
     display: flex;
     flex-direction: column;

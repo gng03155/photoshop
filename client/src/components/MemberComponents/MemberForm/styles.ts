@@ -11,14 +11,10 @@ export const TitleArea = styled.div`
     }
 `
 
-export const Form = styled.form`
-
-`
-
 export const Table = styled.table`
-    table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
     tr{
         width: 100%;
         height:45px;
@@ -59,6 +55,7 @@ export const IdBox = styled.tr`
     }
     ${props => props.theme.media.mobile}{
         span.msg.active{
+            display: block;
             margin-left : 0px;
         }
      }
@@ -76,6 +73,11 @@ export const TextBox = styled.tr`
     }
     span.msg.active{
         display: inline;
+    }
+    ${props => props.theme.media.mobile}{
+        th{
+            width : 150px;
+        }
     }
 `
 
@@ -114,6 +116,12 @@ export const AddressBox = styled.tr`
             }
         }
     }
+    ${props => props.theme.media.mobile}{
+        input{
+            font-size: 10px;
+        }
+    }
+
     
 `
 
@@ -178,6 +186,10 @@ export const EmailBox = styled.tr`
         margin-left : 10px;
     }
     ${props => props.theme.media.mobile}{
+        input{
+            width : 100%;
+            height : 35px;
+        }
         span.msg.active{
             margin-left : 0px;
         }

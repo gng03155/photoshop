@@ -5,7 +5,7 @@ import crypto from "crypto";
 import SHA256 from 'crypto-js/sha256';
 
 
-import { TitleArea, Form, Table, IdBox, TextBox, AddressBox, PhoneBox, EmailBox, BirthBox, Button, PostWrap } from "./styles"
+import { TitleArea, Table, IdBox, TextBox, AddressBox, PhoneBox, EmailBox, BirthBox, Button, PostWrap } from "./styles"
 
 import fb from '../../../firebase';
 import useSWR from 'swr';
@@ -184,7 +184,7 @@ export default function MemberForm({ userInfo, setOverWrap }: Props) {
             <TitleArea><h3>기본 정보</h3></TitleArea>
             <Table>
                 <colgroup>
-                    <col style={{ width: "100px" }} />
+                    <col style={{ width: "120px" }} />
                     <col style={{ width: "auto" }} />
                 </colgroup>
                 <tbody>
