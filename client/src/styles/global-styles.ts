@@ -3,9 +3,11 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
   html {
+    width : 100%;
   }
   body {
     max-width: 100%;
+    width : 100%;
     min-height: 100vh;
     overflow-x: hidden;
     font-family: "Noto Serif",'Noto Sans KR', sans-serif;

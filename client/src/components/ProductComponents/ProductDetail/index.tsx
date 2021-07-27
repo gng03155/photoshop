@@ -36,8 +36,8 @@ export default function ProductDetail({ id, userKey }: Props) {
     const { data: detailImgs } = useSWR<string[] | undefined>(`products/${id}/imgs/detail`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: thumbImg } = useSWR<string[] | undefined>(`products/${id}/imgs/thumb`, fetcherStorage, { revalidateOnMount: true, "initialData": [] });
     const { data: productInfo, revalidate: proUpdate } = useSWR<IProduct | undefined>(`products/product/${id}`, fetcherData, { revalidateOnMount: true });
-    const { data: reviewList } = useSWR<string[] | undefined>(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
-    const { data: qnaList } = useSWR<string[] | undefined>(`products/qna/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: reviewList, revalidate: rvRedate } = useSWR<string[] | undefined>(`products/review/${id}`, fetcherData, { revalidateOnMount: true });
+    const { data: qnaList, revalidate: qnaRedate } = useSWR<string[] | undefined>(`products/qna/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: stock } = useSWR<IStock | undefined>(`products/stock/${id}`, fetcherData, { revalidateOnMount: true });
     const { data: likeList } = useSWR<string[]>(`like/${userKey}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
@@ -560,7 +560,7 @@ export default function ProductDetail({ id, userKey }: Props) {
                         </ul>
                     </NaviBar>
                     <h2>Review</h2>
-                    <Board boardKeyList={reviewList} userKey={userKey} category={"review"}></Board>
+                    <Board boardKeyList={reviewList} userKey={userKey} category={"review"} boardRevalidate={rvRedate}></Board>
                 </Review>
                 <QnA ref={ref[3]}>
                     <NaviBar>
@@ -572,7 +572,8 @@ export default function ProductDetail({ id, userKey }: Props) {
                         </ul>
                     </NaviBar>
                     <h2>Q&A</h2>
-                    <Board boardKeyList={qnaList} userKey={userKey} category={"qna"}></Board>
+                    {console.log(qnaList)}
+                    <Board boardKeyList={qnaList} userKey={userKey} category={"qna"} boardRevalidate={qnaRedate}></Board>
                 </QnA>
             </DetailWrap>
         </div>

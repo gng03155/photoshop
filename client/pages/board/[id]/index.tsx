@@ -13,8 +13,7 @@ export default function Index() {
 
     const router = useRouter();
 
-    const { data: user } = useSWR("userKey", localFetcher, { revalidateOnMount: false, revalidateOnFocus: false, revalidateOnReconnect: false, refreshWhenOffline: false, refreshInterval: 0 });
-
+    const { data: boardKeyList, revalidate } = useSWR<string[] | undefined>(query !== null ? `board/category/${query}` : "", fetcherData, { revalidateOnMount: true });
 
     useEffect(() => {
         const isUser = window.sessionStorage.getItem("uid");
@@ -43,7 +42,7 @@ export default function Index() {
                 {query === "review" && <h2>상품후기</h2>}
                 {query === "qna" && <h2>Q&A</h2>}
             </Title>
-            {<BoardList userKey={userKey} category={query}></BoardList>}
+            {<BoardList userKey={userKey} category={query} boardKeyList={boardKeyList} boardRevalidate={revalidate}></BoardList>}
         </div>
     )
 }

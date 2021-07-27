@@ -14,9 +14,10 @@ interface Props {
     boardKeyList?: string[] | undefined,
     userKey: string,
     category: string,
+    boardRevalidate: any,
 }
 
-export default function BoardList({ userKey, category }: Props) {
+export default function BoardList({ boardKeyList, userKey, category, boardRevalidate }: Props) {
 
     const router = useRouter();
 
@@ -27,8 +28,8 @@ export default function BoardList({ userKey, category }: Props) {
 
     const [isRoute, setIsRoute] = useState(false);
 
-    const { data: allList, revalidate, mutate } = useSWR<{ [key: string]: IBoard }>(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
-    const { data: boardKeyList, revalidate: bKeyRvdate } = useSWR(`board/category/${category}`, fetcherData, { revalidateOnMount: true, initialData: null });
+    const { data: allList, revalidate: allRevalidate, mutate } = useSWR<{ [key: string]: IBoard }>(`board/board_list`, fetcherData, { revalidateOnMount: true, initialData: null, compare: (a, b) => false });
+    // const { data: boardKeyList, revalidate: bKeyRvdate } = useSWR(`board/category/${category}`, fetcherData, { revalidateOnMount: true, initialData: null });
 
     //board 타입 정의
     const boardType = {
@@ -45,12 +46,12 @@ export default function BoardList({ userKey, category }: Props) {
     }, []);
 
     useEffect(() => {
-        revalidate();
-        bKeyRvdate();
+        allRevalidate();
+        boardRevalidate();
     }, [router])
 
     useEffect(() => {
-        if (allList !== undefined && allList !== null && boardKeyList !== null) {
+        if (allList !== undefined && allList !== null && boardKeyList !== undefined) {
             setBoardList();
         }
         setIsRoute(true);
