@@ -273,12 +273,9 @@ export default function BoardList({ boardKeyList, userKey, category, boardRevali
 
                 </tbody>
             </Table>}
-            {/* {(userKey !== "" && category !== "notice") && <WriteButton>
+            {(userKey !== "" && category !== "notice") && <WriteButton>
                 <button onClick={onClickWrite}>글쓰기</button>
-            </WriteButton>} */}
-            <WriteButton>
-                <button onClick={onClickWrite}>글쓰기</button>
-            </WriteButton>
+            </WriteButton>}
             <PageNation onSetPage={onSetPage} pageNumber={pageNumber} curNumber={0}></PageNation>
         </Wrap>
     )

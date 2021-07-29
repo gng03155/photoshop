@@ -74,6 +74,7 @@ export const BG = styled.div`
 export const SearchWrap = styled.div`
     position: absolute;
     top: 100%;
+    left : 0;
     width : 100vw;
     height : 0px;
     margin-left: calc(-50vw + 50%);
