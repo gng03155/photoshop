@@ -62,9 +62,18 @@ export default function BoardRead({ boardKey, userKey }: Props) {
 
     const onClickEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
-        router.push({
-            pathname: `/board/${boardInfo.category}/modify/${boardKey}`
-        })
+        if (router.query.product) {
+            router.push({
+                pathname: `/board/${boardInfo.category}/modify/${boardKey}`,
+                query: {
+                    product: router.query.product,
+                }
+            });
+        } else {
+            router.push({
+                pathname: `/board/${boardInfo.category}/modify/${boardKey}`,
+            });
+        }
     }
 
     const onClickbList = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

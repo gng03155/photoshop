@@ -34,7 +34,7 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
 
     const { data: load, mutate } = useSWR("load", localFetcher);
 
-    const [product, setProduct] = useState(productId);
+    const [product, setProduct] = useState(productId ? productId : "");
 
     const [data, setData] = useState("");
 
@@ -46,10 +46,10 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
     const passRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-    }, [])
-
-    useEffect(() => {
-    }, [data])
+        if (boardInfo !== undefined && boardInfo !== null) {
+            setData(boardInfo.content);
+        }
+    }, [boardInfo])
 
     useEffect(() => {
         if (fileInfo !== undefined && fileInfo !== null) {

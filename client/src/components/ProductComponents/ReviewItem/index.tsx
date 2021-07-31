@@ -1,6 +1,6 @@
 import React from 'react'
 import useSWR from 'swr'
-import { fetcherData, fetcherStorage } from '../../util/fetcher'
+import { fetcherData, fetcherStorage } from '../../../util/fetcher'
 import { Wrap, ThumbWrap, DescWrap, SubWrap, RightBox } from "./styles"
 interface Props {
     productInfo: {

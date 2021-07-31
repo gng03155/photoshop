@@ -32,7 +32,7 @@ export default function Index() {
     if (category === "" || boardKey === "") {
         return <div></div>
     } else {
-        if (category !== "free" && category !== "qna" && category !== "review" && userKey !== "") {
+        if (category !== "free" && category !== "qna" && category !== "review" && category !== "review" && userKey !== "") {
             return <div></div>
         }
     }

@@ -13,24 +13,23 @@ export default function Index() {
 
     const router = useRouter();
 
-    const { data: boardKeyList, revalidate } = useSWR<string[] | undefined>(query !== null ? `board/category/${query}` : "", fetcherData, { revalidateOnMount: true });
+    const { data: boardKeyList, revalidate } = useSWR<string[] | undefined | null>(query !== null ? `board/category/${query}` : "", fetcherData, { initialData: null, revalidateOnMount: true });
 
     useEffect(() => {
         const isUser = window.sessionStorage.getItem("uid");
         if (isUser) {
             setUserKey(window.sessionStorage.getItem("uid"));
         }
-
-
     }, [])
 
     useEffect(() => {
         if (typeof router.query.id === "string") {
             setQuery(router.query.id);
         }
+        revalidate();
     }, [router])
 
-    if (query === null) {
+    if (boardKeyList === null) {
         return <div></div>;
     }
 

@@ -6,7 +6,7 @@ import { IBoard } from '../../../types';
 
 import { fetcherData } from '../../../util/fetcher';
 import PageNation from '../../PageNation'
-import ReviewItem from '../../ReviewItem';
+import ReviewItem from '../../ProductComponents/ReviewItem';
 
 import { NoBoard, Table, WriteButton, ReviewBoard, Lock, Wrap } from "./styles"
 
