@@ -64,4 +64,4 @@ React , Typescript , Redux , Redux-thunk , express , puppeteer
 ## 실행화면
 ![photo_mark](https://user-images.githubusercontent.com/73515375/127759277-d0c79f93-4ff0-48c3-9ed4-9b5d76f2356f.gif)
 ## 개발 이슈
->[Notion](https://www.notion.so/photoshop-2c6ae95cf7024776b252071dc1c1b550, "notion link")
+>[Notion](https://www.notion.so/photoshop-2c6ae95cf7024776b252071dc1c1b550 , "notion link")
