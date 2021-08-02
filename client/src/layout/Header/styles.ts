@@ -48,6 +48,9 @@ export const MainMenu = styled.div`
                 font-size : 15px;
                 padding: 0 10px;
             }
+            a:hover{
+                font-weight: 700;
+            }
         }
         li.board{
             position: relative;
@@ -79,7 +82,7 @@ export const SearchWrap = styled.div`
     height : 0px;
     margin-left: calc(-50vw + 50%);
     margin-right: calc(-50vw + 50%);
-    background-color : rgba(255,255,255,0.4);
+    background-color : rgba(255,255,255,0.8);
     flex: none;
     overflow-y: hidden;
     transition: all linear 0.3s;

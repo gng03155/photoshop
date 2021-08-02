@@ -37,18 +37,14 @@ export default function ProductList({ proIdList, isSearch }: Props) {
     const [selectCategory, setSelectCategory] = useState([]);
 
     useEffect(() => {
-
-        // for (let i = 0; i < 20; i++) {
-        //     proIdList.push(`A008`);
-        // }
-
-    }, []);
+        console.log(categoryList);
+    }, [categoryList])
 
     useEffect(() => {
         setPage(proIdList);
     }, [proIdList])
 
-    const setPage = (idList) => {
+    const setPage = useCallback((idList) => {
         const num = idList.length;
         if (num === 0) {
             setCurPage(0)
@@ -58,7 +54,6 @@ export default function ProductList({ proIdList, isSearch }: Props) {
             return;
         }
         let totalIdx = Math.floor(num / 8);
-        // totalIdx = totalIdx !== 0 ? totalIdx : 1;
         const copy = [[]];
         for (let i = 0; i <= totalIdx; i++) {
             let list: string[] = [];
@@ -70,15 +65,12 @@ export default function ProductList({ proIdList, isSearch }: Props) {
             }
             copy.push(list);
         }
-        // if (num % 8 === 0) {
-        //     copy.splice(-1, 1);
-        // }
         copy.splice(0, 1);
         setPageNumber(copy.length);
         setCurIdList(idList);
         setCurPage(0);
         setData(copy);
-    }
+    }, [])
 
     const onChangeCategory = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
@@ -98,13 +90,13 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         }
     }
 
-    const setCategory = (selectCategory?, isAll = false) => {
+    const setCategory = useCallback((selCategory, isAll = false) => {
 
         let cateList = [];
         if (isAll) {
             cateList = Object.keys(productList);
         } else {
-            for (let name of selectCategory) {
+            for (let name of selCategory) {
                 if (categoryList[name])
                     cateList.push(categoryList[name]);
             }
@@ -114,7 +106,7 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         setPage(cateList);
 
 
-    }
+    }, [productList, categoryList, setPage])
 
     const onClickColor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
@@ -139,7 +131,7 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         }
     }
 
-    const setColor = (selectColor?, isAll = false) => {
+    const setColor = useCallback((selectColor?, isAll = false) => {
         let idList = [];
         let cateList = [];
 
@@ -176,31 +168,26 @@ export default function ProductList({ proIdList, isSearch }: Props) {
 
         setPage(idList);
 
-    }
+    }, [selectCategory, productList, categoryList, setPage])
 
-    const onClickAllCategory = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-
-        const tg = e.target as HTMLAnchorElement;
-        const children = Array.from(tg.parentElement.children);
+    const onClickAllCategory = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         cateRef.forEach((node) => {
             node.current.checked = false;
         })
         setCurIdList(Object.keys(productList));
         setSelectCategory([]);
         setCategory([], true);
-    }
+    }, [cateRef, productList, setCategory])
 
-    const onClickAllColor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        const tg = e.target as HTMLAnchorElement;
-        const children = Array.from(tg.parentElement.children);
+    const onClickAllColor = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         colorRef.forEach((node) => {
             node.current.classList.remove("active");
         })
         setSelectColor([]);
         setColor([], true);
-    }
+    }, [colorRef, setColor])
 
-    const onClickPriceSort = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickPriceSort = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 
         e.preventDefault();
 
@@ -236,9 +223,9 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         result = sortList.map((list) => list.id);
         setPage(result);
 
-    }
+    }, [curIdList, productList, setPage])
 
-    const onClickNameeSort = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickNameeSort = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 
         e.preventDefault();
 
@@ -267,9 +254,9 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         result = sortList.map((list) => list.id);
         setPage(result);
 
-    }
+    }, [curIdList, productList, setPage])
 
-    const onClickRevieweSort = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickRevieweSort = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
 
         e.preventDefault();
 
@@ -302,10 +289,11 @@ export default function ProductList({ proIdList, isSearch }: Props) {
         result = sortList.map((list) => list.id);
         setPage(result);
 
-    }
-    const onSetPage = (num) => {
+    }, [reviewList, curIdList, setPage])
+
+    const onSetPage = useCallback((num) => {
         setCurPage(num);
-    }
+    }, [])
 
     if (proIdList.length === 0) {
         return <div></div>

@@ -27,8 +27,6 @@ export default function OrderPage({ userKey, cartData }: Props) {
 
     const [cartList, setCartList] = useState<ICart[]>(cartData);
 
-    const [isStandard, setIsStandard] = useState(true);
-
     const [name, setName] = useState("");
     const [adrs1, setAdrs1] = useState("");
     const [adrs2, setAdrs2] = useState("");
@@ -51,10 +49,6 @@ export default function OrderPage({ userKey, cartData }: Props) {
 
 
     const [isAdress, setIsAdress] = useState(false);
-
-    useEffect(() => {
-        // console.log(cartData);
-    }, [])
 
     useEffect(() => {
         if (userInfo !== undefined) {
@@ -117,7 +111,7 @@ export default function OrderPage({ userKey, cartData }: Props) {
         setIsAdress(false);
     }, [])
 
-    const onClickArrow = (e: React.MouseEvent<HTMLDivElement>) => {
+    const onClickArrow = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
         const tg = e.currentTarget as HTMLDivElement;
@@ -130,12 +124,10 @@ export default function OrderPage({ userKey, cartData }: Props) {
         const ht = window.getComputedStyle(contentArea).height;
 
         contentArea.style.height = ht === "0px" ? `${clientHt}px` : "0px";
+    }, [])
 
-
-    }
-
-    const onClickShipping = (e: React.MouseEvent<HTMLInputElement>) => {
-        // e.preventDefault();
+    const onClickShipping = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
+        e.preventDefault();
         const tg = e.target as HTMLInputElement;
         const state = tg.value;
         if (state === "standard") {
@@ -162,13 +154,13 @@ export default function OrderPage({ userKey, cartData }: Props) {
             setEmail2("");
         }
 
-    }
+    }, [userInfo])
 
-    const onChangeValue = (e: any, value) => {
+    const onChangeValue = useCallback((e: any, value) => {
         value(e.target.value);
-    }
+    }, [])
 
-    const onChangeSelect = (e: React.ChangeEvent<HTMLSelectElement>, setState) => {
+    const onChangeSelect = useCallback((e: React.ChangeEvent<HTMLSelectElement>, setState) => {
         const tg = e.target as HTMLSelectElement;
         const value = tg.value;
         const inputElem = tg.nextElementSibling as HTMLInputElement;
@@ -181,9 +173,9 @@ export default function OrderPage({ userKey, cartData }: Props) {
         inputElem.style.display = "inline-block";
         setState("");
 
-    }
+    }, [])
 
-    const onClickDeleteList = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickDeleteList = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const isDelete = confirm("정말로 해당 상품을 취소하시겠습니까?");
         if (!isDelete) {
@@ -208,9 +200,9 @@ export default function OrderPage({ userKey, cartData }: Props) {
             router.back();
             return;
         }
-    }
+    }, [cartList, userKey, fb])
 
-    const onClickPayment = async (e: React.DragEvent<HTMLButtonElement>) => {
+    const onClickPayment = useCallback(async (e: React.DragEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         const mob = mobile2 + mobile3;
@@ -388,10 +380,11 @@ export default function OrderPage({ userKey, cartData }: Props) {
                 orderKey: mKey,
             },
         }, "/mypage/order_detail");
-        return;
-    }
 
-    const onChangeMileage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        return;
+    }, [adrs1, adrs2, adrs3, mobile1, mobile2, mobile3, email1, email2, delMsg, fb, cartList, userKey, totalPrice, userInfo, mileage, productSale, router])
+
+    const onChangeMileage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         let value = Number(e.target.value);
         const maxMileage = Number(userInfo.mileage);
 
@@ -415,25 +408,25 @@ export default function OrderPage({ userKey, cartData }: Props) {
         } else {
             setMileage(value);
         }
-    }
+    }, [userInfo, totalPrice])
 
-    const checkMobNumber = (value) => {
+    const checkMobNumber = useCallback((value) => {
         const chkStyle = /^[0-9]+$/;
         if (chkStyle.test(value)) {
             return true;
         } else {
             return false;
         }
-    }
+    }, [])
 
-    const checkEmail = (value) => {
+    const checkEmail = useCallback((value) => {
         const chkStyle = /[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[.]{1}[A-Za-z]{1,5}$/;
         if (chkStyle.test(value)) {
             return true;
         } else {
             return false;
         }
-    }
+    }, [])
 
 
 

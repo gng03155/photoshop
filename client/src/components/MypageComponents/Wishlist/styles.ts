@@ -7,31 +7,44 @@ export const Wrap = styled.div`
 export const WishWrap = styled.div`
     ul{
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
         border : 2px solid #ececec;
         padding: 5px 10px 10px;
     }
     li{
-        width : 23.333333%;
-        margin-top : 5px;
+        width : 22%;
+        margin-right: 2.4%;
+        margin-top : 10px;
+        margin-bottom: 10px;
         background-color: #fff;
         & > div{
             align-items: flex-start;
+            height : 100%
         }
         nav{
             width : calc(100% - 115px);
+            height : 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            button{
+                align-self: flex-start;
+            }
         }
     }
+    li:first-child , li:nth-child(4n+1){
+                margin-left: 2.39999%;
+    } 
     li.sel{
         background-color: rgba(0, 0, 0, 0.5);
     }
     ${props => props.theme.media.desktop}{
-        ul{
-            justify-content: flex-start;
+        && ul{
 
             li{
                 width : 32%;
+                margin-left: 0;
+                margin-right: 0;
             }
             li:first-child , li:nth-child(3n+1){
                 margin-left: 2%;
@@ -41,7 +54,6 @@ export const WishWrap = styled.div`
     ${props => props.theme.media.tablet}{
         ul{
             justify-content: flex-start;
-
             li{
                 & > div{
                     flex-direction: column;
@@ -58,6 +70,7 @@ export const WishWrap = styled.div`
                         button{
                             font-size : 10px;
                             padding : 6px 6px;
+                            align-self: center;
                         }
                     }
                 }

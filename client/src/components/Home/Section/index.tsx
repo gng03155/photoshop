@@ -70,7 +70,7 @@ export default function Section() {
             divRef.current.style.visibility = "hidden";
         }
         prev = cur;
-    }, [])
+    }, [wrapRef, divRef, imgRef, clientHeight, elemHeight, screenHeight, prev, cur])
 
     return (
         <div>

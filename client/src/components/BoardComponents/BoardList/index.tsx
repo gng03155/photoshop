@@ -62,7 +62,7 @@ export default function BoardList({ boardKeyList, userKey, category, boardRevali
     }
 
 
-    const setBoardList = () => {
+    const setBoardList = useCallback(() => {
 
         let listKeys = Object.keys(allList)
         let temp = [];
@@ -98,11 +98,11 @@ export default function BoardList({ boardKeyList, userKey, category, boardRevali
         copy.splice(0, 1);
         setPageNumber(copy.length);
         setData(copy);
-    }
+    }, [allList, boardKeyList])
 
-    const onSetPage = (num) => {
+    const onSetPage = useCallback((num) => {
         setCurPage(num);
-    }
+    }, [])
 
     const onClickBoard = useCallback(async (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         const tg = e.currentTarget as HTMLAnchorElement;
@@ -146,9 +146,9 @@ export default function BoardList({ boardKeyList, userKey, category, boardRevali
 
 
 
-    }, [userKey])
+    }, [userKey, router])
 
-    const onUpdateHits = async (key) => {
+    const onUpdateHits = useCallback(async (key) => {
         await fb.database().ref(`board/board_list/${key}`).once("value").then((data) => {
             if (data.exists) {
                 let temp = data.val().hits;
@@ -158,9 +158,9 @@ export default function BoardList({ boardKeyList, userKey, category, boardRevali
                 })
             }
         })
-    }
+    }, [fb])
 
-    const onClickWrite = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickWrite = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         if (router.query.product) {
             router.push({
@@ -174,7 +174,7 @@ export default function BoardList({ boardKeyList, userKey, category, boardRevali
                 pathname: `/board/${category}/write`
             });
         }
-    }
+    }, [router])
 
     if (allList === null || isRoute === false) {
         return <div></div>

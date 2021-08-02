@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { CKEditor } from 'ckeditor4-react';
 
 import { useRouter } from 'next/router';
@@ -122,7 +122,7 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
 
     }
 
-    const getFiles = (tg) => {
+    const getFiles = useCallback((tg) => {
         //첨부파일 확인 및 가져오기
         const fileList: any = Array.from(tg["file"]).reduce((prev: File[], cur: HTMLInputElement) => {
             if (cur.files[0] !== undefined) {
@@ -133,9 +133,9 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
         }, []);
 
         return fileList;
-    }
+    }, [])
 
-    const editBoard = async (info) => {
+    const editBoard = useCallback(async (info) => {
         const copy = { ...boardInfo };
 
         copy.title = info.title;
@@ -173,9 +173,9 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
         }
 
         await fb.database().ref(`board/board_list/${info.key}`).update(copy).then(() => { console.log("게시물 업데이트 성공") });
-    }
+    }, [boardInfo, changeFiles, fb])
 
-    const writeBoard = async (info) => {
+    const writeBoard = useCallback(async (info) => {
         if (info.fileList.length !== 0) {
             let fileCopy = [];
             for (let file of info.fileList) {
@@ -259,9 +259,9 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
             console.log("성공");
         })
             .catch(err => { console.log(err) });
-    }
+    }, [category, userInfo, product, productList, userKey, fb])
 
-    const onChangePswd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangePswd = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
         const id = tg.id;
         if (id === "public") {
@@ -271,9 +271,9 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
         }
         passRef.current.value = "";
 
-    }
+    }, [passRef])
 
-    const onChangeProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const onChangeProduct = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         e.preventDefault();
         const tg = e.target as HTMLSelectElement;
         const val = tg.value;
@@ -281,9 +281,9 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
             return;
         }
         setProduct(val);
-    }
+    }, [])
 
-    const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
         const idx = tg.dataset.idx;
         const name = tg.files[0].name;
@@ -293,9 +293,9 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
         const ccopy = [...changeFiles];
         ccopy[idx] = true;
         setChangeFiles(ccopy);
-    }
+    }, [fileName, changeFiles])
 
-    const onClickFile = (e) => {
+    const onClickFile = useCallback((e) => {
         if (boardKey) {
             return;
         }
@@ -304,7 +304,7 @@ export default function BoardWrite({ boardKey, category, productId, userKey }: P
             e.preventDefault();
             alert("첨부파일 1은 필수입니다!!");
         }
-    }
+    }, [boardKey, fileRef])
 
     if (boardInfo === null || fileInfo === null || productList === null) {
         return <div></div>

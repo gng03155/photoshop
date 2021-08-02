@@ -45,7 +45,7 @@ export default function Index() {
                 {category === "review" && <h2>상품후기</h2>}
                 {category === "qna" && <h2>Q&A</h2>}
             </Title>
-            {category === ("review" || "qna") && <ProductItem2 productId={productId} />}
+            {(category === "review" || category === "review") && <ProductItem2 productId={productId} />}
             <BoardTable userKey={userKey} boardKey={boardKey}></BoardTable>
             <Comment boardKey={boardKey} />
         </div>

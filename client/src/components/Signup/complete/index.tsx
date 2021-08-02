@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Head, Section, Button } from "./styles"
 
 
@@ -15,10 +15,10 @@ export default function Complete({ userData }: Props) {
 
     const router = useRouter();
 
-    const onClickSuccess = (e: React.DragEvent<HTMLButtonElement>) => {
+    const onClickSuccess = useCallback((e: React.DragEvent<HTMLButtonElement>) => {
         e.preventDefault();
         router.push("/");
-    }
+    }, [router])
 
     return (
         <div>
@@ -37,15 +37,15 @@ export default function Complete({ userData }: Props) {
                 <tbody>
                     <tr>
                         <th>아이디</th>
-                        <td>{userData.id}입니다.</td>
+                        <td>{userData.id} 입니다.</td>
                     </tr>
                     <tr>
                         <th>이 름</th>
-                        <td>{userData.name}입니다.</td>
+                        <td>{userData.name} 입니다.</td>
                     </tr>
                     <tr>
                         <th>이메일</th>
-                        <td>{userData.email}입니다.</td>
+                        <td>{userData.email} 입니다.</td>
                     </tr>
                 </tbody>
             </Section>

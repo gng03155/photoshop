@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import useSWR from 'swr'
 import crypto from 'crypto';
-import { SHA256 } from 'crypto-js';
 
 import { fetcherData } from '../../../src/util/fetcher'
 import { Button, Form, Wrap } from '../../../page_style/member/find/styles'
@@ -58,7 +57,7 @@ export default function MemberFind() {
         });
     }
 
-    const pswdHashing = async (pw) => {
+    const pswdHashing = useCallback(async (pw) => {
         const { hashPw, salt } = await new Promise((resolve, reject) => {
             let hashPw, salt = "";
             crypto.randomBytes(64, (err, buf) => {
@@ -71,13 +70,13 @@ export default function MemberFind() {
             });
         })
         return { hashPw, salt };
-    }
+    }, [])
 
 
-    const onClickCancel = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickCancel = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
-        const aa = router.back();
-    }
+        router.back();
+    }, [router])
 
     return (
         <Wrap>

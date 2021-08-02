@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
@@ -21,15 +21,6 @@ export default function Search() {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-
-    useEffect(() => {
-        console.log("시작");
-
-        return () => {
-            console.log("종료");
-        }
-    }, []);
-
     useEffect(() => {
         console.log("router");
         const word = router.query.keyword;
@@ -47,7 +38,7 @@ export default function Search() {
         }
     }, [productList, keyword])
 
-    const onClickSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickSearch = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const value = inputRef.current.value;
         if (value === "") {
@@ -59,19 +50,18 @@ export default function Search() {
             alert("공백을 지우고 다시 입력해주세요!");
             return;
         }
-        console.log("??");
         mutate(true, false);
         setKeyword(value);
         setIdList(value);
         mutate(false, false);
-    }
+    }, [inputRef])
 
-    const spaceCheck = (value) => {
+    const spaceCheck = useCallback((value) => {
         const pattern = /^\s/g;
         return pattern.test(value);
-    }
+    }, [])
 
-    const setIdList = (word) => {
+    const setIdList = useCallback((word) => {
         let idList = [];
 
         word = word.toLowerCase();
@@ -85,7 +75,7 @@ export default function Search() {
         }
 
         setProIdList(idList);
-    }
+    }, [productList])
 
     if (proIdList[0] === null) {
         return <div></div>

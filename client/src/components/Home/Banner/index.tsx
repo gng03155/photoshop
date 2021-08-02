@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { clearInterval } from 'timers';
+import React, { useCallback, useState, useEffect } from 'react'
 import { ImgSlide, Wrap } from "./styles"
 export default function Banner() {
 
@@ -20,7 +19,7 @@ export default function Banner() {
         }
     }, [isActive, count])
 
-    const setFadeImg = () => {
+    const setFadeImg = useCallback(() => {
 
         SetIsActive((value) => {
             value[count] = false;
@@ -38,7 +37,7 @@ export default function Banner() {
                 return 0;
             }
         });
-    }
+    }, [count, isActive])
 
 
     return (

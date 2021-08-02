@@ -57,6 +57,7 @@ export default function Login() {
             <Wrap>
                 <Titlearea>
                     <h2>로그인</h2>
+                    <p>Demo Account = id : demo / pw : 1q2w3e4r!!</p>
                 </Titlearea>
                 <Form onSubmit={(e) => onSubmitLogin(e)}>
                     <Input type="text" id="id" placeholder="아이디"></Input>

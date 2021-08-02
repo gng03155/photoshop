@@ -1,8 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useCallback } from 'react'
 import useSWR from 'swr';
 import fb from '../../../firebase';
-import { nanoid } from 'nanoid'
-
 import { Wrap, WishWrap, Button, None } from "./styles"
 import { fetcherData } from '../../../util/fetcher'
 import ProductItem2 from '../../ProductComponents/ProductItem2'
@@ -21,17 +19,14 @@ export default function Wishlist({ userKey }: Props) {
     const ref2 = useRef<HTMLDivElement>(null);
     const ref3 = useRef<HTMLUListElement>(null);
 
-    useEffect(() => {
-    }, []);
-
-    const onClickEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickEdit = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         ref1.current.style.display = "none"
         ref2.current.style.display = "block"
         setIsEdit(true);
-    }
+    }, [ref1, ref2])
 
-    const onClickCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickCancel = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         ref1.current.style.display = "inline-block"
         ref2.current.style.display = "none"
@@ -43,7 +38,7 @@ export default function Wishlist({ userKey }: Props) {
         })
         setSelList([]);
         setIsEdit(false);
-    }
+    }, [ref1, ref2, ref3])
 
     const onClickDelete = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -73,7 +68,7 @@ export default function Wishlist({ userKey }: Props) {
         }
     }
 
-    const onSelect = (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    const onSelect = useCallback((e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
         if (!isEdit) {
             return;
         }
@@ -90,7 +85,7 @@ export default function Wishlist({ userKey }: Props) {
             setSelList(copy);
             tg.className = "sel";
         }
-    }
+    }, [isEdit, selList])
 
     if (wishList === null) {
         return <div></div>

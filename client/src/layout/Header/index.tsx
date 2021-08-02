@@ -4,16 +4,8 @@ import { useRouter } from "next/router"
 import { useMediaQuery } from 'react-responsive'
 
 import { Content, Logo, BoardCategory, MainMenu, SearchWrap, SearchInput, SideMenu, Inner, SubMenuWrap, MenuIcon, BG, SideClose, Wrap } from "./styles"
-import fb from '../../firebase'
-import useSWR from 'swr'
-import { localFetcher } from '../../util/localFetcher'
-import dynamic from 'next/dynamic'
 
-// const test = dynamic(() => import('react-responsive'), { ssr: false });
 export default function Header() {
-
-    const { data: load, mutate } = useSWR("load", localFetcher);
-    const { data: user, mutate: userMutate } = useSWR("userKey", localFetcher);
 
     const router = useRouter();
 
@@ -45,21 +37,6 @@ export default function Header() {
     }, []);
 
     useEffect(() => {
-        if (divRef.current === null) {
-            return;
-        }
-
-        const cc = document.querySelector("#MainWrap");
-        // if (isMobile) {
-        //     cc.addEventListener("scroll", scrollHeader);
-        //     window.removeEventListener("scroll", scrollHeader);
-        // } else {
-        //     cc.removeEventListener("scroll", scrollHeader);
-        //     window.addEventListener("scroll", scrollHeader);
-        // }
-    }, [isMobile])
-
-    useEffect(() => {
         setUserKey(window.sessionStorage.getItem("uid"));
     }, [router]);
 
@@ -71,8 +48,6 @@ export default function Header() {
     const scrollHeader = useCallback(() => {
         const ofWidth = document.body.offsetWidth;
         let cWidth = divRef.current.clientWidth + "px";
-
-        const wrap = divRef.current as HTMLDivElement;
 
         let scrollTop = 0;
         scrollTop = document.documentElement.scrollTop;
@@ -93,23 +68,22 @@ export default function Header() {
             ref.current.style.height = "100px";
 
         }
-    }, [])
+    }, [divRef, ref])
 
-    const onLogout = (e: any) => {
+    const onLogout = useCallback((e: any) => {
         window.sessionStorage.removeItem("uid");
-        mutate("", false);
         setUserKey(null);
         router.reload();
-    }
+    }, [router])
 
-    const onClickBoard = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickBoard = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const id = tg.dataset.id;
         router.push(`/board/${id}`);
-    }
+    }, [router])
 
-    const onClickSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickSearch = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const isActive = searchRef.current.classList.contains("active");
         if (!isActive) {
@@ -120,9 +94,9 @@ export default function Header() {
             searchRef.current.style.height = "0px";
             setKeyword("");
         }
-    }
+    }, [searchRef])
 
-    const moveSearch = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
+    const moveSearch = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (keyword === "") {
             alert("검색어를 입력해주세요");
@@ -148,36 +122,34 @@ export default function Header() {
                 },
             }, "/category/search", { shallow: true });
         }
-    }
+    }, [keyword, searchRef, router])
 
-    const onClickCancelSearch = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    const onClickCancelSearch = useCallback((e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         e.preventDefault();
         searchRef.current.classList.remove("active");
         searchRef.current.style.height = "0px";
         setKeyword("");
-    }
+    }, [searchRef])
 
-    const onClickToggle = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
+    const onClickToggle = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         toggleRef.current.style.visibility = "visible";
         toggleRef.current.style.opacity = "1";
-    }
+    }, [toggleRef])
 
-    const onClickToggleClose = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLLIElement>) => {
+    const onClickToggleClose = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | React.MouseEvent<HTMLLIElement>) => {
         e.preventDefault();
         toggleRef.current.style.visibility = "hidden";
         toggleRef.current.style.opacity = "0";
-    }
+    }, [toggleRef])
 
-    const onClickSub = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickSub = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         const tg = e.target as HTMLAnchorElement;
         const friend = tg.nextElementSibling;
         friend.classList.toggle("active");
-    }
+    }, [])
 
     const test = async () => {
-        // mutate(!load, false);
-
         //폴더추가
         // for (let i = 1; i <= 32; i++) {
         //     let storage1 = fb.storage().ref(`products/A0${i}/imgs/detail/test`);
@@ -224,7 +196,6 @@ export default function Header() {
     }
     return (
         <Wrap ref={divRef}>
-            {/* <button style={{ position: "relative", zIndex: 1000 }} onClick={test}>test</button> */}
             <Content ref={ref}>
                 <MainMenu>
                     {isTablet ?

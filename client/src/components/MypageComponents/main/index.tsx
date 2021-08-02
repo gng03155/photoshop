@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr';
 import { IOrder, IUser } from '../../../types';
 import { fetcherData } from '../../../util/fetcher';
@@ -50,15 +50,13 @@ export default function Main({ userKey }: Props) {
 
     }, [userOrderList, allOrderList, userInfo])
 
-    const onClickCategory = (e: React.MouseEvent<HTMLLIElement>) => {
+    const onClickCategory = useCallback((e: React.MouseEvent<HTMLLIElement>) => {
         e.preventDefault();
         const tg = e.currentTarget as EventTarget & HTMLLIElement;
         const name = tg.dataset.name;
-        console.log(name);
         router.push(`/mypage/${name}`);
         return;
-
-    }
+    }, [router])
 
     if (!isInit) {
         return <div></div>

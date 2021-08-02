@@ -69,73 +69,17 @@ export default function MemberForm({ userInfo, setOverWrap }: Props) {
         setIsAdress(false);
     }, [])
 
-    const checkPassword = useCallback(
-        (pswd, chpswd) => {
-            if (pswd !== chpswd) {
-                alert("비밀번호가 일치하지 않습니다.");
-                return true;
-            } else {
-                return false;
-            }
-        },
-        [],
-    )
 
-    const checkEmpty = useCallback((values, target) => {
-
-
-        if (values.email === null) {
-            alert("이메일을 입력해주세요!");
-            target["email"].focus();
-            return true;
-        } if (values.mobile[1] === null) {
-            target["mobile2"].focus();
-            alert("휴대전화를 입력해주세요!");
-            return true;
-        } if (values.mobile[2] === null) {
-            target["mobile3"].focus();
-            alert("휴대전화를 입력해주세요!");
-            return true;
-        } if (values.adrs[1] === null) {
-            target["adrs2"].focus();
-            alert("주소를 입력해주세요!");
-            return true;
-        } if (values.name === null) {
-            target["name"].focus();
-            alert("이름을 입력해주세요!");
-            return true;
-        } if (values.pswd === null) {
-            target["pswd"].focus();
-            alert("비밀번호를 입력해주세요!");
-            return true;
-
-        } if (values.checkpswd === null) {
-            target["checkpswd"].focus();
-            alert("비밀번호를 입력해주세요!");
-            return true;
-        } if (values.id === null) {
-            target["id"].focus();
-            alert("아이디를 입력해주세요!");
-            return true;
-        }
-
-        return false;
-
-    }, [])
-
-
-
-    const equalPw = (e: React.FocusEvent<HTMLInputElement>) => {
+    const equalPw = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
-        console.dir(tg);
         if (tg.value !== password) {
             tg.nextElementSibling.classList.add("active")
         } else {
             tg.nextElementSibling.classList.remove("active")
         }
-    }
+    }, [password])
 
-    const overlapCheckId = (e: React.FocusEvent<HTMLInputElement>) => {
+    const overlapCheckId = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
         const sibling = tg.nextElementSibling as HTMLSpanElement;
         const value = tg.value;
@@ -155,9 +99,9 @@ export default function MemberForm({ userInfo, setOverWrap }: Props) {
             sibling.innerText = "사용 가능한 아이디 입니다.";
             setOverWrap(true);
         }
-    }
+    }, [userList])
 
-    const overlapCheckEmail = (e: React.FocusEvent<HTMLInputElement>) => {
+    const overlapCheckEmail = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
         const tg = e.target as HTMLInputElement;
         const sibling = tg.nextElementSibling as HTMLSpanElement;
         const value = tg.value;
@@ -177,7 +121,7 @@ export default function MemberForm({ userInfo, setOverWrap }: Props) {
             sibling.innerText = "사용 가능한 이메일 입니다.";
             setOverWrap(true);
         }
-    }
+    }, [userList])
 
     return (
         <div>

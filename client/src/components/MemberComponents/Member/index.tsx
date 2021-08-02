@@ -26,6 +26,11 @@ export default function Member({ userKey }: Props) {
 
     const onSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (checkDemo()) {
+            return;
+        }
+
         const target = e.target as HTMLTextAreaElement;
 
         const values = {
@@ -72,7 +77,7 @@ export default function Member({ userKey }: Props) {
 
         router.push("/mypage/main");
 
-    }, [])
+    }, [router, userInfo])
 
     const checkPassword = useCallback(
         (pswd, chpswd) => {
@@ -139,6 +144,9 @@ export default function Member({ userKey }: Props) {
             return;
         }
 
+        if (checkDemo()) {
+            return;
+        }
 
         const target = formRef.current as HTMLFormElement;
         const values = {
@@ -167,6 +175,15 @@ export default function Member({ userKey }: Props) {
             alert("비밀번호가 일치하지 않습니다!");
         }
     }
+
+    const checkDemo = useCallback(() => {
+        if (userInfo.id === "demo") {
+            alert("해당 계정은 수정 및 삭제가 불가능합니다.");
+            return true;
+        } else {
+            return false;
+        }
+    }, [userInfo])
 
     const onClickCancel = (e: React.DragEvent<HTMLButtonElement>) => {
         e.preventDefault();

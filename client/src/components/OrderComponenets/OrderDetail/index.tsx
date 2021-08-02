@@ -1,5 +1,5 @@
+import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import useSWR from 'swr'
 
@@ -25,9 +25,6 @@ export default function OrderDetail({ userKey, orderKey }: Props) {
 
     useEffect(() => {
         if (orderInfo !== undefined) {
-            // if (orderInfo.user_key !== userKey) {
-            //     // router.back();
-            // }
             if (orderInfo !== undefined && allList !== undefined) {
                 const temp = Object.keys(allList).reduce((prev, cur) => {
                     if (orderInfo.product_list.includes(cur)) {

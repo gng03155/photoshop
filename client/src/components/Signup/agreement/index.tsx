@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useCallback } from 'react'
 
 import Router from "next/router";
 
@@ -8,7 +8,7 @@ export default function Agreement() {
 
     const inputRefs = new Array(4).fill(0).map((i) => { return useRef<HTMLInputElement>(null) });
 
-    const onChangeCheck = (e) => {
+    const onChangeCheck = useCallback((e) => {
         const changeTg = e.target.name.replace("check_", "");
 
         if (changeTg === "4") {
@@ -17,16 +17,16 @@ export default function Agreement() {
                 item.current.checked = chageMode;
             });
         }
-    }
+    }, [inputRefs])
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (inputRefs[3].current.checked || (inputRefs[0].current.checked && inputRefs[1].current.checked)) {
             Router.push("/member/signup/?name=join", "/member/signup");
         } else {
             alert("필수 동의 항목을 체크해주세요!");
         }
-    }
+    }, [inputRefs])
 
     return (
         <Contnent onSubmit={(e: React.FormEvent<HTMLFormElement>) => onSubmit(e)} >

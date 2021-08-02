@@ -21,29 +21,4 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-// firebase.auth().signInWithEmailAndPassword("test@test.com", "dnflwn12")
-//     .then((userCredential) => {
-//         // Signed in
-//         var user = userCredential.user;
-//         // ...
-//     })
-//     .catch((error) => {
-//         var errorCode = error.code;
-//         var errorMessage = error.message;
-//     });
-
-
-// firebase.firestore().enablePersistence()
-//     .catch((err) => {
-//         if (err.code == 'failed-precondition') {
-//             // Multiple tabs open, persistence can only be enabled
-//             // in one tab at a a time.
-//             // ...
-//         } else if (err.code == 'unimplemented') {
-//             // The current browser does not support all of the
-//             // features required to enable persistence
-//             // ...
-//         }
-//     });
-
 export default fb;

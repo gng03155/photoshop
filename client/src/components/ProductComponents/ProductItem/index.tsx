@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { fetcherData, fetcherStorage } from '../../../util/fetcher';
 import { Wrap, ThumbNail, Description, Color, Promotion, Like, IconWrap, ColorWrap, Desc } from "./styles"
+import { IProduct } from '../../../types';
 
 interface Props {
     id: string,

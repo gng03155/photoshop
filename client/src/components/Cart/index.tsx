@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, RefObject, MutableRefObject } from 'react'
+import React, { useEffect, useState, useRef, useCallback, MutableRefObject } from 'react'
 import { useRouter } from 'next/router';
 import { useMediaQuery } from 'react-responsive'
 import useSWR from 'swr'
@@ -68,7 +68,7 @@ export default function CartList({ userKey }: Props) {
         }
     }, [cartList])
 
-    const setStock = async (ids) => {
+    const setStock = useCallback(async (ids) => {
         const temp: { [key: string]: IStock } = {};
 
         for (let id of ids) {
@@ -79,7 +79,7 @@ export default function CartList({ userKey }: Props) {
         setOptionList(temp);
         setIsInit(true);
 
-    }
+    }, [fb])
 
     const onClickMinus = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
@@ -112,7 +112,7 @@ export default function CartList({ userKey }: Props) {
         alert("수량이 변경되었습니다.")
         cartUpdate();
     }
-    const onChangeAllCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeAllCheck = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 
         const changeMode = ref[0].current.checked ? true : false;
 
@@ -122,10 +122,11 @@ export default function CartList({ userKey }: Props) {
             }
 
         })
-    }
+    }, [ref])
 
     const onClickDelete = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
+
         const isDelete = confirm("정말 삭제하시겠습니까?");
         if (!isDelete) {
             return;
@@ -142,6 +143,11 @@ export default function CartList({ userKey }: Props) {
 
     const onClickSelectDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
 
+
+        if (cartList === undefined) {
+            alert("장바구니가 비어있습니다.");
+            return;
+        }
 
         const keyList = [];
         ref.forEach((elem, idx) => {
@@ -171,7 +177,8 @@ export default function CartList({ userKey }: Props) {
 
     const onClickAllDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        if (cartList === null) {
+        if (cartList === undefined) {
+            alert("장바구니가 비어있습니다.");
             return;
         }
         const isDelete = confirm("등록된 장바구니 목록을 모두 비우시겠습니까?");
@@ -183,7 +190,7 @@ export default function CartList({ userKey }: Props) {
         cartUpdate();
     }
 
-    const onClickOrder = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const onClickOrder = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
 
         if (cartList === undefined) {
             alert("주문 가능한 상품이 없습니다.");
@@ -219,7 +226,7 @@ export default function CartList({ userKey }: Props) {
         }, `/order`);
 
 
-    }
+    }, [cartList, ref, router])
 
 
     const onSubmitOption = (e: React.FormEvent<HTMLFormElement>) => {
@@ -242,7 +249,7 @@ export default function CartList({ userKey }: Props) {
         cartUpdate();
     }
 
-    const openOptionModal = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const openOptionModal = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
 
         const tg = e.target as HTMLAnchorElement;
@@ -255,14 +262,14 @@ export default function CartList({ userKey }: Props) {
         setIsModal(true);
         setModalProps({ x, y, productId: id, cartKey: key });
 
-    }
+    }, [])
 
-    const onCloseModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const onCloseModal = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         setIsOption(false);
         setIsModal(false);
-    }
+    }, [])
 
-    const onChangeColor = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const onChangeColor = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         const tg = e.target as HTMLSelectElement;
 
         const value = tg.value;
@@ -275,7 +282,7 @@ export default function CartList({ userKey }: Props) {
 
         setIsOption(true);
         setSelColor(value);
-    }
+    }, [])
 
 
 

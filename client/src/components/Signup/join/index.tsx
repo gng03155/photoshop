@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import fb from '../../../firebase';
 import MemberForm from '../../MemberComponents/MemberForm'
 import crypto from "crypto";
@@ -74,14 +74,14 @@ export default function Join() {
         mutate(false, false);
 
         router.push({
-            pathname: "/memeber/signup",
+            pathname: "/member/signup",
             query: {
                 name: "complete",
                 data: JSON.stringify(data),
             }
         }, "/member/signup");
 
-    }, [isOverWrap])
+    }, [isOverWrap, router])
 
     const checkPassword = useCallback(
         (pswd, chpswd) => {
@@ -95,7 +95,7 @@ export default function Join() {
         [],
     )
 
-    const pswdHashing = async (id, pw) => {
+    const pswdHashing = useCallback(async (id, pw) => {
         const { hashId, hashPw, salt } = await new Promise((resolve, reject) => {
             let hashId, hashPw, salt = "";
             crypto.randomBytes(64, (err, buf) => {
@@ -109,7 +109,7 @@ export default function Join() {
             });
         })
         return { hashId, hashPw, salt };
-    }
+    }, [])
 
     const checkEmpty = useCallback((values, target) => {
 

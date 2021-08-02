@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import fb from '../../../firebase';
@@ -28,7 +28,7 @@ export default function BoardRead({ boardKey, userKey }: Props) {
         }
     }, [boardInfo, userKey])
 
-    const onClickDelete = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickDelete = useCallback(async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         const isDelete = confirm("정말로 삭제하시겠습니까?");
         if (!isDelete) {
@@ -58,9 +58,9 @@ export default function BoardRead({ boardKey, userKey }: Props) {
                 pathname: `/board/${boardInfo.category}/`,
             })
         }
-    }
+    }, [fb, boardKey, boardInfo, router])
 
-    const onClickEdit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickEdit = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         if (router.query.product) {
             router.push({
@@ -74,14 +74,14 @@ export default function BoardRead({ boardKey, userKey }: Props) {
                 pathname: `/board/${boardInfo.category}/modify/${boardKey}`,
             });
         }
-    }
+    }, [router, boardInfo, boardKey])
 
-    const onClickbList = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onClickbList = useCallback((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         router.push({
             pathname: `/board/${boardInfo.category}/`,
         })
-    }
+    }, [router, boardInfo])
 
     if (boardInfo === undefined) {
         return <div></div>

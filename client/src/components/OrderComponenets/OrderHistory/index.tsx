@@ -43,9 +43,8 @@ export default function OrderHistory({ userKey }: Props) {
         }
     }, [orderKey, allList])
 
-    const setPage = (idList: IOrder[]) => {
+    const setPage = useCallback((idList: IOrder[]) => {
         let totalIdx = parseInt(`${idList.length / 8}`);
-        // totalIdx = totalIdx !== 0 ? totalIdx : 1;
         const copy: [IOrder[]] = [[]];
         for (let i = 0; i <= totalIdx; i++) {
             let list: IOrder[] | [undefined] = [];
@@ -60,7 +59,7 @@ export default function OrderHistory({ userKey }: Props) {
         copy.splice(0, 1);
         setPageNumber(copy.length);
         setData(copy);
-    }
+    }, [])
 
     const onClickDetail = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
@@ -76,9 +75,9 @@ export default function OrderHistory({ userKey }: Props) {
 
     }, [router])
 
-    const onSetPage = (num) => {
+    const onSetPage = useCallback((num) => {
         setCurPage(num);
-    }
+    }, [])
 
     if (data[0] === null) {
         return <div></div>

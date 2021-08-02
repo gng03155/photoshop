@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr';
 import { fetcherData } from '../../../util/fetcher';
 import PageNation from '../../PageNation';
@@ -32,7 +32,7 @@ export default function MileageHistory({ userKey }) {
         }
     }, [mileageList])
 
-    const setPage = (idList: string[]) => {
+    const setPage = useCallback((idList: string[]) => {
         const num = idList.length;
         if (num === 0) {
             setCurPage(0)
@@ -61,9 +61,9 @@ export default function MileageHistory({ userKey }) {
         setCurIdList(idList);
         setCurPage(0);
         setData(copy);
-    }
+    }, [mileageList,])
 
-    const onClickOrderNum = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickOrderNum = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const orderKey = tg.dataset.key;
@@ -73,10 +73,11 @@ export default function MileageHistory({ userKey }) {
                 orderKey,
             }
         }, "/mypage/order_detail")
-    }
-    const onSetPage = (num) => {
+    }, [router])
+
+    const onSetPage = useCallback((num) => {
         setCurPage(num);
-    }
+    }, [])
 
     if (!isInit) {
         return <div></div>

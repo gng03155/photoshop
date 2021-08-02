@@ -11,7 +11,10 @@ export const Wrap = styled.div`
 `;
 
 export const Titlearea = styled.div`
-
+    p{
+        font-size: 12px;
+        color : #555;
+    }
 `;
 
 export const Form = styled.form`

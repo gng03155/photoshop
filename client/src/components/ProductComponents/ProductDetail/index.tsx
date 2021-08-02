@@ -82,19 +82,19 @@ export default function ProductDetail({ id, userKey }: Props) {
     const onClickDetail = useCallback((e) => {
         e.preventDefault();
         window.scrollTo(0, ref[0].current.offsetTop - 100);
-    }, []);
+    }, [ref]);
     const onClickInfo = useCallback((e) => {
         e.preventDefault();
         window.scrollTo(0, ref[1].current.offsetTop - 100);
-    }, []);
+    }, [ref]);
     const onClickReview = useCallback((e) => {
         e.preventDefault();
         window.scrollTo(0, ref[2].current.offsetTop - 100);
-    }, []);
+    }, [ref]);
     const onClickQna = useCallback((e) => {
         e.preventDefault();
         window.scrollTo(0, ref[3].current.offsetTop - 100);
-    }, []);
+    }, [ref]);
 
 
     const onClickBuy = useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -119,9 +119,9 @@ export default function ProductDetail({ id, userKey }: Props) {
             },
         }, `/order`);
 
-    }, [userKey, buyProductInfo])
+    }, [userKey, buyProductInfo, router])
 
-    const setFbCart = async () => {
+    const setFbCart = useCallback(async () => {
         for (let info of buyProductInfo) {
             const dataRef = fb.database().ref(`cart/${userKey}`).push();
             const key = dataRef.toString().split(`${userKey}/`)[1]
@@ -138,9 +138,9 @@ export default function ProductDetail({ id, userKey }: Props) {
             })
             info.key = key;
         }
-    }
+    }, [buyProductInfo, fb, userKey, thumbImg])
 
-    const onChangeNum = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeNum = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         let value = Number(e.target.value.replace(/[^0-9]/g, ""));
         if (value >= 5) {
             alert("최대 5개까지 주문 가능합니다!");
@@ -158,9 +158,9 @@ export default function ProductDetail({ id, userKey }: Props) {
         calcPrice(copy);
 
         setBuyProductInfo(copy);
-    }
+    }, [buyProductInfo])
 
-    const calcPrice = (copy) => {
+    const calcPrice = useCallback((copy) => {
         let totalP = 0;
         let totalN = 0;
 
@@ -173,9 +173,9 @@ export default function ProductDetail({ id, userKey }: Props) {
         setTotalPrice(totalP);
         setTotalNum(totalN);
 
-    }
+    }, [])
 
-    const onClickDelete = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickDelete = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const idx = Number(tg.id);
@@ -190,9 +190,9 @@ export default function ProductDetail({ id, userKey }: Props) {
         setBuyProductInfo(copy);
         setOption(copyOpt);
 
-    }
+    }, [buyProductInfo, option])
 
-    const onClickMinus = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickMinus = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const idx = Number(tg.id);
@@ -208,9 +208,9 @@ export default function ProductDetail({ id, userKey }: Props) {
         calcPrice(copy);
         setBuyProductInfo(copy);
 
-    }
+    }, [buyProductInfo])
 
-    const onClickPlus = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickPlus = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const idx = Number(tg.id);
@@ -225,9 +225,9 @@ export default function ProductDetail({ id, userKey }: Props) {
         copy[idx].num = String(num);
         calcPrice(copy);
         setBuyProductInfo(copy);
-    }
+    }, [buyProductInfo])
 
-    const onClickColor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickColor = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         const tg = e.target as HTMLAnchorElement;
         const name = tg.id;
@@ -246,18 +246,18 @@ export default function ProductDetail({ id, userKey }: Props) {
 
         setIsColor(true);
 
-    }
+    }, [colorRef, sizeRef])
 
-    const setBuyList = (name, info) => {
+    const setBuyList = useCallback((name, info) => {
         setIsProduct(true);
         setOption([...option, selOption + name]);
         info.option = selOption + name;
         setBuyProductInfo([...buyProductInfo, info]);
         setTotalPrice(totalPrice + Number(info.price));
         setTotalNum(totalNum + 1);
-    }
+    }, [option, selOption, buyProductInfo, totalPrice, totalNum])
 
-    const onClickSize = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    const onClickSize = useCallback((e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
         e.preventDefault();
         if (!isColor) {
             alert("컬러를 먼저 선택해주세요!");
@@ -265,7 +265,6 @@ export default function ProductDetail({ id, userKey }: Props) {
         }
         const tg = e.target as HTMLAnchorElement;
         const name = tg.id;
-        const nodes = tg.parentElement.parentElement.childNodes;
         sizeRef.current.firstChild.childNodes.forEach((node) => {
             const elem = node.firstChild as HTMLAnchorElement;
             elem.classList.remove("active");
@@ -298,9 +297,9 @@ export default function ProductDetail({ id, userKey }: Props) {
         info["stock"] = num;
 
         setBuyList(name, info);
-    }
+    }, [isColor, sizeRef, productInfo, thumbImg, option, selOption])
 
-    const checkStock = (optionName, sub) => {
+    const checkStock = useCallback((optionName, sub) => {
         let num = 0;
         for (let key in stock) {
             if (stock[key]["name"] === optionName) {
@@ -312,9 +311,9 @@ export default function ProductDetail({ id, userKey }: Props) {
             }
         }
         return num;
-    }
+    }, [stock])
 
-    const onClickCart = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const onClickCart = useCallback(async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 
         e.preventDefault();
         if (isFb) {
@@ -340,7 +339,7 @@ export default function ProductDetail({ id, userKey }: Props) {
 
         alert("장바구니에 추가되었습니다.");
 
-    }
+    }, [isFb, buyProductInfo, userKey])
 
     const onClickLike = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (isFb) {
