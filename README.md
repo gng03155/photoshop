@@ -59,7 +59,7 @@ root
 └── Index.tsx
 ```
 ## 사용 기술 스택
-React , Typescript , Redux , Redux-thunk , express , puppeteer
+Typescrpit , React , Next.js , SWR , Firebase , StyledComponents
 
 ## 실행화면
 ![photo_mark](https://user-images.githubusercontent.com/73515375/127759277-d0c79f93-4ff0-48c3-9ed4-9b5d76f2356f.gif)
